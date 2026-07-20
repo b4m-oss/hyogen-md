@@ -1,0 +1,50 @@
+:root {
+  --bg: #e8eef2;
+  --bg-panel: #f7fafb;
+  --bg-deep: #d5dee5;
+  --ink: #1a242c;
+  --ink-muted: #5a6b76;
+  --line: #b8c5ce;
+  --accent: #0d6e6e;
+  --accent-soft: #d4ecec;
+  --danger: #a32d2d;
+  --danger-soft: #f5e0e0;
+  --warn: #8a5a12;
+  --warn-soft: #f3ead8;
+  --font: "IBM Plex Sans", "Helvetica Neue", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --header-h: 3rem;
+  --diag-h: 9rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #c5dde0 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #d9e3ea 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg) 0%, #dfe7ec 100%);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

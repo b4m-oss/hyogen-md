@@ -31,22 +31,22 @@
 
 ### 実装
 
-- [ ] `playground/`（Vite + Vue + TypeScript + CodeMirror 6）
-- [ ] バーチャル FS（実ディスクなし）。`src` 編集可 / `outDir` 読み取り専用
-- [ ] 左ペインファイラー（ネスト・作成・削除・リネーム・フォルダ）
-- [ ] エディタ + 自動 render（デバウンス）。開いている 1 ファイルだけ `outDir` へ
-- [ ] プレビュー: 展開後 MD + HTML 見た目。診断パネル（エラー／警告）
-- [ ] `localStorage` 永続化 + 「Reset to demo」
-- [ ] デモ寄りシード（extend / if / each / component 等）
-- [ ] Vite alias で `../app` ソースを参照。固定 context（UI なし）
+- [x] `playground/`（Vite + Vue + TypeScript + CodeMirror 6）
+- [x] バーチャル FS（実ディスクなし）。`src` 編集可 / `outDir` 読み取り専用
+- [x] 左ペインファイラー（ネスト・作成・削除・リネーム・フォルダ）
+- [x] エディタ + 自動 render（デバウンス）。開いている 1 ファイルだけ `outDir` へ
+- [x] プレビュー: 展開後 MD + HTML 見た目。診断パネル（エラー／警告）
+- [x] `localStorage` 永続化 + 「Reset to demo」
+- [x] デモ寄りシード（extend / if / each / component 等）
+- [x] Vite alias で `../app` ソースを参照。固定 context（UI なし）
 
 ### テスト
 
 テスト仕様書: [app/test/specs/v0.9.0.md](../app/test/specs/v0.9.0.md)（[development.md](./development.md) の TDD 手順に従う。UI は手動）
 
-- [ ] 仮想 FS CRUD・永続化・Reset
-- [ ] loader 経由で include / component が解決できること
-- [ ] 開いている 1 ファイルの src → outDir 反映
+- [x] 仮想 FS CRUD・永続化・Reset
+- [x] loader 経由で include / component が解決できること
+- [x] 開いている 1 ファイルの src → outDir 反映
 
 ### 参照
 

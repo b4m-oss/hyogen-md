@@ -55,6 +55,21 @@ describe("executeHgBlocks", () => {
     assert.match(result, /const x = 1/);
   });
 
+  it("passes through block/endblock single-line blocks", () => {
+    const source = "<!--@hg\nblock contents\n@endhg-->X<!--@hg\nendblock\n@endhg-->";
+    const { source: result, directives } = executeHgBlocks(source);
+    assert.equal(directives.length, 0);
+    assert.match(result, /block contents/);
+    assert.match(result, /endblock/);
+  });
+
+  it("passes through extend single-line blocks", () => {
+    const source = "<!--@hg\nextend layout.md\n@endhg-->X";
+    const { source: result, directives } = executeHgBlocks(source);
+    assert.equal(directives.length, 0);
+    assert.match(result, /extend layout\.md/);
+  });
+
   it("throws parse_error for unsupported multi-line hyogen block", () => {
     try {
       executeHgBlocks("<!--@hg\nfoo\nbar\n@endhg-->");

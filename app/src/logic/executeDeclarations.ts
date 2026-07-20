@@ -7,6 +7,7 @@ import {
   parseDeclarationStatements,
 } from "./parseDeclaration.js";
 import { extractHgBlockLines, isControlDirectiveLine } from "./hgBlockUtils.js";
+import { parseExtendBlock } from "../layout/parseExtendBlock.js";
 
 export type ExecuteDeclarationsOptions = {
   path?: string;
@@ -30,10 +31,11 @@ export async function executeDeclarations(
 
   const blocks = scanHgBlocks(source);
   if (blocks.length === 0) {
-    return { source, context };
+    return { source, context, declarationUpdates: {} };
   }
 
   const constBindings = new Set<string>();
+  const declarationUpdates: HyogenContext = {};
   let result = source;
   let offset = 0;
 
@@ -48,6 +50,28 @@ export async function executeDeclarations(
     }
 
     if (lines.length === 1 && /^component\s+/i.test(lines[0]!)) {
+      continue;
+    }
+
+    const extendBlock = parseExtendBlock(block.inner, path);
+    if (extendBlock) {
+      if (extendBlock.declarationsSource.trim().length > 0) {
+        const declarations = parseDeclarationStatements(
+          extendBlock.declarationsSource,
+          path,
+        );
+        for (const declaration of declarations) {
+          await executeDeclaration(declaration, context, { path, constBindings });
+          declarationUpdates[declaration.name] = context[declaration.name];
+        }
+      }
+
+      // Keep the `extend <path>` directive for step 3, but remove declarations.
+      const start = block.start - offset;
+      const end = block.end - offset;
+      const extendRaw = `<!--@hg\nextend ${extendBlock.path}\n@endhg-->`;
+      result = result.slice(0, start) + extendRaw + result.slice(end);
+      offset += block.raw.length - extendRaw.length;
       continue;
     }
 
@@ -66,6 +90,7 @@ export async function executeDeclarations(
     const declarations = parseDeclarationStatements(body, path);
     for (const declaration of declarations) {
       await executeDeclaration(declaration, context, { path, constBindings });
+      declarationUpdates[declaration.name] = context[declaration.name];
     }
 
     const start = block.start - offset;
@@ -74,5 +99,5 @@ export async function executeDeclarations(
     offset += block.raw.length;
   }
 
-  return { source: result, context };
+  return { source: result, context, declarationUpdates };
 }

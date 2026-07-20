@@ -70,6 +70,7 @@ export async function renderComponent(
     registry: options.registry,
     warnings: options.warnings,
     visitStack: options.visitStack,
+    inComponent: true,
     preserveFrontMatter: false,
     preserveHgComments: options.preserveHgComments,
     constrainToRoot: options.constrainToRoot,

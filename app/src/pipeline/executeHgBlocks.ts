@@ -65,6 +65,12 @@ function parseHgBlockDirective(
     return parseComponentDirective(inner, path);
   }
 
+  // v0.4: `block` / `endblock` / single-line `extend` are handled in a
+  // separate pipeline step. `executeHgBlocks` only passes them through.
+  if (line === "endblock" || /^block\s+/.test(line) || /^extend\s+/.test(line)) {
+    return null;
+  }
+
   throw createHyogenError({
     code: "parse_error",
     path,

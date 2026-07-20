@@ -110,18 +110,20 @@
 
 ### 実装
 
-- [ ] `extend <path>` / `block <name>` … `endblock`
-- [ ] 子テンプレート: block 以外の本文は無視
-- [ ] 未上書き block は layout デフォルトを残す
-- [ ] extend は include より先（step 3）
-- [ ] component 内 extend → `extend_in_component` 警告でスキップ
-- [ ] extend 先頭 hyogen 必須（その上の front matter は可）
+- [x] `extend <path>` / `block <name>` … `endblock`
+- [x] 子テンプレート: block 以外の本文は無視
+- [x] 未上書き block は layout デフォルトを残す
+- [x] extend は include より先（step 3）
+- [x] component 内 extend → `extend_in_component` 警告でスキップ
+- [x] extend 先頭 hyogen 必須（その上の front matter は可）
 
 ### テスト
 
-- [ ] 単一継承の block 上書き
-- [ ] 未上書き block のデフォルト残存
-- [ ] component 内 extend のスキップ
+テスト仕様書: [app/test/specs/v0.4.0.md](../app/test/specs/v0.4.0.md)（[development.md](./development.md) の TDD 手順に従う）
+
+- [x] 単一継承の block 上書き
+- [x] 未上書き block のデフォルト残存
+- [x] component 内 extend のスキップ
 
 ### 参照 spec
 

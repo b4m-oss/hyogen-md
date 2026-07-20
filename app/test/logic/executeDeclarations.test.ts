@@ -33,6 +33,23 @@ describe("executeDeclarations", () => {
     assert.equal(context.x, 1);
   });
 
+  it("executes declarations in extend blocks and keeps extend directive", async () => {
+    const source = [
+      "A",
+      "<!--@hg",
+      "extend layout.md",
+      "",
+      "const x = 1",
+      "@endhg-->",
+      "B",
+    ].join("\n");
+
+    const { source: result, context } = await executeDeclarations(source);
+    assert.equal(context.x, 1);
+    assert.match(result, /extend layout\.md/);
+    assert.doesNotMatch(result, /const x/);
+  });
+
   it("processes blocks in document order", async () => {
     const source = [
       "<!--@hg\nconst a = 1\n@endhg-->",

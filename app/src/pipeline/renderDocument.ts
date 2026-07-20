@@ -15,6 +15,7 @@ import { executeDeclarations } from "../logic/executeDeclarations.js";
 import { executeHgBlocks } from "./executeHgBlocks.js";
 import { applyFrontMatterOutputOption } from "./applyFrontMatterOutputOption.js";
 import { stripHgComments } from "./stripHgComments.js";
+import { expandExtendsAndBlocks } from "../layout/expandExtendsAndBlocks.js";
 
 export type RenderDocumentOptions = RenderOptions & {
   path?: string;
@@ -22,6 +23,8 @@ export type RenderDocumentOptions = RenderOptions & {
   registry?: ComponentRegistry;
   warnings?: HyogenWarning[];
   visitStack?: VisitStack;
+  /** When true, renders through the `component` path (extend is skipped with warning). */
+  inComponent?: boolean;
 };
 
 export type RenderDocumentBodyOptions = RenderDocumentOptions & {
@@ -38,13 +41,29 @@ export async function renderDocumentBody(
   const warnings = options.warnings ?? [];
   const visitStack = options.visitStack ?? new VisitStack();
 
-  const { source: afterDeclarations, context: declarationContext } =
-    await executeDeclarations(body, { path, context: { ...context } });
+  const {
+    source: afterDeclarations,
+    declarationUpdates,
+  } = await executeDeclarations(body, { path, context: { ...context } });
 
-  const { source: afterHg, directives } = executeHgBlocks(afterDeclarations, {
+  const expandResult = await expandExtendsAndBlocks(afterDeclarations, {
+    path,
+    context,
+    declarationUpdates: declarationUpdates ?? {},
+    loader: options.loader,
+    root: options.root,
+    constrainToRoot: options.constrainToRoot,
+    visitStack,
+    warnings,
+    inComponent: options.inComponent ?? false,
+  });
+
+  const { source: afterExtends, context: mergedContext } = expandResult;
+
+  const { source: afterHg, directives } = executeHgBlocks(afterExtends, {
     path,
     registry,
-    context: declarationContext,
+    context: mergedContext,
   });
 
   const loader = options.loader;
@@ -57,7 +76,7 @@ export async function renderDocumentBody(
     markdown = await expandIncludes({
       source: afterHg,
       directives,
-      context: declarationContext,
+      context: mergedContext,
       loader,
       root: options.root,
       path,
@@ -71,26 +90,26 @@ export async function renderDocumentBody(
   }
 
   markdown = await expandControlStructures(markdown, {
-    context: declarationContext,
+    context: mergedContext,
     path,
     registry,
     loader,
     rootDir: options.root,
     warnings,
     visitStack,
-    parentContext: declarationContext,
+    parentContext: mergedContext,
     preserveHgComments: options.preserveHgComments,
     constrainToRoot: options.constrainToRoot,
   });
 
-  markdown = await interpolateExpressions(markdown, declarationContext, {
+  markdown = await interpolateExpressions(markdown, mergedContext, {
     path,
     registry,
     loader,
     rootDir: options.root,
     warnings,
     visitStack,
-    parentContext: declarationContext,
+    parentContext: mergedContext,
     preserveHgComments: options.preserveHgComments,
     constrainToRoot: options.constrainToRoot,
   });

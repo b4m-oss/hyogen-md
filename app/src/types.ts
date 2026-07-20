@@ -129,6 +129,8 @@ export type ControlNode =
 export type ExecuteDeclarationsResult = {
   source: string;
   context: HyogenContext;
+  /** Updated bindings caused by executed declaration blocks. */
+  declarationUpdates?: HyogenContext;
 };
 
 export type EvaluateExpressionOptions = {

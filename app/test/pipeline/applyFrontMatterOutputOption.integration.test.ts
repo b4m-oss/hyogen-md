@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { parseFrontMatter } from "../../src/frontmatter/parseFrontMatter.js";
 import { applyFrontMatterOutputOption } from "../../src/pipeline/applyFrontMatterOutputOption.js";
 

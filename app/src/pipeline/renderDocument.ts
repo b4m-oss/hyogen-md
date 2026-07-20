@@ -1,12 +1,15 @@
 import type {
   HyogenContext,
+  HyogenWarning,
   RenderOptions,
   RenderResult,
 } from "../types.js";
+import { ComponentRegistry } from "../component/ComponentRegistry.js";
 import { mergeContext } from "../context/mergeContext.js";
 import { parseFrontMatter } from "../frontmatter/parseFrontMatter.js";
 import { interpolateExpressions } from "../expr/interpolateExpressions.js";
 import { expandIncludes } from "../include/expandIncludes.js";
+import { VisitStack } from "../include/VisitStack.js";
 import { executeHgBlocks } from "./executeHgBlocks.js";
 import { applyFrontMatterOutputOption } from "./applyFrontMatterOutputOption.js";
 import { stripHgComments } from "./stripHgComments.js";
@@ -14,22 +17,30 @@ import { stripHgComments } from "./stripHgComments.js";
 export type RenderDocumentOptions = RenderOptions & {
   path?: string;
   context?: HyogenContext;
+  registry?: ComponentRegistry;
+  warnings?: HyogenWarning[];
+  visitStack?: VisitStack;
 };
 
-export async function renderDocument(
-  source: string,
-  options: RenderDocumentOptions = {},
-): Promise<RenderResult> {
+export type RenderDocumentBodyOptions = RenderDocumentOptions & {
+  context: HyogenContext;
+};
+
+export async function renderDocumentBody(
+  body: string,
+  options: RenderDocumentBodyOptions,
+): Promise<string> {
   const path = options.path;
-  const mergedInputContext = mergeContext(options.context);
+  const context = options.context;
+  const registry = options.registry ?? new ComponentRegistry();
+  const warnings = options.warnings ?? [];
+  const visitStack = options.visitStack ?? new VisitStack();
 
-  const { context: fmContext, body, rawFrontMatter } = parseFrontMatter(
-    source,
+  const { source: afterHg, directives } = executeHgBlocks(body, {
     path,
-  );
-  const context = mergeContext(mergedInputContext, fmContext);
-
-  const { source: afterHg, directives } = executeHgBlocks(body, path);
+    registry,
+    context,
+  });
 
   const loader = options.loader;
   if (directives.length > 0 && !loader) {
@@ -47,11 +58,53 @@ export async function renderDocument(
       path,
       preserveFrontMatter: options.preserveFrontMatter,
       preserveHgComments: options.preserveHgComments,
+      visitStack,
+      warnings,
+      registry,
+      constrainToRoot: options.constrainToRoot,
     });
   }
 
-  markdown = interpolateExpressions(markdown, context, path);
+  markdown = await interpolateExpressions(markdown, context, {
+    path,
+    registry,
+    loader,
+    rootDir: options.root,
+    warnings,
+    visitStack,
+    parentContext: context,
+    preserveHgComments: options.preserveHgComments,
+    constrainToRoot: options.constrainToRoot,
+  });
+
   markdown = stripHgComments(markdown, options.preserveHgComments);
+  return markdown;
+}
+
+export async function renderDocument(
+  source: string,
+  options: RenderDocumentOptions = {},
+): Promise<RenderResult> {
+  const path = options.path;
+  const mergedInputContext = mergeContext(options.context);
+  const registry = options.registry ?? new ComponentRegistry();
+  const warnings = options.warnings ?? [];
+  const visitStack = options.visitStack ?? new VisitStack();
+
+  const { context: fmContext, body, rawFrontMatter } = parseFrontMatter(
+    source,
+    path,
+  );
+  const context = mergeContext(mergedInputContext, fmContext);
+
+  let markdown = await renderDocumentBody(body, {
+    ...options,
+    context,
+    registry,
+    warnings,
+    visitStack,
+  });
+
   markdown = applyFrontMatterOutputOption(markdown, {
     preserveFrontMatter: options.preserveFrontMatter,
     rawFrontMatter,
@@ -59,7 +112,7 @@ export async function renderDocument(
 
   return {
     markdown,
-    warnings: [],
+    warnings,
   };
 }
 
@@ -70,7 +123,7 @@ export type RenderChildDocumentOptions = Omit<
   context: HyogenContext;
 };
 
-/** Renders an included child document through the full v0.1 pipeline (Option A). */
+/** Renders an included child document through the full pipeline. */
 export async function renderChildDocument(
   source: string,
   options: RenderChildDocumentOptions,
@@ -79,24 +132,9 @@ export async function renderChildDocument(
   const { context: fmContext, body } = parseFrontMatter(source, path);
   const context = mergeContext(options.context, fmContext);
 
-  const { source: afterHg, directives } = executeHgBlocks(body, path);
-
-  let markdown = afterHg;
-  if (directives.length > 0) {
-    markdown = await expandIncludes({
-      source: afterHg,
-      directives,
-      context,
-      loader: options.loader!,
-      root: options.root,
-      path,
-      preserveFrontMatter: false,
-      preserveHgComments: options.preserveHgComments,
-    });
-  }
-
-  markdown = interpolateExpressions(markdown, context, path);
-  markdown = stripHgComments(markdown, options.preserveHgComments);
-
-  return markdown;
+  return renderDocumentBody(body, {
+    ...options,
+    context,
+    preserveFrontMatter: false,
+  });
 }

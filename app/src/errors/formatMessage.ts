@@ -1,13 +1,12 @@
 import messages from "./messages.en.json" with { type: "json" };
 
 const errorTemplates = messages.errors as Record<string, string>;
+const warningTemplates = messages.warnings as Record<string, string>;
 
-/** Unknown codes resolve to empty string (implementation choice for v0.1). */
-export function formatMessage(
-  code: string,
+function applyTemplate(
+  template: string | undefined,
   details?: Record<string, unknown>,
 ): string {
-  const template = errorTemplates[code];
   if (template === undefined) {
     return "";
   }
@@ -19,4 +18,19 @@ export function formatMessage(
     const value = details[key];
     return value === undefined || value === null ? "" : String(value);
   });
+}
+
+/** Unknown codes resolve to empty string (implementation choice for v0.1). */
+export function formatMessage(
+  code: string,
+  details?: Record<string, unknown>,
+): string {
+  return applyTemplate(errorTemplates[code], details);
+}
+
+export function formatWarningMessage(
+  code: string,
+  details?: Record<string, unknown>,
+): string {
+  return applyTemplate(warningTemplates[code], details);
 }

@@ -1,15 +1,15 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { renderServer } from "../../src/renderServer.js";
-import { FRONTMATTER_SIZE_LIMIT } from "../../src/frontmatter/parseFrontMatter.js";
-import { assertHyogenError } from "../helpers/assertHyogenError.js";
+import { renderServer } from "../src/renderServer.js";
+import { FRONTMATTER_SIZE_LIMIT } from "../src/frontmatter/parseFrontMatter.js";
+import { assertHyogenError } from "./helpers/assertHyogenError.js";
 
 const fixtureDir = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../fixtures/v0.1",
+  "fixtures/v0.1",
 );
 
 describe("renderServer", () => {

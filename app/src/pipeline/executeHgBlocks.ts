@@ -1,5 +1,7 @@
 import { createHyogenError } from "../errors/createError.js";
-import type { ExecuteHgBlocksResult } from "../types.js";
+import type { ComponentRegistry } from "../component/ComponentRegistry.js";
+import type { ExecuteHgBlocksResult, HyogenContext } from "../types.js";
+import { parseComponentDirective } from "../parse/parseComponentDirective.js";
 import { parseIncludeDirective } from "../parse/parseIncludeDirective.js";
 import { findUnclosedHgBlock, scanHgBlocks } from "../parse/scanHgBlocks.js";
 
@@ -9,10 +11,64 @@ export function createIncludeMarker(index: number): string {
   return `${MARKER_PREFIX}${index}\u0000`;
 }
 
+export type ExecuteHgBlocksOptions = {
+  path?: string;
+  registry?: ComponentRegistry;
+  context?: HyogenContext;
+};
+
+function parseHgBlockDirective(
+  inner: string,
+  path?: string,
+): ReturnType<typeof parseIncludeDirective> | ReturnType<typeof parseComponentDirective> {
+  const trimmed = inner
+    .replace(/@hg/g, "")
+    .replace(/@endhg/g, "")
+    .trim();
+
+  const lines = trimmed
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
+  if (lines.length !== 1) {
+    throw createHyogenError({
+      code: "parse_error",
+      path,
+      details: { message: "hyogen block must contain a single directive" },
+    });
+  }
+
+  const line = lines[0]!;
+  if (/^include\s+/i.test(line) && /\bcomponent\s+/i.test(line)) {
+    throw createHyogenError({
+      code: "parse_error",
+      path,
+      details: { message: "include and component cannot coexist in one block" },
+    });
+  }
+
+  if (/^include\s+/i.test(line)) {
+    return parseIncludeDirective(inner, path);
+  }
+
+  if (/^component\s+/i.test(line)) {
+    return parseComponentDirective(inner, path);
+  }
+
+  throw createHyogenError({
+    code: "parse_error",
+    path,
+    details: { message: `unsupported hyogen directive: ${line}` },
+  });
+}
+
 export function executeHgBlocks(
   source: string,
-  path?: string,
+  options: ExecuteHgBlocksOptions = {},
 ): ExecuteHgBlocksResult {
+  const path = options.path;
+
   if (findUnclosedHgBlock(source)) {
     throw createHyogenError({
       code: "parse_error",
@@ -29,17 +85,35 @@ export function executeHgBlocks(
   const directives: ExecuteHgBlocksResult["directives"] = [];
   let result = source;
   let offset = 0;
+  let includeIndex = 0;
 
-  blocks.forEach((block, index) => {
-    const marker = createIncludeMarker(index);
-    const directive = parseIncludeDirective(block.inner, path);
-    directives.push({ ...directive, marker, raw: block.raw });
-
+  for (const block of blocks) {
+    const directive = parseHgBlockDirective(block.inner, path);
     const start = block.start - offset;
     const end = block.end - offset;
+
+    if (directive.kind === "component") {
+      if (options.registry) {
+        options.registry.register(
+          {
+            alias: directive.alias,
+            componentPath: directive.path,
+            definedAt: path,
+          },
+          Object.keys(options.context ?? {}),
+          path,
+        );
+      }
+      result = result.slice(0, start) + result.slice(end);
+      offset += block.raw.length;
+      continue;
+    }
+
+    const marker = createIncludeMarker(includeIndex++);
+    directives.push({ ...directive, marker, raw: block.raw });
     result = result.slice(0, start) + marker + result.slice(end);
     offset += block.raw.length - marker.length;
-  });
+  }
 
   return { source: result, directives };
 }

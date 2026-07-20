@@ -63,7 +63,7 @@ class ExpressionParser {
       this.skipWhitespace();
       if (this.peek() === ".") {
         this.index++;
-        node = this.parseMember(node);
+        node = this.parseAfterDot(node);
         continue;
       }
       if (this.peek() === "|") {
@@ -77,13 +77,48 @@ class ExpressionParser {
     return node;
   }
 
-  private parseMember(object: ExprNode): ExprNode {
+  private parseAfterDot(object: ExprNode): ExprNode {
     this.skipWhitespace();
     const property = this.readIdentifier();
     if (!property) {
       throw parseError(this.path, "expected property name after '.'");
     }
+
+    this.skipWhitespace();
+    if (this.peek() === "(") {
+      if (property !== "toLocaleString") {
+        throw parseError(this.path, `unsupported method: ${property}()`);
+      }
+      this.index++;
+      const args = this.parseMethodArgs();
+      return { type: "method", object, method: property, args };
+    }
+
     return { type: "member", object, property };
+  }
+
+  private parseMethodArgs(): unknown[] {
+    this.skipWhitespace();
+    const args: unknown[] = [];
+
+    if (this.peek() === ")") {
+      this.index++;
+      return args;
+    }
+
+    args.push(this.parseLiteralValue());
+    this.skipWhitespace();
+    while (this.peek() === ",") {
+      this.index++;
+      args.push(this.parseLiteralValue());
+      this.skipWhitespace();
+    }
+
+    if (this.peek() !== ")") {
+      throw parseError(this.path, "expected ')' after method arguments");
+    }
+    this.index++;
+    return args;
   }
 
   private parsePrimary(): ExprNode {
@@ -96,6 +131,10 @@ class ExpressionParser {
 
     if (ch === "-" || (ch >= "0" && ch <= "9")) {
       return { type: "literal", value: this.readNumber() };
+    }
+
+    if (ch === "{") {
+      return { type: "literal", value: this.parseObjectLiteral() };
     }
 
     if (isIdentifierStart(ch)) {
@@ -116,28 +155,109 @@ class ExpressionParser {
                 : undefined;
         return { type: "literal", value };
       }
-      this.assertNoCallSyntax(name);
+
+      this.skipWhitespace();
+      if (this.peek() === "(") {
+        this.index++;
+        const args = this.parseCallArgs();
+        return { type: "call", callee: name, args };
+      }
+
+      if (this.peek() === "[") {
+        throw parseError(this.path, "bracket access is not allowed");
+      }
+      if (this.peek() === "?") {
+        throw parseError(this.path, "ternary expressions are not allowed");
+      }
+
       return { type: "identifier", name };
     }
 
     throw parseError(this.path, `unexpected character '${ch}'`);
   }
 
-  private peek(): string {
-    return this.input[this.index] ?? "";
+  private parseCallArgs(): Record<string, unknown> {
+    this.skipWhitespace();
+    if (this.peek() === ")") {
+      this.index++;
+      return {};
+    }
+
+    const args = this.parseObjectLiteral();
+    this.skipWhitespace();
+    if (this.peek() !== ")") {
+      throw parseError(this.path, "expected ')' after call arguments");
+    }
+    this.index++;
+    return args;
   }
 
-  private assertNoCallSyntax(name: string): void {
+  private parseObjectLiteral(): Record<string, unknown> {
+    if (this.peek() !== "{") {
+      throw parseError(this.path, "expected object literal");
+    }
+    this.index++;
     this.skipWhitespace();
-    if (this.peek() === "(") {
-      throw parseError(this.path, `function calls are not allowed: ${name}()`);
+
+    const result: Record<string, unknown> = {};
+    if (this.peek() === "}") {
+      this.index++;
+      return result;
     }
-    if (this.peek() === "[") {
-      throw parseError(this.path, "bracket access is not allowed");
+
+    while (true) {
+      this.skipWhitespace();
+      const key = this.readIdentifier();
+      if (!key) {
+        throw parseError(this.path, "expected property name in object literal");
+      }
+
+      this.skipWhitespace();
+      if (this.peek() !== ":") {
+        throw parseError(this.path, "expected ':' in object literal");
+      }
+      this.index++;
+      this.skipWhitespace();
+
+      result[key] = this.parseLiteralValue();
+      this.skipWhitespace();
+
+      if (this.peek() === "}") {
+        this.index++;
+        break;
+      }
+      if (this.peek() !== ",") {
+        throw parseError(this.path, "expected ',' or '}' in object literal");
+      }
+      this.index++;
     }
-    if (this.peek() === "?") {
-      throw parseError(this.path, "ternary expressions are not allowed");
+
+    return result;
+  }
+
+  private parseLiteralValue(): unknown {
+    this.skipWhitespace();
+    const ch = this.peek();
+
+    if (ch === '"' || ch === "'") {
+      return this.readString();
     }
+    if (ch === "-" || (ch >= "0" && ch <= "9")) {
+      return this.readNumber();
+    }
+    if (isIdentifierStart(ch)) {
+      const name = this.readIdentifier();
+      if (name === "true") return true;
+      if (name === "false") return false;
+      if (name === "null") return null;
+      throw parseError(this.path, "object literal values must be literals");
+    }
+
+    throw parseError(this.path, "object literal values must be literals");
+  }
+
+  private peek(): string {
+    return this.input[this.index] ?? "";
   }
 
   private readIdentifier(): string {

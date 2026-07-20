@@ -1,13 +1,16 @@
 import { createHyogenError } from "../errors/createError.js";
-import type { HyogenContext } from "../types.js";
+import type { InterpolateExpressionsOptions } from "../types.js";
 import { evaluateExpression } from "./evaluateExpression.js";
 import { parseExpression } from "./parseExpression.js";
 
-export function interpolateExpressions(
+export async function interpolateExpressions(
   source: string,
-  context: HyogenContext,
-  path?: string,
-): string {
+  context: InterpolateExpressionsOptions["context"],
+  options: Omit<InterpolateExpressionsOptions, "context"> & {
+    path?: string;
+  } = {},
+): Promise<string> {
+  const path = options.path;
   let result = "";
   let i = 0;
 
@@ -49,7 +52,12 @@ export function interpolateExpressions(
 
     const exprSource = source.slice(open + openLen, close).trim();
     const node = parseExpression(exprSource, path);
-    const value = evaluateExpression(node, context);
+    const value = await evaluateExpression(node, {
+      ...options,
+      context,
+      path,
+      parentContext: options.parentContext ?? context,
+    });
     result += value === undefined || value === null ? "" : String(value);
     i = close + closeToken.length;
   }

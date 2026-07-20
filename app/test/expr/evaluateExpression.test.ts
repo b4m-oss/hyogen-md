@@ -1,41 +1,60 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { evaluateExpression } from "../../src/expr/evaluateExpression.js";
 import { parseExpression } from "../../src/expr/parseExpression.js";
+import { assertHyogenError } from "../helpers/assertHyogenError.js";
 
 describe("evaluateExpression", () => {
-  it("resolves identifier from context", () => {
+  it("resolves identifier from context", async () => {
     const node = parseExpression("title");
-    assert.equal(evaluateExpression(node, { title: "Hello" }), "Hello");
+    assert.equal(
+      await evaluateExpression(node, { context: { title: "Hello" } }),
+      "Hello",
+    );
   });
 
-  it("resolves nested member access", () => {
+  it("resolves nested member access", async () => {
     const node = parseExpression("meta.id");
-    assert.equal(evaluateExpression(node, { meta: { id: 1 } }), 1);
+    assert.equal(
+      await evaluateExpression(node, { context: { meta: { id: 1 } } }),
+      1,
+    );
   });
 
-  it("uses default pipe fallback for unbound identifiers", () => {
+  it("uses default pipe fallback for unbound identifiers", async () => {
     const node = parseExpression('color | "transparent"');
-    assert.equal(evaluateExpression(node, {}), "transparent");
+    assert.equal(await evaluateExpression(node, { context: {} }), "transparent");
   });
 
-  it("treats zero as falsy in default pipe", () => {
+  it("treats zero as falsy in default pipe", async () => {
     const node = parseExpression('count | "none"');
-    assert.equal(evaluateExpression(node, { count: 0 }), "none");
+    assert.equal(
+      await evaluateExpression(node, { context: { count: 0 } }),
+      "none",
+    );
   });
 
-  it("treats false as falsy in default pipe", () => {
+  it("treats false as falsy in default pipe", async () => {
     const node = parseExpression('flag | "yes"');
-    assert.equal(evaluateExpression(node, { flag: false }), "yes");
+    assert.equal(
+      await evaluateExpression(node, { context: { flag: false } }),
+      "yes",
+    );
   });
 
-  it("returns undefined for missing intermediate properties", () => {
+  it("returns undefined for missing intermediate properties", async () => {
     const node = parseExpression("a.b.c");
-    assert.equal(evaluateExpression(node, {}), undefined);
+    assert.equal(await evaluateExpression(node, { context: {} }), undefined);
   });
 
-  it("does not throw for __proto__ member access in v0.1", () => {
+  it("throws forbidden_property_access for __proto__ identifier", async () => {
     const node = parseExpression("__proto__");
-    assert.doesNotThrow(() => evaluateExpression(node, {}));
+    await assert.rejects(
+      () => evaluateExpression(node, { context: {} }),
+      (error: unknown) => {
+        assertHyogenError(error, "forbidden_property_access");
+        return true;
+      },
+    );
   });
 });

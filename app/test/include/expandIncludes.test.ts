@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { createHyogenError } from "../../src/errors/createError.js";
 import { expandIncludes } from "../../src/include/expandIncludes.js";
 import { executeHgBlocks } from "../../src/pipeline/executeHgBlocks.js";

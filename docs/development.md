@@ -79,7 +79,15 @@ app/test/{モジュール}/{関数・メソッド名}.integration.test.ts … �
 ルートから:
 
 ```bash
-make test
+make test          # 1 回実行 (vitest run)
+make test-watch    # 監視モード (vitest)
+```
+
+`app/` 直下でも同様:
+
+```bash
+npm test
+npm run test:watch
 ```
 
 ---

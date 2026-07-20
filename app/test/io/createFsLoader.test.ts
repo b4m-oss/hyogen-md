@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { createFsLoader } from "../../src/io/createFsLoader.js";
 import { assertHyogenError } from "../helpers/assertHyogenError.js";
 

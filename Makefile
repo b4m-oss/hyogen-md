@@ -3,7 +3,7 @@ NPM := npm --prefix $(APP_DIR)
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install build typecheck test dev clean
+.PHONY: help install build typecheck test test-watch dev clean
 
 help: ## 利用可能なコマンド一覧
 	@printf "Usage: make [target]\n\nTargets:\n"
@@ -12,16 +12,19 @@ help: ## 利用可能なコマンド一覧
 install: ## app/ の依存関係をインストール
 	$(NPM) install
 
-build: ## TypeScript をビルド (app/dist)
+build: ## Vite ライブラリビルド (app/dist)
 	$(NPM) run build
 
 typecheck: ## 型チェックのみ
 	$(NPM) run typecheck
 
-test: ## テスト実行
+test: ## テスト実行 (Vitest)
 	$(NPM) run test
 
-dev: ## 変更監視付きビルド
+test-watch: ## テスト監視 (Vitest watch)
+	$(NPM) run test:watch
+
+dev: ## 変更監視付きビルド (Vite watch)
 	$(NPM) run dev
 
 clean: ## ビルド成果物を削除

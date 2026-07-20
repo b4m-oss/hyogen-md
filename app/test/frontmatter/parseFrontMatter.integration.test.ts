@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseFrontMatter } from "../../src/frontmatter/parseFrontMatter.js";

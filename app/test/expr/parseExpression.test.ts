@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import { parseExpression } from "../../src/expr/parseExpression.js";
 import { assertHyogenError } from "../helpers/assertHyogenError.js";
 
@@ -19,12 +19,12 @@ describe("parseExpression", () => {
     assert.equal(node.type, "default");
   });
 
-  it("throws parse_error for function calls", () => {
-    try {
-      parseExpression("foo()");
-      assert.fail("expected throw");
-    } catch (error) {
-      assertHyogenError(error, "parse_error");
+  it("parses registered-style function calls", () => {
+    const node = parseExpression('greet({ name: "Ada" })');
+    assert.equal(node.type, "call");
+    if (node.type === "call") {
+      assert.equal(node.callee, "greet");
+      assert.deepEqual(node.args, { name: "Ada" });
     }
   });
 

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import path from "node:path";
 import { resolveIncludePath } from "../../src/io/resolveIncludePath.js";
 import { assertHyogenError } from "../helpers/assertHyogenError.js";

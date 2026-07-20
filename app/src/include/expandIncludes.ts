@@ -1,6 +1,9 @@
+import { formatWarningMessage } from "../errors/formatMessage.js";
 import { resolveIncludePath } from "../io/resolveIncludePath.js";
 import { renderChildDocument } from "../pipeline/renderDocument.js";
-import type { HyogenContext, IncludeDirective, Loader } from "../types.js";
+import type { ComponentRegistry } from "../component/ComponentRegistry.js";
+import type { VisitStack } from "./VisitStack.js";
+import type { HyogenContext, HyogenWarning, IncludeDirective, Loader } from "../types.js";
 
 export type ExpandIncludesOptions = {
   source: string;
@@ -11,6 +14,10 @@ export type ExpandIncludesOptions = {
   path?: string;
   preserveFrontMatter?: boolean;
   preserveHgComments?: boolean;
+  visitStack?: VisitStack;
+  warnings?: HyogenWarning[];
+  registry?: ComponentRegistry;
+  constrainToRoot?: boolean;
 };
 
 export async function expandIncludes(
@@ -23,25 +30,58 @@ export async function expandIncludes(
       options.root,
       directive.path,
       options.path,
+      options.path,
+      options.constrainToRoot,
+      true,
     );
 
-    const childSource = await options.loader(absolutePath);
+    if (options.visitStack) {
+      const circular = options.visitStack.check(absolutePath);
+      if (circular.circular) {
+        options.warnings?.push({
+          code: "circular_include",
+          message: formatWarningMessage("circular_include", {
+            path: absolutePath,
+            from: circular.from,
+            via: "include",
+          }),
+          path: options.path,
+          details: {
+            path: absolutePath,
+            from: circular.from,
+            via: "include",
+          },
+        });
+        result = result.replace(directive.marker, "");
+        continue;
+      }
+      options.visitStack.push(absolutePath);
+    }
 
-    const childMarkdown = await renderChildDocument(childSource, {
-      context: options.context,
-      loader: options.loader,
-      root: options.root,
-      path: absolutePath,
-      preserveFrontMatter: options.preserveFrontMatter,
-      preserveHgComments: options.preserveHgComments,
-    });
+    try {
+      const childSource = await options.loader(absolutePath);
 
-    const replacement =
-      options.preserveHgComments && directive.raw
-        ? `${directive.raw}\n${childMarkdown}`
-        : childMarkdown;
+      const childMarkdown = await renderChildDocument(childSource, {
+        context: options.context,
+        loader: options.loader,
+        root: options.root,
+        path: absolutePath,
+        preserveFrontMatter: options.preserveFrontMatter,
+        preserveHgComments: options.preserveHgComments,
+        visitStack: options.visitStack,
+        warnings: options.warnings,
+        registry: options.registry,
+      });
 
-    result = result.replace(directive.marker, replacement);
+      const replacement =
+        options.preserveHgComments && directive.raw
+          ? `${directive.raw}\n${childMarkdown}`
+          : childMarkdown;
+
+      result = result.replace(directive.marker, replacement);
+    } finally {
+      options.visitStack?.pop();
+    }
   }
 
   return result;

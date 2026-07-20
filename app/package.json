@@ -1,6 +1,6 @@
 {
   "name": "hyogen-md",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Extended Markdown template engine",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,15 +15,18 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node --import tsx --test test/**/*.test.ts",
-    "dev": "tsc -p tsconfig.json --watch"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "vite build --watch"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "tsx": "^4.20.3",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vite": "^7.0.6",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=20"

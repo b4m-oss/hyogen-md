@@ -18,6 +18,8 @@ export type RenderOptions = {
   preserveHgComments?: boolean;
   loader?: Loader;
   root?: string;
+  path?: string;
+  constrainToRoot?: boolean;
 };
 
 export type ServerRenderOptions = RenderOptions & {
@@ -43,6 +45,12 @@ export type IncludeDirective = {
   raw?: string;
 };
 
+export type ComponentDirective = {
+  kind: "component";
+  path: string;
+  alias: string;
+};
+
 export type ParseFrontMatterResult = {
   context: HyogenContext;
   body: string;
@@ -58,4 +66,21 @@ export type ExprNode =
   | { type: "identifier"; name: string }
   | { type: "literal"; value: unknown }
   | { type: "member"; object: ExprNode; property: string }
-  | { type: "default"; left: ExprNode; right: ExprNode };
+  | { type: "default"; left: ExprNode; right: ExprNode }
+  | { type: "call"; callee: string; args: Record<string, unknown> }
+  | { type: "method"; object: ExprNode; method: string; args: unknown[] };
+
+export type EvaluateExpressionOptions = {
+  context: HyogenContext;
+  path?: string;
+  registry?: import("./component/ComponentRegistry.js").ComponentRegistry;
+  loader?: Loader;
+  rootDir?: string;
+  warnings?: HyogenWarning[];
+  visitStack?: import("./include/VisitStack.js").VisitStack;
+  parentContext?: HyogenContext;
+  preserveHgComments?: boolean;
+  constrainToRoot?: boolean;
+};
+
+export type InterpolateExpressionsOptions = EvaluateExpressionOptions;

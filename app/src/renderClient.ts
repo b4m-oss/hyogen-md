@@ -1,4 +1,6 @@
 import { createHyogenError } from "./errors/createError.js";
+import { mergeContext } from "./context/mergeContext.js";
+import { renderDocument } from "./pipeline/renderDocument.js";
 import type { HyogenContext, RenderOptions, RenderResult } from "./types.js";
 
 type ClientRenderOptions = RenderOptions & {
@@ -7,12 +9,12 @@ type ClientRenderOptions = RenderOptions & {
 };
 
 /**
- * Client-side render entry (stub until v0.6).
- * Rejects serverContext immediately; otherwise throws not-implemented.
+ * Client-side render entry. Requires an injected loader; never uses
+ * createNodeLoader / resolveRenderInput (no FS or network in the library).
  */
 export async function renderClient(
-  _source: string | { path: string },
-  _context?: HyogenContext,
+  input: string | { path: string },
+  context?: HyogenContext,
   options?: ClientRenderOptions,
 ): Promise<RenderResult> {
   if (
@@ -25,8 +27,33 @@ export async function renderClient(
     });
   }
 
-  throw createHyogenError({
-    code: "parse_error",
-    details: { message: "renderClient is not implemented (available in v0.6)" },
+  const loader = options?.loader;
+  if (!loader) {
+    throw createHyogenError({
+      code: "parse_error",
+      details: { message: "loader is required for renderClient" },
+    });
+  }
+
+  let source: string;
+  let entryPath: string | undefined;
+
+  if (typeof input === "string") {
+    source = input;
+  } else {
+    entryPath = input.path;
+    source = await loader(input.path);
+  }
+
+  const mergedContext = mergeContext(context);
+
+  return renderDocument(source, {
+    context: mergedContext,
+    loader,
+    root: options?.root,
+    path: entryPath ?? options?.path,
+    preserveFrontMatter: options?.preserveFrontMatter,
+    preserveHgComments: options?.preserveHgComments,
+    constrainToRoot: options?.constrainToRoot,
   });
 }

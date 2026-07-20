@@ -166,16 +166,18 @@
 
 ### 実装
 
-- [ ] `renderClient()`（loader **必須**）
-- [ ] ライブラリ本体はネットワーク取得しない（loader に委譲）
-- [ ] 同一オリジン想定のパス解決（[paths.md](./specs/paths.md)）
-- [ ] Node / ブラウザで共通のコアと、環境差（デフォルト loader の有無）の分離
+- [x] `renderClient()`（loader **必須**）
+- [x] ライブラリ本体はネットワーク取得しない（loader に委譲）
+- [x] 同一オリジン想定のパス解決（[paths.md](./specs/paths.md)）
+- [x] Node / ブラウザで共通のコアと、環境差（デフォルト loader の有無）の分離
 
 ### テスト
 
-- [ ] loader 未指定時のエラー
-- [ ] 注入 loader 経由の include / component
-- [ ] ブラウザバンドル可能な公開面（import パスの確認）
+テスト仕様書: [app/test/specs/v0.6.0.md](../app/test/specs/v0.6.0.md)（[development.md](./development.md) の TDD 手順に従う）
+
+- [x] loader 未指定時のエラー
+- [x] 注入 loader 経由の include / component
+- [x] ブラウザバンドル可能な公開面（import パスの確認）
 
 ### 参照 spec
 

@@ -1,7 +1,7 @@
 # 要意思決定・後続定義事項
 
 確定済みの仕様は各 [specs](./specs/) を正とする。  
-ここに残すのは **未決・後続** のみ。
+ここに残すのは **未決・後続** のみ。バージョン割当の正は [roadmap.md](./roadmap.md)。
 
 ---
 
@@ -13,18 +13,23 @@
 
 ---
 
-## 将来候補（v0.9+）
+## バージョン割当（実装予定）
+
+| バージョン | 項目 | 方針 | 参照 |
+|------------|------|------|------|
+| **v0.9.0** | プレイグラウンド | **最優先**。同リポジトリ内。ローカルで十分。ドキュメントサイト未満。npm 公開は前提にしない | [roadmap.md](./roadmap.md), [main.md](./main.md) |
+| **v0.10.0** | データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数。**複数ファイル**可。詳細 API は実装前に spec 更新 | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
+| **v0.11.0** | TOC | **専用ヘルパ**。構文・配置・見出し抽出の詳細は後で詰める | [roadmap.md](./roadmap.md) |
+| **v0.12.0** | 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。追加候補: `.length` / `.slice` など配列操作系 | [dsl.md](./specs/dsl.md) |
+
+## トリガー待ち・方針のみ
 
 | 項目 | 方針 | 参照 |
 |------|------|------|
-| ビルトイン関数 | **当面なし**（実装しない）。必要なら v0.9+ で spec 追加のうえ最小セット | [dsl.md](./specs/dsl.md) |
-| 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。**候補メモ**: `.length` / `.slice` など配列操作系。追加時は都度 spec | [dsl.md](./specs/dsl.md) |
+| ビルトイン関数 | **当面なし**。必要なら別バージョンで spec 追加のうえ最小セット | [dsl.md](./specs/dsl.md) |
 | パフォーマンス | **当面やらない**。体感遅さが出たら計測基盤 → ホットパス改善 | [roadmap.md](./roadmap.md) |
 | 未展開 `{{ }}` の明示オプション | **不要（後回し）**。現状のプレビュー許容で十分 | [pipeline.md](./specs/pipeline.md), [variables.md](./specs/variables.md) |
-| プレイグラウンド | **同リポジトリ内**。ドキュメントサイトほどではない。ローカルで動作確認できれば十分（バーチャル FS + `renderClient` 想定） | [roadmap.md](./roadmap.md) |
 | npm 公開 | **時期は未定**。プレイグラウンド先行のためには公開不要 | [roadmap.md](./roadmap.md) |
-| データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数バインド。**複数ファイル**読込可。詳細 API は後続 | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
-| TOC | **専用ヘルパ**を入れる方針。構文・配置・見出し抽出の詳細は後で詰める | [roadmap.md](./roadmap.md) |
 
 ## 採用時期未定（先送り）
 
@@ -66,3 +71,4 @@
 | 変数 / props 推論 | [variables.md](./specs/variables.md) |
 | パイプライン順 / if | [pipeline.md](./specs/pipeline.md), [dsl.md](./specs/dsl.md) |
 | DSL / ショートハンド `@@` | [dsl.md](./specs/dsl.md) |
+| 完了ロードマップ | [_archive/roadmap/](./_archive/roadmap/) |

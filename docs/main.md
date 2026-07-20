@@ -50,7 +50,8 @@
 | [specs/api.md](./specs/api.md) | 公開 API・loader・エラーコード |
 | [specs/messages.en.json](./specs/messages.en.json) | 英語エラー・警告メッセージ |
 | [need_decision.md](./need_decision.md) | 未決定・後続定義事項 |
-| [roadmap.md](./roadmap.md) | 開発ロードマップ（`v0.n.0`） |
+| [roadmap.md](./roadmap.md) | 開発ロードマップ（現行 `v0.9.0`〜） |
+| [_archive/roadmap/](./_archive/roadmap/) | 完了ロードマップ（`v0.1.0`〜`v0.8.0`） |
 | [development.md](./development.md) | 開発方針（TDD） |
 | [app/test/specs/v0.1.0.md](../app/test/specs/v0.1.0.md) | v0.1.0 テスト仕様書 |
 | [app/test/specs/v0.2.0.md](../app/test/specs/v0.2.0.md) | v0.2.0 テスト仕様書 |
@@ -59,15 +60,18 @@
 | [app/test/specs/v0.5.0.md](../app/test/specs/v0.5.0.md) | v0.5.0 テスト仕様書 |
 | [app/test/specs/v0.6.0.md](../app/test/specs/v0.6.0.md) | v0.6.0 テスト仕様書 |
 | [app/test/specs/v0.7.0.md](../app/test/specs/v0.7.0.md) | v0.7.0 テスト仕様書 |
+| [app/test/specs/v0.8.0.md](../app/test/specs/v0.8.0.md) | v0.8.0 テスト仕様書 |
 
 ---
 
 ## 実装優先度（目安）
 
-1. **MVP**: `include`、YAML front matter → 変数注入、Mustache 変数（+ デフォルトパイプ）、コメント strip オプション
-2. **次**: `component` + props、環境差を吸収する loader 抽象
-3. **その後**: if / each、extend / block
-4. **最後**: 三項演算子の詳細
+1. **v0.9.0**: 同リポ・ローカル向けプレイグラウンド
+2. **v0.10.0**: データソースのインポート（API・複数ファイル）
+3. **v0.11.0**: TOC 専用ヘルパ
+4. **v0.12.0**: 許可メソッド（`.length` / `.slice` 等）
+
+詳細: [roadmap.md](./roadmap.md)
 
 ---
 

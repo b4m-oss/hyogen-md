@@ -6,271 +6,141 @@
 仕様の正: [main.md](./main.md)、[specs/](./specs/)、[need_decision.md](./need_decision.md)  
 実装の進め方（TDD）: [development.md](./development.md)
 
+完了済み（`v0.1.0`〜`v0.8.0`）: [_archive/roadmap/](./_archive/roadmap/)
+
 各バージョンの「テスト」節は [development.md](./development.md) の手順に従い、**テスト仕様書 → Red → Green → Refactor** で埋める。
 
 ---
 
-## v0.1.0 — 基盤と MVP
+## 優先順位（目安）
 
-パイプラインの骨格と、最小限のテンプレート機能を Node 単体文字列入力で動かす。
+1. **v0.9.0** — プレイグラウンド（最優先）
+2. **v0.10.0** — データソースのインポート（API）
+3. **v0.11.0** — TOC 専用ヘルパ
+4. **v0.12.0** — 許可メソッド追加（`.length` / `.slice` 等）
 
-### 実装
-
-- [x] 公開型の骨格（`HyogenError` / `HyogenWarning` / `RenderResult` 等 → [api.md](./specs/api.md)）
-- [x] 英語メッセージ参照（[messages.en.json](./specs/messages.en.json)）
-- [x] 処理パイプラインのオーケストレータ（段階の呼び出し順のみ。中身は段階的に接続 → [pipeline.md](./specs/pipeline.md)）
-- [x] hyogen ブロックの字句解析（`@hg` / `@endhg`。`@@` は後続バージョンでも可）
-- [x] YAML front matter のパースと context への注入（64KB 上限 → `frontmatter_too_large`）
-- [x] 本文 `{{ }}` の式評価（変数参照・リテラル・メンバアクセス）
-- [x] デフォルトパイプ `{{ value | "default" }}`
-- [x] `include`（ローカル相対パス。`renderServer(source: string)` から）
-- [x] 出力オプション: front matter strip（デフォルト ON）、hyogen コメント strip（デフォルト ON）
-- [x] エラー: `parse_error` / `file_not_found` / `load_failed`（loader 未実装時の FS 読み込み含む）
-
-### テスト
-
-テスト仕様書: [app/test/specs/v0.1.0.md](../app/test/specs/v0.1.0.md)（[development.md](./development.md) の TDD 手順に従う）
-
-- [x] front matter → 変数展開
-- [x] include の単純埋め込み
-- [x] デフォルトパイプ
-- [x] 不正 DSL → `parse_error`
-
-### 参照 spec
-
-[variables.md](./specs/variables.md) / [pipeline.md](./specs/pipeline.md) / [templating.md](./specs/templating.md)（include のみ）/ [dsl.md](./specs/dsl.md)（最小 subset）
+詳細方針は [need_decision.md](./need_decision.md)。
 
 ---
 
-## v0.2.0 — パス解決・loader・component
+## v0.9.0 — プレイグラウンド
 
-ファイルパス入力とコンポーネント呼び出しまでを Node SSR/SSG 向けに揃える。
+同リポジトリ内のローカル向けプレイグラウンド。ドキュメントサイトは作らない。npm 公開は前提にしない。
 
-### 実装
+### 実装（メモ）
 
-- [x] Vite ライブラリモード + Vitest（Phase 0 基盤移行）
-- [x] `.doc_root` と相対パス規則（[paths.md](./specs/paths.md)）
-- [x] `renderServer({ path })` と `root` オプション
-- [x] デフォルト Node loader（FS。省略時利用）
-- [x] `Loader` 型と注入（[api.md](./specs/api.md)）
-- [x] 循環 include 検出 → `circular_include` 警告
-- [x] 危険キーアクセス拒否 → `forbidden_property_access`（[security.md](./specs/security.md)）
-- [x] `component path as name` の登録（hyogen ブロック内）
-- [x] `{{ name({ ... }) }}` による component 呼び出し（単行出力のみ → `component_multiline_output`）
-- [x] component front matter からの props 定義・型検証（警告: `prop_*`）
-- [x] エイリアス衝突 → `duplicate_component_alias` / `alias_collision`
-- [x] スコープ: 後勝ち。component `as` 衝突はエラー（[variables.md](./specs/variables.md)）
+- [ ] リポジトリ直下（または適切なパス）に `playground/` を追加
+- [ ] バーチャル FS（ブラウザ上にファイルを持つだけ。実ディスク操作は不要）
+- [ ] 左ペイン: 縦方向ファイラー（ディレクトリネスト可）
+- [ ] エディタ: Markdown + hyogen.md 構文
+- [ ] `src` 領域と `outDir` 領域の分離（仮想）
+- [ ] `hyogen-md/client` の `renderClient` + カスタム loader でプレビュー
+- [ ] Markdown 見た目プレビューは利用側（展開後 MD → HTML）。ライブラリは MD 出力のみ
+- [ ] ローカルで `npm` / Vite 等により起動・確認できれば十分
 
 ### テスト
 
-テスト仕様書: [app/test/specs/v0.2.0.md](../app/test/specs/v0.2.0.md)（[development.md](./development.md) の TDD 手順に従う）
+- [ ] テスト仕様書: `app/test/specs/v0.9.0.md`（または playground 側の検証方針を development に合わせて定義）
+- [ ] 仮想 FS loader 経由で include / component が解決できること
+- [ ] src → 展開結果が outDir 相当に反映されること（代表シナリオ）
 
-- [x] Phase 0: v0.1 回帰（Vitest 移行）
-- [x] `.doc_root` 基準の include / component 解決
-- [x] props 型不一致・未知 props・必須欠落
-- [x] 循環 include
-- [x] `__proto__` 等の拒否
+### 参照
 
-### 参照 spec
-
-[paths.md](./specs/paths.md) / [templating.md](./specs/templating.md) / [security.md](./specs/security.md)
+[need_decision.md](./need_decision.md) / [api.md](./specs/api.md)（`renderClient` / loader）/ [main.md](./main.md)（周辺方針）
 
 ---
 
-## v0.3.0 — ロジック（if / each）
+## v0.10.0 — データソースのインポート（API）
 
-本文を挟む構造ディレクティブと、step 2 / step 5 の分離を実装する。
+外部データ（YAML / JSON / CSV 等）を **API 側のみ**で読み、変数へバインドする。DSL では読まない。
 
-### 実装
+### 実装（メモ）
 
-- [x] hyogen ブロック内の宣言・代入（`const` / `let`、ホワイトリスト準拠 → [dsl.md](./specs/dsl.md)）
-- [x] `if` / `else if` / `else` / `endif`（Pug 風。step 5 展開）
-- [x] `each` / `endeach`（Pug 風。step 5 展開）
-- [x] `if` / `each` 構造ネスト合計 20 → `nest_limit_exceeded` 警告（[logic.md](./specs/logic.md)）
-- [x] 条件式・ループ式は `{{ }}` と同じ式サブセット
-- [x] パイプライン順の確定: 宣言（step 2）→ if/each 展開（step 5）→ `{{ }}`（step 6）
+- [ ] 公開 API でデータファイルを読み込む経路を追加（詳細形は実装前に [api.md](./specs/api.md) を更新）
+- [ ] **複数ファイル**読込可
+- [ ] 読み結果を context / テンプレート変数へバインド
+- [ ] 対応形式: 少なくとも YAML / JSON。CSV は同バージョンまたは直後で可
+- [ ] DSL の `import` / `require` は引き続き禁止（[dsl.md](./specs/dsl.md)）
 
 ### テスト
 
-- [x] if 分岐（else / else if 含む）
-- [x] each（配列・オブジェクトの配列）
-- [x] if 内 each / each 内 if
-- [x] ネスト 20 超のスキップ
-- [x] 未対 `if` → `parse_error`
+- [ ] テスト仕様書: `app/test/specs/v0.10.0.md`
+- [ ] 単一・複数ファイルの読込と変数参照
+- [ ] 欠落ファイル等のエラー挙動
 
-### 参照 spec
+### 参照
 
-[dsl.md](./specs/dsl.md) / [logic.md](./specs/logic.md) / [pipeline.md](./specs/pipeline.md)
+[need_decision.md](./need_decision.md) / [api.md](./specs/api.md) / [dsl.md](./specs/dsl.md)
 
 ---
 
-## v0.4.0 — extend / block
+## v0.11.0 — TOC 専用ヘルパ
 
-レイアウト継承をパイプライン上 include より先に解決する。
+ページ内見出しをパースし、TOC を生成する **専用ヘルパ**を入れる。
 
-### 実装
+### 実装（メモ）
 
-- [x] `extend <path>` / `block <name>` … `endblock`
-- [x] 子テンプレート: block 以外の本文は無視
-- [x] 未上書き block は layout デフォルトを残す
-- [x] extend は include より先（step 3）
-- [x] component 内 extend → `extend_in_component` 警告でスキップ
-- [x] extend 先頭 hyogen 必須（その上の front matter は可）
+- [ ] 構文・配置・見出し抽出ルールを [specs/](./specs/) に確定してから実装
+- [ ] 専用ヘルパとして提供（詳細は後続で詰める）
+- [ ] 出力は Markdown（リスト等）。HTML 化は対象外
 
 ### テスト
 
-テスト仕様書: [app/test/specs/v0.4.0.md](../app/test/specs/v0.4.0.md)（[development.md](./development.md) の TDD 手順に従う）
+- [ ] テスト仕様書: `app/test/specs/v0.11.0.md`
+- [ ] 代表的な見出し階層から TOC が生成されること
 
-- [x] 単一継承の block 上書き
-- [x] 未上書き block のデフォルト残存
-- [x] component 内 extend のスキップ
+### 参照
 
-### 参照 spec
-
-[templating.md](./specs/templating.md) / [pipeline.md](./specs/pipeline.md)
+[need_decision.md](./need_decision.md) / [wishlist.md](./wishlist.md)（個人メモ）
 
 ---
 
-## v0.5.0 — SSG（build）と Node 拡張
+## v0.12.0 — 許可メソッド追加
 
-一括ビルドとサーバ専用 context、リモート取得を載せる。
+式内の許可メソッドを拡張する（ビルトイン関数は当面なしのまま）。
 
-### 実装
+### 実装（メモ）
 
-- [x] `build()`（[api.md](./specs/api.md)）
-- [x] 入力: パス列挙 + glob（picomatch + fast-glob 想定）
-- [x] `_` partial のエントリ除外（マッチ後フィルタ。glob 明示で上書き可）
-- [x] エントリ指定 → 依存（include / component / extend）を辿る走査
-- [x] `serverContext`（`renderServer` / `build` のみ）
-- [x] リモート URL の include / component（Node のみ。デフォルト loader 拡張）
-- [x] `renderClient` に `serverContext` 相当 → `server_context_on_client` エラー
+- [ ] `.length` を許可
+- [ ] `.slice` など配列操作系を最小セットで許可（都度 [dsl.md](./specs/dsl.md) 更新）
+- [ ] ビルトイン関数は導入しない（必要なら別バージョンで再検討）
 
 ### テスト
 
-テスト仕様書: [app/test/specs/v0.5.0.md](../app/test/specs/v0.5.0.md)（[development.md](./development.md) の TDD 手順に従う）
+- [ ] テスト仕様書: `app/test/specs/v0.12.0.md`
+- [ ] 許可メソッドの正常系・未許可メソッドの拒否
 
-- [x] glob + `_` フィルタ
-- [x] 依存グラフ走査
-- [x] `serverContext` が CSR に渡らないこと
-- [x] リモート include（モック fetch）
+### 参照
 
-### 参照 spec
-
-[api.md](./specs/api.md) / [paths.md](./specs/paths.md) / [pipeline.md](./specs/pipeline.md)
+[need_decision.md](./need_decision.md) / [dsl.md](./specs/dsl.md)
 
 ---
 
-## v0.6.0 — CSR（renderClient）
+## トリガー待ち・採用時期未定
 
-ブラウザ実行向け API と loader 必須の制約を実装する。
-
-### 実装
-
-- [x] `renderClient()`（loader **必須**）
-- [x] ライブラリ本体はネットワーク取得しない（loader に委譲）
-- [x] 同一オリジン想定のパス解決（[paths.md](./specs/paths.md)）
-- [x] Node / ブラウザで共通のコアと、環境差（デフォルト loader の有無）の分離
-
-### テスト
-
-テスト仕様書: [app/test/specs/v0.6.0.md](../app/test/specs/v0.6.0.md)（[development.md](./development.md) の TDD 手順に従う）
-
-- [x] loader 未指定時のエラー
-- [x] 注入 loader 経由の include / component
-- [x] ブラウザバンドル可能な公開面（import パスの確認）
-
-### 参照 spec
-
-[api.md](./specs/api.md) / [pipeline.md](./specs/pipeline.md)
-
----
-
-## v0.7.0 — DSL 残り・式の完成度
-
-ホワイトリスト上の残り構文とショートハンド、セキュリティ警告を揃える。
-
-### 実装
-
-- [x] `@@` ショートハンド（`@hg` と等価 → [dsl.md](./specs/dsl.md)）
-- [x] `for (init; cond; update)` / `do { ... } while (cond)`（hyogen ブロック内）
-- [x] 三項演算子（`{{ }}` 内）
-- [x] `.toLocaleString(...)` の許可
-- [x] テンプレートリテラル内 `${}` の式制限
-- [x] コードフェンス内 hyogen ブロックの無視
-- [x] context 値の危険パターン警告 → `suspicious_context_value`（正規表現は実装時調整 → [need_decision.md](./need_decision.md)）
-
-### テスト
-
-テスト仕様書: [app/test/specs/v0.7.0.md](../app/test/specs/v0.7.0.md)（[development.md](./development.md) の TDD 手順に従う）
-
-- [x] `@@` と `@hg` の等価性
-- [x] for / do-while
-- [x] 三項・テンプレートリテラル
-- [x] フェンス内 DSL が実行されないこと
-
-### 参照 spec
-
-[dsl.md](./specs/dsl.md) / [security.md](./specs/security.md)
-
----
-
-## v0.8.0 — 仕上げ・ドキュメント追随
-
-実装と spec の差分を埋め、利用例と回帰テストを厚くする。
-
-### 実装
-
-- [x] [need_decision.md](./need_decision.md) の未決が残っていれば spec 更新または実装反映
-- [x] each 内 component 呼び出しの公式例を [templating.md](./specs/templating.md) に追記
-- [x] エラーログ出力形式の統一（[api.md](./specs/api.md) の例）→ `formatDiagnosticLog`
-- [x] ビルトイン関数の要否判断（**当面なし**。v0.9+ 候補として記録）
-
-### テスト
-
-テスト仕様書: [app/test/specs/v0.8.0.md](../app/test/specs/v0.8.0.md)（[development.md](./development.md) の TDD 手順に従う）
-
-- [x] spec 各章に対応する統合テスト（代表 fixture）
-- [x] 回帰: 警告は中断しない・エラーは中断する
-
-### 参照 spec
-
-（横断。特に [templating.md](./specs/templating.md) / [api.md](./specs/api.md) / [security.md](./specs/security.md) / [need_decision.md](./need_decision.md)）
-
----
-
-## v0.9.0 以降（未定）
-
-以下は **v0.x の追加候補**。順序・採否は実装の進捗と spec 更新に従う。詳細は [need_decision.md](./need_decision.md)。
+順序・時期は未定。ロードマップ上の番号は振らない。
 
 | 項目 | 方針 |
 |------|------|
-| 追加ビルトイン関数・許可メソッド | **候補メモのみ**（実装は後）。頭出し: `.length` / `.slice` など配列操作系。詳細は dsl / need_decision |
-| パフォーマンス計測とホットパス改善 | **当面やらない**。実利用で遅さを感じたら、計測基盤 → ホットパス改善へすぐ移す |
+| パフォーマンス計測とホットパス改善 | **当面やらない**。実利用で遅さを感じたら、計測 → 改善へすぐ移す |
 | 未展開 `{{ }}` の明示的オプション化 | **不要（後回し）**。現状のプレビュー許容で十分 |
-| プレイグラウンド | **同リポジトリ内**で用意する（ドキュメントサイト未満）。ローカルで試せれば十分。詳細は [need_decision.md](./need_decision.md) |
-| データソースのインポート | **API のみ**（DSL では読まない）。複数ファイル可。YAML / JSON / CSV 等 → 変数。詳細は [need_decision.md](./need_decision.md) |
-| TOC | **専用ヘルパ**方針。詳細は後続 |
+| component の見出し適合 | 採用時期未定 |
+| ナビゲーション機能 | 現状維持・先送り |
+| front matter の `@hg` 内読み込み | 採用時期未定 |
+| `@hg` 内の `echo` | 採用時期未定。現状は `{{ }}` |
 
-### 採用時期未定（先送り）
+詳細: [need_decision.md](./need_decision.md)
 
-- component の見出し適合
-- ナビゲーション機能
-- front matter の `@hg` 内読み込み
-- `@hg` 内の `echo`（変数の本文展開）
+---
 
-詳細は [need_decision.md](./need_decision.md)。
+## 対象外・配布
 
-### ロードマップから外したもの
-
-- **HTML 出力レイヤ** — ライブラリは Markdown 出力のみ。HTML 化は利用側の責務（対象外）
-
-### 配布
-
-- **npm 公開** — **時期は未定**。プレイグラウンドのためには公開不要（ローカル利用で十分）
-
-## 無期限保留
-
-- **mixin**（保留中。必要が出た時点で spec 再検討 → [need_decision.md](./need_decision.md)）
+| 項目 | 方針 |
+|------|------|
+| HTML 出力レイヤ | **対象外**。ライブラリは Markdown 出力のみ |
+| npm 公開 | **時期は未定**。プレイグラウンドのためには不要 |
+| ドキュメントサイト | 当面作らない（プレイグラウンドで足りる想定） |
+| mixin | 無期限保留（[need_decision.md](./need_decision.md)） |
 
 ---
 
@@ -282,6 +152,7 @@
 | 本ロードマップ | **`v0.n.0` = MINOR 相当の機能塊**（PATCH は同一塊内の修正） |
 | `v1.0.0` | API・仕様安定の宣言。タイミングはメンテナー判断 |
 | spec 変更 | 実装前に [specs/](./specs/) を更新し、ロードマップのチェック項目と同期する |
+| 完了バージョン | [_archive/roadmap/](./_archive/roadmap/) へ移す |
 
 ---
 

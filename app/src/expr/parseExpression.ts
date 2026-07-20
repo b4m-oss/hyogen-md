@@ -430,20 +430,70 @@ class ExpressionParser {
     throw parseError(this.path, "unterminated template expression");
   }
 
-  private parseCallArgs(): Record<string, unknown> {
+  private parseCallArgs(): Record<string, ExprNode> {
     this.skipWhitespace();
     if (this.peek() === ")") {
       this.index++;
       return {};
     }
 
-    const args = this.parseObjectLiteral();
+    if (this.peek() !== "{") {
+      throw parseError(this.path, "expected object literal");
+    }
+    this.index++;
+    this.skipWhitespace();
+
+    const result: Record<string, ExprNode> = {};
+    if (this.peek() === "}") {
+      this.index++;
+      this.skipWhitespace();
+      if (this.peek() !== ")") {
+        throw parseError(this.path, "expected ')' after call arguments");
+      }
+      this.index++;
+      return result;
+    }
+
+    while (true) {
+      this.skipWhitespace();
+      const key = this.readIdentifier();
+      if (!key) {
+        throw parseError(this.path, "expected property name in object literal");
+      }
+
+      this.skipWhitespace();
+      if (this.peek() !== ":") {
+        throw parseError(this.path, "expected ':' in object literal");
+      }
+      this.index++;
+      this.skipWhitespace();
+
+      // Call-arg values may be full expressions (e.g. item.name in each).
+      result[key] = this.parseTernary();
+      this.skipWhitespace();
+
+      if (this.peek() === "}") {
+        this.index++;
+        break;
+      }
+      if (this.peek() === ",") {
+        this.index++;
+        this.skipWhitespace();
+        if (this.peek() === "}") {
+          this.index++;
+          break;
+        }
+        continue;
+      }
+      throw parseError(this.path, "expected ',' or '}' in object literal");
+    }
+
     this.skipWhitespace();
     if (this.peek() !== ")") {
       throw parseError(this.path, "expected ')' after call arguments");
     }
     this.index++;
-    return args;
+    return result;
   }
 
   private parseObjectLiteral(): Record<string, unknown> {

@@ -24,7 +24,18 @@ describe("parseExpression", () => {
     assert.equal(node.type, "call");
     if (node.type === "call") {
       assert.equal(node.callee, "greet");
-      assert.deepEqual(node.args, { name: "Ada" });
+      assert.deepEqual(node.args, {
+        name: { type: "literal", value: "Ada" },
+      });
+    }
+  });
+
+  it("parses expression values in call arguments", () => {
+    const node = parseExpression("cityItem({ city: item.name, population: 1 })");
+    assert.equal(node.type, "call");
+    if (node.type === "call") {
+      assert.equal(node.args.city?.type, "member");
+      assert.deepEqual(node.args.population, { type: "literal", value: 1 });
     }
   });
 

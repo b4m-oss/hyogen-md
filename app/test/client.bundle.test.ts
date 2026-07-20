@@ -27,6 +27,7 @@ describe("hyogen-md/client bundle (v0.6)", () => {
     assert.equal(typeof mod.renderClient, "function");
     assert.equal(typeof mod.createHyogenError, "function");
     assert.equal(typeof mod.formatMessage, "function");
+    assert.equal(typeof mod.formatDiagnosticLog, "function");
     assert.equal("build" in mod, false);
     assert.equal("renderServer" in mod, false);
   });

@@ -5,30 +5,20 @@
 
 ---
 
-## DSL
-
-- 許可メソッドの追加（都度 spec。当面 `.toLocaleString` のみ）
-- 初期リリースのビルトイン関数（実装状況を見て検討）
-
----
-
-## Component
-
-- **each 内で component を呼ぶ公式例**の追加（方針: 可・変数見える → [templating.md](./specs/templating.md)）
-
----
-
-## セキュリティ
-
-- 危険 context 警告の **最終正規表現**（パターン表は [security.md](./specs/security.md) に確定。実装時に調整）
-
----
-
 ## 保留（当面実装しない）
 
 | 項目 | 方針 |
 |------|------|
 | **mixin** | 廃止（保留）。component / include で代替。必要時に将来実装 |
+
+---
+
+## 将来候補（v0.9+）
+
+| 項目 | 方針 | 参照 |
+|------|------|------|
+| ビルトイン関数 | **v0.8 時点では導入しない**（当面なし）。必要なら v0.9+ で spec 追加のうえ最小セット | [dsl.md](./specs/dsl.md) |
+| 許可メソッドの追加 | 当面 `.toLocaleString` のみ。追加は都度 spec | [dsl.md](./specs/dsl.md) |
 
 ---
 
@@ -39,6 +29,9 @@
 | `HyogenError` / `HyogenWarning` の詳細型 | api.md の概要型をベースに実装 | [api.md](./specs/api.md) |
 | glob 実装 | Vite 系。picomatch + fast-glob 等 | [api.md](./specs/api.md) |
 | 英語メッセージ | [messages.en.json](./specs/messages.en.json) を正 | [api.md](./specs/api.md) |
+| 診断ログ形式 | `formatDiagnosticLog`（console 自動出力なし） | [api.md](./specs/api.md) |
+| suspicious 正規表現 | security.md に確定転記済み | [security.md](./specs/security.md) |
+| each 内 component | 可・ループ変数は props に見える。公式例あり | [templating.md](./specs/templating.md) |
 
 ---
 

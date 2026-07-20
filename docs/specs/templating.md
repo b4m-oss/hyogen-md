@@ -36,7 +36,7 @@
 | ネスト | component 内でさらに `component ... as` **可** |
 | include | component 内で **可** |
 | extend | component 内では **不可**。書いた場合は **スキップ + 警告** |
-| each 内呼び出し | **可**（ループ変数は見える。公式例は後続） |
+| each 内呼び出し | **可**（ループ変数は props に見える。公式例は下記） |
 
 関数呼び出し全般は [dsl.md](./dsl.md)。
 
@@ -113,6 +113,51 @@ component city-item.md as cityItem
 ```
 
 output: `cities.md`（レンダリング結果）
+
+```markdown
+# City list
+
+- Name: Osaka / Population: 2,825,000
+- Name: Kobe / Population: 1,490,000
+```
+
+### each 内での component 呼び出し
+
+ループ変数は component の props に渡せる（呼び出しオブジェクトの値は **式可**。例: `item.name`）。親スコープの変数も component から見える（[variables.md](./variables.md)）。
+
+parent: `cities.md`（each 版）
+
+```markdown
+<!--
+@hg
+component city-item.md as cityItem
+@endhg
+-->
+
+<!--
+@hg
+const cities = [
+  { name: "Osaka", population: 2825000 },
+  { name: "Kobe", population: 1490000 },
+]
+@endhg
+-->
+
+# City list
+
+<!--
+@hg
+each item in cities
+@endhg
+-->
+- {{ cityItem({ city: item.name, population: item.population }) }}
+<!--
+@hg
+endeach
+@endhg
+-->
+```
+output:
 
 ```markdown
 # City list

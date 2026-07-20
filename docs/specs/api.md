@@ -72,7 +72,20 @@ type BuildOptions = RenderOptions & {
 };
 
 declare function build(options: BuildOptions): Promise<BuildResult>;
+
+/** 診断を api.md 例形式の複数行テキストに整形する。console へは出力しない。 */
+declare function formatDiagnosticLog(
+  kind: "error" | "warning",
+  diagnostic: HyogenDiagnostic,
+): string;
 ```
+
+`formatDiagnosticLog` は `hyogen-md` および `hyogen-md/client` から export される。
+
+- 1 行目: `[hyogen:{kind}] {code}`
+- 以降: `details` の各キーを `  {key}: {value}`（インデント 2 スペース）。値は `String(value)`。`undefined` のキーは省略
+- `diagnostic.path` も `path` 行として含める。`details.path` がある場合はそちらを優先
+- ライブラリ本体は **自動で console 出力しない**（呼び出し側が使うユーティリティ）
 
 ### サーバ専用 context
 

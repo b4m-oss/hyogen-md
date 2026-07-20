@@ -96,7 +96,7 @@ export type ExprNode =
   | { type: "literal"; value: unknown }
   | { type: "member"; object: ExprNode; property: string }
   | { type: "default"; left: ExprNode; right: ExprNode }
-  | { type: "call"; callee: string; args: Record<string, unknown> }
+  | { type: "call"; callee: string; args: Record<string, ExprNode> }
   | { type: "method"; object: ExprNode; method: string; args: unknown[] }
   | { type: "unary"; op: "!"; operand: ExprNode }
   | { type: "binary"; op: BinaryOp; left: ExprNode; right: ExprNode }

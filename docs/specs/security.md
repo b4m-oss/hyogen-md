@@ -18,7 +18,7 @@
 
 | 項目 | 方針 |
 |------|------|
-| 式の範囲 | `{{ }}` は式のみ。関数はユーザー登録（component `as`）および将来のビルトインのみ。メソッドは当面 `.toLocaleString` のみ。詳細は [dsl.md](./dsl.md) |
+| 式の範囲 | `{{ }}` は式のみ。関数はユーザー登録（component `as`）のみ。ビルトインは当面なし。メソッドは当面 `.toLocaleString` のみ。詳細は [dsl.md](./dsl.md) |
 | 危険キー | `__proto__` / `prototype` / `constructor` / `__defineGetter__` |
 | 危険キーアクセス時 | **エラー**（`forbidden_property_access`） |
 | 変数パス深さ・文字種 | 明示制限なし（識別子は JS Unicode 相当） |
@@ -37,15 +37,24 @@
 改変はしない。検出したら `suspicious_context_value` を出す。  
 メッセージテンプレートは [messages.en.json](./messages.en.json)。
 
-| パターン | 例 | reason（参考） |
-|----------|-----|----------------|
+| パターン | 例 | reason |
+|----------|-----|--------|
 | script タグ | `<script`, `</script>` | `contains_html_script_tag` |
 | イベントハンドラ属性 | `onerror=`, `onclick=`, `onload=` | `contains_event_handler` |
 | 危険スキーム | `javascript:`, `vbscript:` | `contains_dangerous_scheme` |
 | 埋め込み | `<iframe`, `<object`, `<embed` | `contains_embed_tag` |
 | meta refresh 等 | `<meta` + `http-equiv` | `contains_meta_refresh` |
 
-正規表現の厳密定義は実装時に調整してよい。
+確定正規表現（[scanSuspiciousContext.ts](../../app/src/security/scanSuspiciousContext.ts) と一致）:
+
+```js
+/<\/?script\b/i                     // contains_html_script_tag
+/\bon(?:error|click|load)\s*=/i     // contains_event_handler
+/(?:javascript|vbscript)\s*:/i      // contains_dangerous_scheme
+/<(?:iframe|object|embed)\b/i       // contains_embed_tag
+/<meta\b[^>]*\bhttp-equiv\b/i       // contains_meta_refresh
+```
+
 
 ## DoS・資源
 

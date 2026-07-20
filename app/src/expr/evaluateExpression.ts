@@ -121,9 +121,13 @@ export async function evaluateExpression(
           },
         });
       }
+      const props: HyogenContext = {};
+      for (const [key, valueNode] of Object.entries(node.args)) {
+        props[key] = await evaluateExpression(valueNode, options);
+      }
       return renderComponent({
         alias: node.callee,
-        props: node.args,
+        props,
         parentContext: options.parentContext ?? context,
         registry: options.registry,
         loader: options.loader,

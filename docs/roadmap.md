@@ -220,15 +220,21 @@
 
 ### 実装
 
-- [ ] [need_decision.md](./need_decision.md) の未決が残っていれば spec 更新または実装反映
-- [ ] each 内 component 呼び出しの公式例を [templating.md](./specs/templating.md) に追記
-- [ ] エラーログ出力形式の統一（[api.md](./specs/api.md) の例）
-- [ ] ビルトイン関数の要否判断（必要なら spec 追加のうえ最小セット）
+- [x] [need_decision.md](./need_decision.md) の未決が残っていれば spec 更新または実装反映
+- [x] each 内 component 呼び出しの公式例を [templating.md](./specs/templating.md) に追記
+- [x] エラーログ出力形式の統一（[api.md](./specs/api.md) の例）→ `formatDiagnosticLog`
+- [x] ビルトイン関数の要否判断（**当面なし**。v0.9+ 候補として記録）
 
 ### テスト
 
-- [ ] spec 各章に対応する統合テスト（代表 fixture）
-- [ ] 回帰: 警告は中断しない・エラーは中断する
+テスト仕様書: [app/test/specs/v0.8.0.md](../app/test/specs/v0.8.0.md)（[development.md](./development.md) の TDD 手順に従う）
+
+- [x] spec 各章に対応する統合テスト（代表 fixture）
+- [x] 回帰: 警告は中断しない・エラーは中断する
+
+### 参照 spec
+
+（横断。特に [templating.md](./specs/templating.md) / [api.md](./specs/api.md) / [security.md](./specs/security.md) / [need_decision.md](./need_decision.md)）
 
 ---
 
@@ -238,9 +244,12 @@
 
 - パフォーマンス計測とホットパス改善
 - 追加ビルトイン関数・許可メソッド
-- **mixin**（保留中。必要が出た時点で spec 再検討 → [need_decision.md](./need_decision.md)）
 - プレビュー向け（未展開 `{{ }}` 許容）の明示的オプション化
 - HTML 出力レイヤ（当面は Markdown 出力が第一。後段責務として分離しうる）
+
+## 無期限保留
+
+- **mixin**（保留中。必要が出た時点で spec 再検討 → [need_decision.md](./need_decision.md)）
 
 ---
 

@@ -6,8 +6,10 @@ export { createNodeLoader } from "./io/createNodeLoader.js";
 export { isRemotePath } from "./io/isRemotePath.js";
 export { createHyogenError } from "./errors/createError.js";
 export { formatMessage } from "./errors/formatMessage.js";
+export { formatDiagnosticLog } from "./errors/formatDiagnosticLog.js";
 export type {
   HyogenContext,
+  HyogenDiagnostic,
   HyogenError,
   HyogenWarning,
   Loader,

@@ -1,6 +1,6 @@
 {
   "name": "hyogen-md",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Extended Markdown template engine",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,10 +21,14 @@
     "dev": "tsc -p tsconfig.json --watch"
   },
   "devDependencies": {
+    "@types/node": "^26.1.1",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0"
   }
 }

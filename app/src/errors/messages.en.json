@@ -1,0 +1,29 @@
+{
+  "errors": {
+    "file_not_found": "File not found: {path} (referenced from {from} via {via})",
+    "frontmatter_too_large": "Front matter exceeds size limit in {path} ({size} bytes, limit {limit})",
+    "duplicate_component_alias": "Duplicate component alias \"{alias}\" in {path}",
+    "alias_collision": "Component alias \"{alias}\" collides with an existing binding in {path}",
+    "forbidden_property_access": "Forbidden property access \"{property}\" in {path}",
+    "parse_error": "Parse error in {path}: {message}",
+    "component_multiline_output": "Component \"{alias}\" returned multiline output (single line required)",
+    "server_context_on_client": "serverContext is not allowed with renderClient",
+    "load_failed": "Failed to load {path}: {reason}"
+  },
+  "warnings": {
+    "circular_include": "Circular reference detected; skipped {path} (referenced from {from} via {via})",
+    "nest_limit_exceeded": "Nesting limit exceeded ({limit}); skipped block in {path}",
+    "extend_in_component": "extend is not allowed inside a component; skipped in {path}",
+    "prop_type_mismatch": "Prop \"{prop}\" type mismatch in component \"{component}\"; expected {expected}, got {actual}",
+    "prop_missing": "Required prop \"{prop}\" is missing for component \"{component}\"",
+    "prop_unknown": "Unknown prop \"{prop}\" passed to component \"{component}\"; ignored",
+    "suspicious_context_value": "Suspicious value in context key \"{key}\" ({reason})"
+  },
+  "warningReasons": {
+    "contains_html_script_tag": "contains HTML script tag",
+    "contains_event_handler": "contains inline event handler",
+    "contains_dangerous_scheme": "contains dangerous URL scheme",
+    "contains_embed_tag": "contains embeddable HTML tag",
+    "contains_meta_refresh": "contains meta refresh"
+  }
+}

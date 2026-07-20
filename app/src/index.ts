@@ -1,5 +1,12 @@
-/**
- * hyogen.md — Extended Markdown template engine.
- * Implementation pending; see docs/ for specifications.
- */
-export {};
+export { renderServer } from "./renderServer.js";
+export { createHyogenError } from "./errors/createError.js";
+export { formatMessage } from "./errors/formatMessage.js";
+export type {
+  HyogenContext,
+  HyogenError,
+  HyogenWarning,
+  Loader,
+  RenderOptions,
+  RenderResult,
+  ServerRenderOptions,
+} from "./types.js";

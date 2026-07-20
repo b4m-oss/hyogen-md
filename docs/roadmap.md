@@ -16,23 +16,25 @@
 
 ### 実装
 
-- [ ] 公開型の骨格（`HyogenError` / `HyogenWarning` / `RenderResult` 等 → [api.md](./specs/api.md)）
-- [ ] 英語メッセージ参照（[messages.en.json](./specs/messages.en.json)）
-- [ ] 処理パイプラインのオーケストレータ（段階の呼び出し順のみ。中身は段階的に接続 → [pipeline.md](./specs/pipeline.md)）
-- [ ] hyogen ブロックの字句解析（`@hg` / `@endhg`。`@@` は後続バージョンでも可）
-- [ ] YAML front matter のパースと context への注入（64KB 上限 → `frontmatter_too_large`）
-- [ ] 本文 `{{ }}` の式評価（変数参照・リテラル・メンバアクセス）
-- [ ] デフォルトパイプ `{{ value | "default" }}`
-- [ ] `include`（ローカル相対パス。`renderServer(source: string)` から）
-- [ ] 出力オプション: front matter strip（デフォルト ON）、hyogen コメント strip（デフォルト ON）
-- [ ] エラー: `parse_error` / `file_not_found` / `load_failed`（loader 未実装時の FS 読み込み含む）
+- [x] 公開型の骨格（`HyogenError` / `HyogenWarning` / `RenderResult` 等 → [api.md](./specs/api.md)）
+- [x] 英語メッセージ参照（[messages.en.json](./specs/messages.en.json)）
+- [x] 処理パイプラインのオーケストレータ（段階の呼び出し順のみ。中身は段階的に接続 → [pipeline.md](./specs/pipeline.md)）
+- [x] hyogen ブロックの字句解析（`@hg` / `@endhg`。`@@` は後続バージョンでも可）
+- [x] YAML front matter のパースと context への注入（64KB 上限 → `frontmatter_too_large`）
+- [x] 本文 `{{ }}` の式評価（変数参照・リテラル・メンバアクセス）
+- [x] デフォルトパイプ `{{ value | "default" }}`
+- [x] `include`（ローカル相対パス。`renderServer(source: string)` から）
+- [x] 出力オプション: front matter strip（デフォルト ON）、hyogen コメント strip（デフォルト ON）
+- [x] エラー: `parse_error` / `file_not_found` / `load_failed`（loader 未実装時の FS 読み込み含む）
 
 ### テスト
 
-- [ ] front matter → 変数展開
-- [ ] include の単純埋め込み
-- [ ] デフォルトパイプ
-- [ ] 不正 DSL → `parse_error`
+テスト仕様書: [app/test/specs/v0.1.0.md](../app/test/specs/v0.1.0.md)（[development.md](./development.md) の TDD 手順に従う）
+
+- [x] front matter → 変数展開
+- [x] include の単純埋め込み
+- [x] デフォルトパイプ
+- [x] 不正 DSL → `parse_error`
 
 ### 参照 spec
 

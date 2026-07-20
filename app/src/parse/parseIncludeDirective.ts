@@ -1,14 +1,12 @@
 import { createHyogenError } from "../errors/createError.js";
 import type { IncludeDirective } from "../types.js";
+import { stripHgMarkers } from "./hgMarkers.js";
 
 export function parseIncludeDirective(
   inner: string,
   path?: string,
 ): Pick<IncludeDirective, "kind" | "path"> {
-  const trimmed = inner
-    .replace(/@hg/g, "")
-    .replace(/@endhg/g, "")
-    .trim();
+  const trimmed = stripHgMarkers(inner).trim();
   if (trimmed.length === 0) {
     throw createHyogenError({
       code: "parse_error",

@@ -3,11 +3,16 @@ import type { ComponentRegistry } from "../component/ComponentRegistry.js";
 import type { ExecuteHgBlocksResult, HyogenContext } from "../types.js";
 import { parseComponentDirective } from "../parse/parseComponentDirective.js";
 import { parseIncludeDirective } from "../parse/parseIncludeDirective.js";
-import { findUnclosedHgBlock, scanHgBlocks } from "../parse/scanHgBlocks.js";
+import {
+  describeHgBlockMarkerError,
+  findUnclosedHgBlock,
+  scanHgBlocks,
+} from "../parse/scanHgBlocks.js";
 import {
   extractHgBlockLines,
   isControlDirectiveLine,
 } from "../logic/hgBlockUtils.js";
+import { isExecutableBlockSource } from "../logic/parseStatement.js";
 import { isDeclarationSource } from "../logic/parseDeclaration.js";
 
 const MARKER_PREFIX = "\u0000HYOGEN_INCLUDE_";
@@ -36,7 +41,10 @@ function parseHgBlockDirective(
     return { kind: "control" };
   }
 
-  if (lines.length === 1 && isDeclarationSource(lines[0]!)) {
+  if (
+    lines.length === 1 &&
+    (isDeclarationSource(lines[0]!) || isExecutableBlockSource(lines[0]!))
+  ) {
     return null;
   }
 
@@ -88,7 +96,11 @@ export function executeHgBlocks(
     throw createHyogenError({
       code: "parse_error",
       path,
-      details: { message: "unclosed @hg block (missing @endhg)" },
+      details: {
+        message:
+          describeHgBlockMarkerError(source) ??
+          "unclosed hyogen block (missing closing marker)",
+      },
     });
   }
 

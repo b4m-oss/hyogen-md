@@ -1,8 +1,7 @@
+import { stripHgMarkers } from "../parse/hgMarkers.js";
+
 export function extractHgBlockLines(inner: string): string[] {
-  const stripped = inner
-    .replace(/@hg/g, "")
-    .replace(/@endhg/g, "")
-    .trim();
+  const stripped = stripHgMarkers(inner).trim();
 
   return stripped
     .split(/\r?\n/)

@@ -156,6 +156,27 @@ export async function evaluateExpression(
         ...(node.args as [string?]),
       );
     }
+    case "ternary": {
+      const condition = await evaluateExpression(node.condition, options);
+      if (isFalsy(condition)) {
+        return evaluateExpression(node.alternate, options);
+      }
+      return evaluateExpression(node.consequent, options);
+    }
+    case "template": {
+      let result = "";
+      for (const part of node.parts) {
+        if (typeof part === "string") {
+          result += part;
+        } else {
+          const value = await evaluateExpression(part, options);
+          if (value !== null && value !== undefined) {
+            result += String(value);
+          }
+        }
+      }
+      return result;
+    }
     default:
       return undefined;
   }

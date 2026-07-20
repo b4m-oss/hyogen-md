@@ -99,12 +99,44 @@ export type ExprNode =
   | { type: "call"; callee: string; args: Record<string, unknown> }
   | { type: "method"; object: ExprNode; method: string; args: unknown[] }
   | { type: "unary"; op: "!"; operand: ExprNode }
-  | { type: "binary"; op: BinaryOp; left: ExprNode; right: ExprNode };
+  | { type: "binary"; op: BinaryOp; left: ExprNode; right: ExprNode }
+  | {
+      type: "ternary";
+      condition: ExprNode;
+      consequent: ExprNode;
+      alternate: ExprNode;
+    }
+  | { type: "template"; parts: Array<string | ExprNode> };
 
 export type Declaration =
   | { kind: "const"; name: string; expr: ExprNode }
   | { kind: "let"; name: string; expr: ExprNode }
   | { kind: "assign"; name: string; expr: ExprNode };
+
+export type CompoundAssignOp = "+=" | "-=" | "*=" | "/=";
+
+export type Statement =
+  | Declaration
+  | {
+      kind: "for";
+      init: Statement | null;
+      cond: ExprNode;
+      update: Statement | null;
+      body: Statement[];
+    }
+  | { kind: "do_while"; body: Statement[]; cond: ExprNode }
+  | {
+      kind: "update";
+      name: string;
+      op: "++" | "--";
+      position: "prefix" | "postfix";
+    }
+  | {
+      kind: "compound_assign";
+      name: string;
+      op: CompoundAssignOp;
+      expr: ExprNode;
+    };
 
 export type ControlOpener =
   | { kind: "if"; expr: ExprNode }

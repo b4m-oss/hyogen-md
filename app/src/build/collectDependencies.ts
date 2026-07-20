@@ -4,9 +4,16 @@ import {
   isControlDirectiveLine,
 } from "../logic/hgBlockUtils.js";
 import { isDeclarationSource } from "../logic/parseDeclaration.js";
+import {
+  isExecutableBlockSource,
+} from "../logic/parseStatement.js";
 import { parseComponentDirective } from "../parse/parseComponentDirective.js";
 import { parseIncludeDirective } from "../parse/parseIncludeDirective.js";
-import { findUnclosedHgBlock, scanHgBlocks } from "../parse/scanHgBlocks.js";
+import {
+  describeHgBlockMarkerError,
+  findUnclosedHgBlock,
+  scanHgBlocks,
+} from "../parse/scanHgBlocks.js";
 import { parseExtendDirective } from "../layout/parseExtendDirective.js";
 
 export type DependencyRef = {
@@ -25,7 +32,11 @@ export function collectDependencies(
     throw createHyogenError({
       code: "parse_error",
       path: fromPath,
-      details: { message: "unclosed @hg block (missing @endhg)" },
+      details: {
+        message:
+          describeHgBlockMarkerError(source) ??
+          "unclosed hyogen block (missing closing marker)",
+      },
     });
   }
 
@@ -46,7 +57,10 @@ export function collectDependencies(
       continue;
     }
 
-    if (lines.length === 1 && isDeclarationSource(lines[0]!)) {
+    if (
+      lines.length === 1 &&
+      (isDeclarationSource(lines[0]!) || isExecutableBlockSource(lines[0]!))
+    ) {
       continue;
     }
 
@@ -63,7 +77,11 @@ export function collectDependencies(
     }
 
     if (lines.length !== 1) {
-      // Multi-line: allow declaration blocks (const/let lines) and extend+decls
+      // Multi-line: allow declaration / statement blocks and extend+decls
+      const body = lines.join("\n");
+      if (isExecutableBlockSource(body)) {
+        continue;
+      }
       const allDeclarations = lines.every(
         (line) =>
           isDeclarationSource(line) ||

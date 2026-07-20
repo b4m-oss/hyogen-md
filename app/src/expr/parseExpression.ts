@@ -9,13 +9,17 @@ function isIdentifierPart(ch: string): boolean {
   return /[A-Za-z0-9_$]/.test(ch);
 }
 
-export function parseExpression(source: string, path?: string): ExprNode {
+export function parseExpression(
+  source: string,
+  path?: string,
+  options: { allowCalls?: boolean } = {},
+): ExprNode {
   const input = source.trim();
   if (input.length === 0) {
     throw parseError(path, "empty expression");
   }
 
-  const parser = new ExpressionParser(input, path);
+  const parser = new ExpressionParser(input, path, options);
   const node = parser.parseExpression();
   parser.skipWhitespace();
   if (parser.hasMore()) {
@@ -34,11 +38,15 @@ function parseError(path: string | undefined, message: string): never {
 
 class ExpressionParser {
   private index = 0;
+  private readonly allowCalls: boolean;
 
   constructor(
     private readonly input: string,
     private readonly path?: string,
-  ) {}
+    options: { allowCalls?: boolean } = {},
+  ) {
+    this.allowCalls = options.allowCalls !== false;
+  }
 
   get position(): number {
     return this.index;
@@ -60,17 +68,38 @@ class ExpressionParser {
   }
 
   private parsePipe(): ExprNode {
-    let node = this.parseLogicalOr();
+    let node = this.parseTernary();
     while (true) {
       this.skipWhitespace();
       if (this.peek() !== "|") {
         break;
       }
+      // Don't treat || as pipe
+      if (this.input[this.index + 1] === "|") {
+        break;
+      }
       this.index++;
-      const right = this.parseLogicalOr();
+      const right = this.parseTernary();
       node = { type: "default", left: node, right };
     }
     return node;
+  }
+
+  private parseTernary(): ExprNode {
+    const condition = this.parseLogicalOr();
+    this.skipWhitespace();
+    if (this.peek() !== "?") {
+      return condition;
+    }
+    this.index++;
+    const consequent = this.parseTernary();
+    this.skipWhitespace();
+    if (this.peek() !== ":") {
+      throw parseError(this.path, "expected ':' in ternary expression");
+    }
+    this.index++;
+    const alternate = this.parseTernary();
+    return { type: "ternary", condition, consequent, alternate };
   }
 
   private parseLogicalOr(): ExprNode {
@@ -246,6 +275,10 @@ class ExpressionParser {
       return node;
     }
 
+    if (ch === "`") {
+      return this.parseTemplateLiteral();
+    }
+
     if (ch === '"' || ch === "'") {
       return { type: "literal", value: this.readString() };
     }
@@ -283,6 +316,12 @@ class ExpressionParser {
 
       this.skipWhitespace();
       if (this.peek() === "(") {
+        if (!this.allowCalls) {
+          throw parseError(
+            this.path,
+            "component calls are not allowed in template literals",
+          );
+        }
         this.index++;
         const args = this.parseCallArgs();
         return { type: "call", callee: name, args };
@@ -291,14 +330,104 @@ class ExpressionParser {
       if (this.peek() === "[") {
         throw parseError(this.path, "bracket access is not allowed");
       }
-      if (this.peek() === "?") {
-        throw parseError(this.path, "ternary expressions are not allowed");
-      }
 
       return { type: "identifier", name };
     }
 
     throw parseError(this.path, `unexpected character '${ch}'`);
+  }
+
+  private parseTemplateLiteral(): ExprNode {
+    // Consume opening backtick.
+    this.index++;
+    const parts: Array<string | ExprNode> = [];
+    let current = "";
+
+    while (this.index < this.input.length) {
+      const ch = this.input[this.index]!;
+
+      if (ch === "`") {
+        this.index++;
+        parts.push(current);
+        return { type: "template", parts };
+      }
+
+      if (ch === "\\") {
+        this.index++;
+        if (this.index >= this.input.length) {
+          throw parseError(this.path, "unterminated template literal escape");
+        }
+        current += this.input[this.index]!;
+        this.index++;
+        continue;
+      }
+
+      if (ch === "$" && this.input[this.index + 1] === "{") {
+        parts.push(current);
+        current = "";
+        this.index += 2;
+        const exprSource = this.readTemplateExpression();
+        const expr = parseExpression(exprSource, this.path, {
+          allowCalls: false,
+        });
+        parts.push(expr);
+        continue;
+      }
+
+      current += ch;
+      this.index++;
+    }
+
+    throw parseError(this.path, "unterminated template literal");
+  }
+
+  private readTemplateExpression(): string {
+    let depth = 1;
+    const start = this.index;
+    let inString: '"' | "'" | "`" | null = null;
+
+    while (this.index < this.input.length) {
+      const ch = this.input[this.index]!;
+
+      if (inString) {
+        if (ch === "\\") {
+          this.index += 2;
+          continue;
+        }
+        if (ch === inString) {
+          inString = null;
+        }
+        this.index++;
+        continue;
+      }
+
+      if (ch === '"' || ch === "'" || ch === "`") {
+        inString = ch;
+        this.index++;
+        continue;
+      }
+
+      if (ch === "{") {
+        depth++;
+        this.index++;
+        continue;
+      }
+
+      if (ch === "}") {
+        depth--;
+        if (depth === 0) {
+          const source = this.input.slice(start, this.index);
+          this.index++;
+          return source;
+        }
+        this.index++;
+        continue;
+      }
+
+      this.index++;
+    }
+
+    throw parseError(this.path, "unterminated template expression");
   }
 
   private parseCallArgs(): Record<string, unknown> {

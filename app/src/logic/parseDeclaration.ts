@@ -2,34 +2,7 @@ import { createHyogenError } from "../errors/createError.js";
 import { parseExpression } from "../expr/parseExpression.js";
 import type { Declaration, ExprNode } from "../types.js";
 import { isReservedWord } from "./reservedWords.js";
-
-function stripComments(source: string): string {
-  let result = "";
-  let i = 0;
-
-  while (i < source.length) {
-    if (source.startsWith("//", i)) {
-      while (i < source.length && source[i] !== "\n") {
-        i++;
-      }
-      continue;
-    }
-
-    if (source.startsWith("/*", i)) {
-      const end = source.indexOf("*/", i + 2);
-      if (end === -1) {
-        break;
-      }
-      i = end + 2;
-      continue;
-    }
-
-    result += source[i]!;
-    i++;
-  }
-
-  return result;
-}
+import { stripComments } from "./stripComments.js";
 
 function parseError(path: string | undefined, message: string): never {
   throw createHyogenError({

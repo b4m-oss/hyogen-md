@@ -28,13 +28,9 @@ describe("parseExpression", () => {
     }
   });
 
-  it("throws parse_error for ternary expressions", () => {
-    try {
-      parseExpression("a ? b : c");
-      assert.fail("expected throw");
-    } catch (error) {
-      assertHyogenError(error, "parse_error");
-    }
+  it("parses ternary expressions", () => {
+    const node = parseExpression("a ? b : c");
+    assert.equal(node.type, "ternary");
   });
 
   it("throws parse_error for bracket access", () => {

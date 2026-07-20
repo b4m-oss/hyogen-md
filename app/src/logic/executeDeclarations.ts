@@ -1,11 +1,15 @@
 import { createHyogenError } from "../errors/createError.js";
 import type { ExecuteDeclarationsResult, HyogenContext } from "../types.js";
-import { findUnclosedHgBlock, scanHgBlocks } from "../parse/scanHgBlocks.js";
-import { executeDeclaration } from "./executeDeclaration.js";
 import {
-  isDeclarationSource,
-  parseDeclarationStatements,
-} from "./parseDeclaration.js";
+  describeHgBlockMarkerError,
+  findUnclosedHgBlock,
+  scanHgBlocks,
+} from "../parse/scanHgBlocks.js";
+import { executeStatementList } from "./executeStatement.js";
+import {
+  isExecutableBlockSource,
+  parseStatementList,
+} from "./parseStatement.js";
 import { extractHgBlockLines, isControlDirectiveLine } from "./hgBlockUtils.js";
 import { parseExtendBlock } from "../layout/parseExtendBlock.js";
 
@@ -25,7 +29,11 @@ export async function executeDeclarations(
     throw createHyogenError({
       code: "parse_error",
       path,
-      details: { message: "unclosed @hg block (missing @endhg)" },
+      details: {
+        message:
+          describeHgBlockMarkerError(source) ??
+          "unclosed hyogen block (missing closing marker)",
+      },
     });
   }
 
@@ -36,6 +44,9 @@ export async function executeDeclarations(
 
   const constBindings = new Set<string>();
   const declarationUpdates: HyogenContext = {};
+  const onUpdate = (name: string) => {
+    declarationUpdates[name] = context[name];
+  };
   let result = source;
   let offset = 0;
 
@@ -56,14 +67,15 @@ export async function executeDeclarations(
     const extendBlock = parseExtendBlock(block.inner, path);
     if (extendBlock) {
       if (extendBlock.declarationsSource.trim().length > 0) {
-        const declarations = parseDeclarationStatements(
+        const statements = parseStatementList(
           extendBlock.declarationsSource,
           path,
         );
-        for (const declaration of declarations) {
-          await executeDeclaration(declaration, context, { path, constBindings });
-          declarationUpdates[declaration.name] = context[declaration.name];
-        }
+        await executeStatementList(statements, context, {
+          path,
+          constBindings,
+          onUpdate,
+        });
       }
 
       // Keep the `extend <path>` directive for step 3, but remove declarations.
@@ -76,7 +88,7 @@ export async function executeDeclarations(
     }
 
     const body = lines.join("\n");
-    if (!isDeclarationSource(body)) {
+    if (!isExecutableBlockSource(body)) {
       if (lines.length === 1) {
         continue;
       }
@@ -87,11 +99,12 @@ export async function executeDeclarations(
       });
     }
 
-    const declarations = parseDeclarationStatements(body, path);
-    for (const declaration of declarations) {
-      await executeDeclaration(declaration, context, { path, constBindings });
-      declarationUpdates[declaration.name] = context[declaration.name];
-    }
+    const statements = parseStatementList(body, path);
+    await executeStatementList(statements, context, {
+      path,
+      constBindings,
+      onUpdate,
+    });
 
     const start = block.start - offset;
     const end = block.end - offset;

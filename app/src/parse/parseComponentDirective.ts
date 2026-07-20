@@ -1,4 +1,5 @@
 import { createHyogenError } from "../errors/createError.js";
+import { stripHgMarkers } from "./hgMarkers.js";
 
 export type ComponentDirective = {
   kind: "component";
@@ -13,10 +14,7 @@ export function parseComponentDirective(
   inner: string,
   path?: string,
 ): ComponentDirective {
-  const trimmed = inner
-    .replace(/@hg/g, "")
-    .replace(/@endhg/g, "")
-    .trim();
+  const trimmed = stripHgMarkers(inner).trim();
 
   if (trimmed.length === 0) {
     throw createHyogenError({

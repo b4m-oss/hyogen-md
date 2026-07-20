@@ -191,20 +191,22 @@
 
 ### 実装
 
-- [ ] `@@` ショートハンド（`@hg` と等価 → [dsl.md](./specs/dsl.md)）
-- [ ] `for (init; cond; update)` / `do { ... } while (cond)`（hyogen ブロック内）
-- [ ] 三項演算子（`{{ }}` 内）
-- [ ] `.toLocaleString(...)` の許可
-- [ ] テンプレートリテラル内 `${}` の式制限
-- [ ] コードフェンス内 hyogen ブロックの無視
-- [ ] context 値の危険パターン警告 → `suspicious_context_value`（正規表現は実装時調整 → [need_decision.md](./need_decision.md)）
+- [x] `@@` ショートハンド（`@hg` と等価 → [dsl.md](./specs/dsl.md)）
+- [x] `for (init; cond; update)` / `do { ... } while (cond)`（hyogen ブロック内）
+- [x] 三項演算子（`{{ }}` 内）
+- [x] `.toLocaleString(...)` の許可
+- [x] テンプレートリテラル内 `${}` の式制限
+- [x] コードフェンス内 hyogen ブロックの無視
+- [x] context 値の危険パターン警告 → `suspicious_context_value`（正規表現は実装時調整 → [need_decision.md](./need_decision.md)）
 
 ### テスト
 
-- [ ] `@@` と `@hg` の等価性
-- [ ] for / do-while
-- [ ] 三項・テンプレートリテラル
-- [ ] フェンス内 DSL が実行されないこと
+テスト仕様書: [app/test/specs/v0.7.0.md](../app/test/specs/v0.7.0.md)（[development.md](./development.md) の TDD 手順に従う）
+
+- [x] `@@` と `@hg` の等価性
+- [x] for / do-while
+- [x] 三項・テンプレートリテラル
+- [x] フェンス内 DSL が実行されないこと
 
 ### 参照 spec
 

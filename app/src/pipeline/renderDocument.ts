@@ -16,6 +16,7 @@ import { executeHgBlocks } from "./executeHgBlocks.js";
 import { applyFrontMatterOutputOption } from "./applyFrontMatterOutputOption.js";
 import { stripHgComments } from "./stripHgComments.js";
 import { expandExtendsAndBlocks } from "../layout/expandExtendsAndBlocks.js";
+import { scanSuspiciousContext } from "../security/scanSuspiciousContext.js";
 
 export type RenderDocumentOptions = RenderOptions & {
   path?: string;
@@ -45,6 +46,12 @@ export async function renderDocumentBody(
     source: afterDeclarations,
     declarationUpdates,
   } = await executeDeclarations(body, { path, context: { ...context } });
+
+  scanSuspiciousContext(
+    mergeContext(context, declarationUpdates ?? {}),
+    warnings,
+    path,
+  );
 
   const expandResult = await expandExtendsAndBlocks(afterDeclarations, {
     path,

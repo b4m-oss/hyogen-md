@@ -17,8 +17,16 @@
 
 | 項目 | 方針 | 参照 |
 |------|------|------|
-| ビルトイン関数 | **v0.8 時点では導入しない**（当面なし）。必要なら v0.9+ で spec 追加のうえ最小セット | [dsl.md](./specs/dsl.md) |
-| 許可メソッドの追加 | 当面 `.toLocaleString` のみ。追加は都度 spec | [dsl.md](./specs/dsl.md) |
+| ビルトイン関数 | **当面なし**（実装しない）。必要なら v0.9+ で spec 追加のうえ最小セット | [dsl.md](./specs/dsl.md) |
+| 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。**候補メモ**: `.length` / `.slice` など配列操作系。追加時は都度 spec | [dsl.md](./specs/dsl.md) |
+| パフォーマンス | **当面やらない**。体感遅さが出たら計測基盤 → ホットパス改善 | [roadmap.md](./roadmap.md) |
+| 未展開 `{{ }}` の明示オプション | **不要（後回し）**。現状のプレビュー許容で十分 | [pipeline.md](./specs/pipeline.md), [variables.md](./specs/variables.md) |
+
+## 対象外（ロードマップから除外）
+
+| 項目 | 方針 | 参照 |
+|------|------|------|
+| HTML 出力レイヤ | ライブラリは **Markdown 出力のみ**。HTML 化は利用側 | [pipeline.md](./specs/pipeline.md), [main.md](./main.md) |
 
 ---
 

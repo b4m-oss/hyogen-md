@@ -23,6 +23,7 @@
 - extend の多重継承
 - **mixin**（保留。component で代替）
 - 任意 JavaScript の評価（`eval` / `new Function` 等）
+- **HTML 出力**（Markdown 出力のみ。HTML 化は利用側）
 
 ### 表記
 

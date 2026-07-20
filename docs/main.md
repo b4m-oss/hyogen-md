@@ -24,10 +24,15 @@
 - **mixin**（保留。component で代替）
 - 任意 JavaScript の評価（`eval` / `new Function` 等）
 - **HTML 出力**（Markdown 出力のみ。HTML 化は利用側）
+- **ドキュメントサイト**（当面作らない。動作確認は同リポのプレイグラウンドで足りる想定）
 
 ### 表記
 
 - 正式名称は **`hyogen.md`**（`hyougen.md` は用いない）
+
+### 周辺（方針メモ）
+
+- **プレイグラウンド**: 同リポジトリ内。ローカルで試せれば十分。npm 公開はプレイグラウンドの前提にしない（時期未定） → [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
 
 ---
 

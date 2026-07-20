@@ -21,6 +21,8 @@
 | 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。**候補メモ**: `.length` / `.slice` など配列操作系。追加時は都度 spec | [dsl.md](./specs/dsl.md) |
 | パフォーマンス | **当面やらない**。体感遅さが出たら計測基盤 → ホットパス改善 | [roadmap.md](./roadmap.md) |
 | 未展開 `{{ }}` の明示オプション | **不要（後回し）**。現状のプレビュー許容で十分 | [pipeline.md](./specs/pipeline.md), [variables.md](./specs/variables.md) |
+| プレイグラウンド | **同リポジトリ内**。ドキュメントサイトほどではない。ローカルで動作確認できれば十分（バーチャル FS + `renderClient` 想定） | [roadmap.md](./roadmap.md) |
+| npm 公開 | **時期は未定**。プレイグラウンド先行のためには公開不要 | [roadmap.md](./roadmap.md) |
 
 ## 対象外（ロードマップから除外）
 

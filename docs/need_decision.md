@@ -23,6 +23,17 @@
 | 未展開 `{{ }}` の明示オプション | **不要（後回し）**。現状のプレビュー許容で十分 | [pipeline.md](./specs/pipeline.md), [variables.md](./specs/variables.md) |
 | プレイグラウンド | **同リポジトリ内**。ドキュメントサイトほどではない。ローカルで動作確認できれば十分（バーチャル FS + `renderClient` 想定） | [roadmap.md](./roadmap.md) |
 | npm 公開 | **時期は未定**。プレイグラウンド先行のためには公開不要 | [roadmap.md](./roadmap.md) |
+| データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数バインド。**複数ファイル**読込可。詳細 API は後続 | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
+| TOC | **専用ヘルパ**を入れる方針。構文・配置・見出し抽出の詳細は後で詰める | [roadmap.md](./roadmap.md) |
+
+## 採用時期未定（先送り）
+
+| 項目 | 方針 | 参照 |
+|------|------|------|
+| component の見出し適合 | 親の見出し深さに合わせて component 内見出しを調整。必要時に再検討 | [pipeline.md](./specs/pipeline.md) |
+| ナビゲーション機能 | 現状維持（詳細未定義のまま先送り） | — |
+| front matter の `@hg` 内読み込み | 採用時期未定 | [variables.md](./specs/variables.md) |
+| `@hg` 内の `echo`（変数の本文展開） | 採用時期未定。現状は `{{ }}` を使う | [dsl.md](./specs/dsl.md) |
 
 ## 対象外（ロードマップから除外）
 

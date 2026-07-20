@@ -163,6 +163,11 @@ await renderServer("./page.md", { title: "public" }, {
   via: include
 ```
 
+## 後続候補（未実装）
+
+- **データソースのインポート**: DSL では読まない。**API 側のみ**で YAML / JSON / CSV 等を読み、変数へバインド。**複数ファイル**対応。具体 API 形は後続（[need_decision.md](../need_decision.md)）
+- **TOC 専用ヘルパ**: 入れる方針。構文・詳細は後続
+
 ## 関連
 
 - パイプライン: [pipeline.md](./pipeline.md)

@@ -1,5 +1,5 @@
 import { createHyogenError } from "../errors/createError.js";
-import type { ExprNode } from "../types.js";
+import type { BinaryOp, ExprNode } from "../types.js";
 
 function isIdentifierStart(ch: string): boolean {
   return /[A-Za-z_$]/.test(ch);
@@ -56,9 +56,125 @@ class ExpressionParser {
   }
 
   parseExpression(): ExprNode {
-    this.skipWhitespace();
-    let node = this.parsePrimary();
+    return this.parsePipe();
+  }
 
+  private parsePipe(): ExprNode {
+    let node = this.parseLogicalOr();
+    while (true) {
+      this.skipWhitespace();
+      if (this.peek() !== "|") {
+        break;
+      }
+      this.index++;
+      const right = this.parseLogicalOr();
+      node = { type: "default", left: node, right };
+    }
+    return node;
+  }
+
+  private parseLogicalOr(): ExprNode {
+    let node = this.parseLogicalAnd();
+    while (true) {
+      this.skipWhitespace();
+      if (!this.match("||")) {
+        break;
+      }
+      const right = this.parseLogicalAnd();
+      node = { type: "binary", op: "||", left: node, right };
+    }
+    return node;
+  }
+
+  private parseLogicalAnd(): ExprNode {
+    let node = this.parseComparison();
+    while (true) {
+      this.skipWhitespace();
+      if (!this.match("&&")) {
+        break;
+      }
+      const right = this.parseComparison();
+      node = { type: "binary", op: "&&", left: node, right };
+    }
+    return node;
+  }
+
+  private parseComparison(): ExprNode {
+    let node = this.parseAdditive();
+    while (true) {
+      this.skipWhitespace();
+      const op = this.readComparisonOp();
+      if (!op) {
+        break;
+      }
+      const right = this.parseAdditive();
+      node = { type: "binary", op, left: node, right };
+    }
+    return node;
+  }
+
+  private readComparisonOp(): BinaryOp | null {
+    const ops: BinaryOp[] = [
+      "===",
+      "!==",
+      "==",
+      "!=",
+      ">=",
+      "<=",
+      ">",
+      "<",
+    ];
+    for (const op of ops) {
+      if (this.input.startsWith(op, this.index)) {
+        this.index += op.length;
+        return op;
+      }
+    }
+    return null;
+  }
+
+  private parseAdditive(): ExprNode {
+    let node = this.parseMultiplicative();
+    while (true) {
+      this.skipWhitespace();
+      const ch = this.peek();
+      if (ch !== "+" && ch !== "-") {
+        break;
+      }
+      this.index++;
+      const right = this.parseMultiplicative();
+      node = { type: "binary", op: ch as "+" | "-", left: node, right };
+    }
+    return node;
+  }
+
+  private parseMultiplicative(): ExprNode {
+    let node = this.parseUnary();
+    while (true) {
+      this.skipWhitespace();
+      const ch = this.peek();
+      if (ch !== "*" && ch !== "/") {
+        break;
+      }
+      this.index++;
+      const right = this.parseUnary();
+      node = { type: "binary", op: ch as "*" | "/", left: node, right };
+    }
+    return node;
+  }
+
+  private parseUnary(): ExprNode {
+    this.skipWhitespace();
+    if (this.peek() === "!") {
+      this.index++;
+      const operand = this.parseUnary();
+      return { type: "unary", op: "!", operand };
+    }
+    return this.parsePostfix();
+  }
+
+  private parsePostfix(): ExprNode {
+    let node = this.parsePrimary();
     while (true) {
       this.skipWhitespace();
       if (this.peek() === ".") {
@@ -66,14 +182,8 @@ class ExpressionParser {
         node = this.parseAfterDot(node);
         continue;
       }
-      if (this.peek() === "|") {
-        this.index++;
-        const right = this.parsePrimary();
-        return { type: "default", left: node, right };
-      }
       break;
     }
-
     return node;
   }
 
@@ -125,6 +235,17 @@ class ExpressionParser {
     this.skipWhitespace();
     const ch = this.peek();
 
+    if (ch === "(") {
+      this.index++;
+      const node = this.parseExpression();
+      this.skipWhitespace();
+      if (this.peek() !== ")") {
+        throw parseError(this.path, "expected ')'");
+      }
+      this.index++;
+      return node;
+    }
+
     if (ch === '"' || ch === "'") {
       return { type: "literal", value: this.readString() };
     }
@@ -135,6 +256,10 @@ class ExpressionParser {
 
     if (ch === "{") {
       return { type: "literal", value: this.parseObjectLiteral() };
+    }
+
+    if (ch === "[") {
+      return { type: "literal", value: this.parseArrayLiteral() };
     }
 
     if (isIdentifierStart(ch)) {
@@ -226,10 +351,53 @@ class ExpressionParser {
         this.index++;
         break;
       }
-      if (this.peek() !== ",") {
+      if (this.peek() === ",") {
+        this.index++;
+        this.skipWhitespace();
+        if (this.peek() === "}") {
+          this.index++;
+          break;
+        }
+      } else {
         throw parseError(this.path, "expected ',' or '}' in object literal");
       }
+    }
+
+    return result;
+  }
+
+  private parseArrayLiteral(): unknown[] {
+    if (this.peek() !== "[") {
+      throw parseError(this.path, "expected array literal");
+    }
+    this.index++;
+    this.skipWhitespace();
+
+    const result: unknown[] = [];
+    if (this.peek() === "]") {
       this.index++;
+      return result;
+    }
+
+    while (true) {
+      this.skipWhitespace();
+      result.push(this.parseLiteralValue());
+      this.skipWhitespace();
+
+      if (this.peek() === "]") {
+        this.index++;
+        break;
+      }
+      if (this.peek() === ",") {
+        this.index++;
+        this.skipWhitespace();
+        if (this.peek() === "]") {
+          this.index++;
+          break;
+        }
+      } else {
+        throw parseError(this.path, "expected ',' or ']' in array literal");
+      }
     }
 
     return result;
@@ -245,6 +413,12 @@ class ExpressionParser {
     if (ch === "-" || (ch >= "0" && ch <= "9")) {
       return this.readNumber();
     }
+    if (ch === "{") {
+      return this.parseObjectLiteral();
+    }
+    if (ch === "[") {
+      return this.parseArrayLiteral();
+    }
     if (isIdentifierStart(ch)) {
       const name = this.readIdentifier();
       if (name === "true") return true;
@@ -254,6 +428,15 @@ class ExpressionParser {
     }
 
     throw parseError(this.path, "object literal values must be literals");
+  }
+
+  private match(token: string): boolean {
+    this.skipWhitespace();
+    if (this.input.startsWith(token, this.index)) {
+      this.index += token.length;
+      return true;
+    }
+    return false;
   }
 
   private peek(): string {

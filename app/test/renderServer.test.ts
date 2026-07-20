@@ -49,14 +49,11 @@ describe("renderServer", () => {
     );
   });
 
-  it("propagates HyogenError from renderDocument", async () => {
-    await assert.rejects(
-      () => renderServer("<!--@hg\nconst x = 1\n@endhg-->"),
-      (error: unknown) => {
-        assertHyogenError(error, "parse_error");
-        return true;
-      },
+  it("executes declaration blocks via pipeline", async () => {
+    const result = await renderServer(
+      "<!--@hg\nconst x = 1\n@endhg-->\n{{ x }}",
     );
+    assert.equal(result.markdown.trim(), "1");
   });
 });
 

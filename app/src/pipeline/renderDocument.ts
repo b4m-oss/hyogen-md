@@ -7,9 +7,11 @@ import type {
 import { ComponentRegistry } from "../component/ComponentRegistry.js";
 import { mergeContext } from "../context/mergeContext.js";
 import { parseFrontMatter } from "../frontmatter/parseFrontMatter.js";
+import { expandControlStructures } from "../control/expandControlStructures.js";
 import { interpolateExpressions } from "../expr/interpolateExpressions.js";
 import { expandIncludes } from "../include/expandIncludes.js";
 import { VisitStack } from "../include/VisitStack.js";
+import { executeDeclarations } from "../logic/executeDeclarations.js";
 import { executeHgBlocks } from "./executeHgBlocks.js";
 import { applyFrontMatterOutputOption } from "./applyFrontMatterOutputOption.js";
 import { stripHgComments } from "./stripHgComments.js";
@@ -36,10 +38,13 @@ export async function renderDocumentBody(
   const warnings = options.warnings ?? [];
   const visitStack = options.visitStack ?? new VisitStack();
 
-  const { source: afterHg, directives } = executeHgBlocks(body, {
+  const { source: afterDeclarations, context: declarationContext } =
+    await executeDeclarations(body, { path, context: { ...context } });
+
+  const { source: afterHg, directives } = executeHgBlocks(afterDeclarations, {
     path,
     registry,
-    context,
+    context: declarationContext,
   });
 
   const loader = options.loader;
@@ -52,7 +57,7 @@ export async function renderDocumentBody(
     markdown = await expandIncludes({
       source: afterHg,
       directives,
-      context,
+      context: declarationContext,
       loader,
       root: options.root,
       path,
@@ -65,14 +70,27 @@ export async function renderDocumentBody(
     });
   }
 
-  markdown = await interpolateExpressions(markdown, context, {
+  markdown = await expandControlStructures(markdown, {
+    context: declarationContext,
     path,
     registry,
     loader,
     rootDir: options.root,
     warnings,
     visitStack,
-    parentContext: context,
+    parentContext: declarationContext,
+    preserveHgComments: options.preserveHgComments,
+    constrainToRoot: options.constrainToRoot,
+  });
+
+  markdown = await interpolateExpressions(markdown, declarationContext, {
+    path,
+    registry,
+    loader,
+    rootDir: options.root,
+    warnings,
+    visitStack,
+    parentContext: declarationContext,
     preserveHgComments: options.preserveHgComments,
     constrainToRoot: options.constrainToRoot,
   });

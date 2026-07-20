@@ -46,13 +46,9 @@ describe("parseExpression", () => {
     }
   });
 
-  it("throws parse_error for arithmetic", () => {
-    try {
-      parseExpression("1 + 2");
-      assert.fail("expected throw");
-    } catch (error) {
-      assertHyogenError(error, "parse_error");
-    }
+  it("parses arithmetic expressions", () => {
+    const node = parseExpression("1 + 2");
+    assert.equal(node.type, "binary");
   });
 
   it("throws parse_error for empty input", () => {

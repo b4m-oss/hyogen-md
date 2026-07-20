@@ -32,9 +32,32 @@ describe("executeHgBlocks", () => {
     );
   });
 
-  it("throws parse_error for non-include hyogen statements", () => {
+  it("passes through single-line control blocks", () => {
+    const source = "<!--@hg\nif isNight\n@endhg-->\nBody";
+    const { source: result } = executeHgBlocks(source);
+    assert.match(result, /if isNight/);
+    assert.match(result, /Body/);
+  });
+
+  it("passes through else, endif, each, endeach blocks", () => {
+    const blocks = ["else", "else if score >= 60", "endif", "each item in data", "endeach"];
+    for (const line of blocks) {
+      const source = `<!--@hg\n${line}\n@endhg-->`;
+      const { source: result } = executeHgBlocks(source);
+      assert.match(result, new RegExp(line.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    }
+  });
+
+  it("passes through declaration lines already handled upstream", () => {
+    const source = "<!--@hg\nconst x = 1\n@endhg-->";
+    const { source: result, directives } = executeHgBlocks(source);
+    assert.equal(directives.length, 0);
+    assert.match(result, /const x = 1/);
+  });
+
+  it("throws parse_error for unsupported multi-line hyogen block", () => {
     try {
-      executeHgBlocks("<!--@hg\nconst x = 1\n@endhg-->");
+      executeHgBlocks("<!--@hg\nfoo\nbar\n@endhg-->");
       assert.fail("expected throw");
     } catch (error) {
       assertHyogenError(error, "parse_error");
@@ -50,9 +73,9 @@ describe("executeHgBlocks", () => {
     }
   });
 
-  it("throws parse_error for multiple include lines in one block", () => {
+  it("throws parse_error for unsupported single-line hyogen directive", () => {
     try {
-      executeHgBlocks("<!--@hg\ninclude ./a.md\ninclude ./b.md\n@endhg-->");
+      executeHgBlocks("<!--@hg\nfoobar x\n@endhg-->");
       assert.fail("expected throw");
     } catch (error) {
       assertHyogenError(error, "parse_error");

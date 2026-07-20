@@ -17,6 +17,41 @@ function getPropertyValue(object: unknown, property: string): unknown {
   return (object as Record<string, unknown>)[property];
 }
 
+function evaluateBinary(op: string, left: unknown, right: unknown): unknown {
+  switch (op) {
+    case "+":
+      return (left as number) + (right as number);
+    case "-":
+      return (left as number) - (right as number);
+    case "*":
+      return (left as number) * (right as number);
+    case "/":
+      return (left as number) / (right as number);
+    case "===":
+      return left === right;
+    case "!==":
+      return left !== right;
+    case "==":
+      return left == right;
+    case "!=":
+      return left != right;
+    case ">=":
+      return (left as number) >= (right as number);
+    case "<=":
+      return (left as number) <= (right as number);
+    case ">":
+      return (left as number) > (right as number);
+    case "<":
+      return (left as number) < (right as number);
+    case "&&":
+      return isFalsy(left) ? left : right;
+    case "||":
+      return isFalsy(left) ? right : left;
+    default:
+      return undefined;
+  }
+}
+
 export async function evaluateExpression(
   node: ExprNode,
   options: EvaluateExpressionOptions,
@@ -40,6 +75,32 @@ export async function evaluateExpression(
         return evaluateExpression(node.right, options);
       }
       return left;
+    }
+    case "unary": {
+      const operand = await evaluateExpression(node.operand, options);
+      if (node.op === "!") {
+        return !operand;
+      }
+      return undefined;
+    }
+    case "binary": {
+      if (node.op === "&&") {
+        const left = await evaluateExpression(node.left, options);
+        if (isFalsy(left)) {
+          return left;
+        }
+        return evaluateExpression(node.right, options);
+      }
+      if (node.op === "||") {
+        const left = await evaluateExpression(node.left, options);
+        if (!isFalsy(left)) {
+          return left;
+        }
+        return evaluateExpression(node.right, options);
+      }
+      const left = await evaluateExpression(node.left, options);
+      const right = await evaluateExpression(node.right, options);
+      return evaluateBinary(node.op, left, right);
     }
     case "call": {
       if (!options.registry || !options.loader || !options.visitStack) {

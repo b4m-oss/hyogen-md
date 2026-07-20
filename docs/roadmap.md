@@ -83,20 +83,20 @@
 
 ### 実装
 
-- [ ] hyogen ブロック内の宣言・代入（`const` / `let`、ホワイトリスト準拠 → [dsl.md](./specs/dsl.md)）
-- [ ] `if` / `else if` / `else` / `endif`（Pug 風。step 5 展開）
-- [ ] `each` / `endeach`（Pug 風。step 5 展開）
-- [ ] `if` / `each` 構造ネスト合計 20 → `nest_limit_exceeded` 警告（[logic.md](./specs/logic.md)）
-- [ ] 条件式・ループ式は `{{ }}` と同じ式サブセット
-- [ ] パイプライン順の確定: 宣言（step 2）→ if/each 展開（step 5）→ `{{ }}`（step 6）
+- [x] hyogen ブロック内の宣言・代入（`const` / `let`、ホワイトリスト準拠 → [dsl.md](./specs/dsl.md)）
+- [x] `if` / `else if` / `else` / `endif`（Pug 風。step 5 展開）
+- [x] `each` / `endeach`（Pug 風。step 5 展開）
+- [x] `if` / `each` 構造ネスト合計 20 → `nest_limit_exceeded` 警告（[logic.md](./specs/logic.md)）
+- [x] 条件式・ループ式は `{{ }}` と同じ式サブセット
+- [x] パイプライン順の確定: 宣言（step 2）→ if/each 展開（step 5）→ `{{ }}`（step 6）
 
 ### テスト
 
-- [ ] if 分岐（else / else if 含む）
-- [ ] each（配列・オブジェクトの配列）
-- [ ] if 内 each / each 内 if
-- [ ] ネスト 20 超のスキップ
-- [ ] 未対 `if` → `parse_error`
+- [x] if 分岐（else / else if 含む）
+- [x] each（配列・オブジェクトの配列）
+- [x] if 内 each / each 内 if
+- [x] ネスト 20 超のスキップ
+- [x] 未対 `if` → `parse_error`
 
 ### 参照 spec
 

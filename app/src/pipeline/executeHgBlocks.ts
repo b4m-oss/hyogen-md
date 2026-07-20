@@ -4,6 +4,11 @@ import type { ExecuteHgBlocksResult, HyogenContext } from "../types.js";
 import { parseComponentDirective } from "../parse/parseComponentDirective.js";
 import { parseIncludeDirective } from "../parse/parseIncludeDirective.js";
 import { findUnclosedHgBlock, scanHgBlocks } from "../parse/scanHgBlocks.js";
+import {
+  extractHgBlockLines,
+  isControlDirectiveLine,
+} from "../logic/hgBlockUtils.js";
+import { isDeclarationSource } from "../logic/parseDeclaration.js";
 
 const MARKER_PREFIX = "\u0000HYOGEN_INCLUDE_";
 
@@ -20,16 +25,20 @@ export type ExecuteHgBlocksOptions = {
 function parseHgBlockDirective(
   inner: string,
   path?: string,
-): ReturnType<typeof parseIncludeDirective> | ReturnType<typeof parseComponentDirective> {
-  const trimmed = inner
-    .replace(/@hg/g, "")
-    .replace(/@endhg/g, "")
-    .trim();
+):
+  | ReturnType<typeof parseIncludeDirective>
+  | ReturnType<typeof parseComponentDirective>
+  | { kind: "control" }
+  | null {
+  const lines = extractHgBlockLines(inner);
 
-  const lines = trimmed
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
+  if (lines.length === 1 && isControlDirectiveLine(lines[0]!)) {
+    return { kind: "control" };
+  }
+
+  if (lines.length === 1 && isDeclarationSource(lines[0]!)) {
+    return null;
+  }
 
   if (lines.length !== 1) {
     throw createHyogenError({
@@ -89,6 +98,14 @@ export function executeHgBlocks(
 
   for (const block of blocks) {
     const directive = parseHgBlockDirective(block.inner, path);
+    if (!directive) {
+      continue;
+    }
+
+    if (directive.kind === "control") {
+      continue;
+    }
+
     const start = block.start - offset;
     const end = block.end - offset;
 

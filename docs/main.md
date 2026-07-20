@@ -48,6 +48,7 @@
 | [development.md](./development.md) | 開発方針（TDD） |
 | [app/test/specs/v0.1.0.md](../app/test/specs/v0.1.0.md) | v0.1.0 テスト仕様書 |
 | [app/test/specs/v0.2.0.md](../app/test/specs/v0.2.0.md) | v0.2.0 テスト仕様書 |
+| [app/test/specs/v0.3.0.md](../app/test/specs/v0.3.0.md) | v0.3.0 テスト仕様書 |
 
 ---
 

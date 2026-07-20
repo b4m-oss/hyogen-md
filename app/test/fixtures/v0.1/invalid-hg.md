@@ -1,5 +1,5 @@
 <!--
 @hg
-const x = 1
+foobar something
 @endhg
 -->

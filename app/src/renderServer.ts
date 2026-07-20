@@ -1,5 +1,5 @@
 import { mergeContext } from "./context/mergeContext.js";
-import { createFsLoader } from "./io/createFsLoader.js";
+import { createNodeLoader } from "./io/createNodeLoader.js";
 import { resolveRenderInput } from "./paths/resolveRenderInput.js";
 import { renderDocument } from "./pipeline/renderDocument.js";
 import type { HyogenContext, RenderResult, ServerRenderOptions } from "./types.js";
@@ -10,7 +10,7 @@ export async function renderServer(
   options?: ServerRenderOptions,
 ): Promise<RenderResult> {
   const mergedContext = mergeContext(context, options?.serverContext);
-  const loader = options?.loader ?? createFsLoader();
+  const loader = options?.loader ?? createNodeLoader();
   const resolved = await resolveRenderInput(input, { root: options?.root });
 
   return renderDocument(resolved.source, {

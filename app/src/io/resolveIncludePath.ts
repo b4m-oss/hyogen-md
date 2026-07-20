@@ -1,4 +1,5 @@
 import { resolveTemplatePath } from "../paths/resolveTemplatePath.js";
+import { isRemotePath } from "./isRemotePath.js";
 
 export function resolveIncludePath(
   root: string | undefined,
@@ -8,6 +9,9 @@ export function resolveIncludePath(
   constrainToRoot = false,
   hyogenPath = false,
 ): string {
+  if (isRemotePath(includePath)) {
+    return includePath;
+  }
   return resolveTemplatePath(includePath, {
     rootDir: root,
     fromPath,

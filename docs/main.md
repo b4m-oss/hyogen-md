@@ -50,6 +50,7 @@
 | [app/test/specs/v0.2.0.md](../app/test/specs/v0.2.0.md) | v0.2.0 テスト仕様書 |
 | [app/test/specs/v0.3.0.md](../app/test/specs/v0.3.0.md) | v0.3.0 テスト仕様書 |
 | [app/test/specs/v0.4.0.md](../app/test/specs/v0.4.0.md) | v0.4.0 テスト仕様書 |
+| [app/test/specs/v0.5.0.md](../app/test/specs/v0.5.0.md) | v0.5.0 テスト仕様書 |
 
 ---
 

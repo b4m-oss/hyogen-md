@@ -9,7 +9,7 @@ export default defineConfig({
       fileName: "index",
     },
     rollupOptions: {
-      external: [/^node:/, "yaml"],
+      external: [/^node:/, "yaml", "fast-glob", "picomatch"],
     },
     sourcemap: true,
     outDir: "dist",

@@ -137,20 +137,22 @@
 
 ### 実装
 
-- [ ] `build()`（[api.md](./specs/api.md)）
-- [ ] 入力: パス列挙 + glob（picomatch + fast-glob 想定）
-- [ ] `_` partial のエントリ除外（マッチ後フィルタ。glob 明示で上書き可）
-- [ ] エントリ指定 → 依存（include / component / extend）を辿る走査
-- [ ] `serverContext`（`renderServer` / `build` のみ）
-- [ ] リモート URL の include / component（Node のみ。デフォルト loader 拡張）
-- [ ] `renderClient` に `serverContext` 相当 → `server_context_on_client` エラー
+- [x] `build()`（[api.md](./specs/api.md)）
+- [x] 入力: パス列挙 + glob（picomatch + fast-glob 想定）
+- [x] `_` partial のエントリ除外（マッチ後フィルタ。glob 明示で上書き可）
+- [x] エントリ指定 → 依存（include / component / extend）を辿る走査
+- [x] `serverContext`（`renderServer` / `build` のみ）
+- [x] リモート URL の include / component（Node のみ。デフォルト loader 拡張）
+- [x] `renderClient` に `serverContext` 相当 → `server_context_on_client` エラー
 
 ### テスト
 
-- [ ] glob + `_` フィルタ
-- [ ] 依存グラフ走査
-- [ ] `serverContext` が CSR に渡らないこと
-- [ ] リモート include（モック fetch）
+テスト仕様書: [app/test/specs/v0.5.0.md](../app/test/specs/v0.5.0.md)（[development.md](./development.md) の TDD 手順に従う）
+
+- [x] glob + `_` フィルタ
+- [x] 依存グラフ走査
+- [x] `serverContext` が CSR に渡らないこと
+- [x] リモート include（モック fetch）
 
 ### 参照 spec
 

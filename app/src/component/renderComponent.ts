@@ -4,6 +4,7 @@ import { parseFrontMatter } from "../frontmatter/parseFrontMatter.js";
 import type { ComponentRegistry } from "./ComponentRegistry.js";
 import { parsePropsContract } from "./parsePropsContract.js";
 import { validateProps } from "./validateProps.js";
+import { isRemotePath } from "../io/isRemotePath.js";
 import { resolveTemplatePath } from "../paths/resolveTemplatePath.js";
 import { renderDocumentBody } from "../pipeline/renderDocument.js";
 import type { HyogenContext, HyogenWarning, Loader } from "../types.js";
@@ -37,13 +38,15 @@ export async function renderComponent(
     });
   }
 
-  const componentPath = resolveTemplatePath(registration.componentPath, {
-    rootDir: options.rootDir,
-    fromPath: registration.definedAt,
-    documentPath: options.path,
-    constrainToRoot: options.constrainToRoot,
-    hyogenPath: true,
-  });
+  const componentPath = isRemotePath(registration.componentPath)
+    ? registration.componentPath
+    : resolveTemplatePath(registration.componentPath, {
+        rootDir: options.rootDir,
+        fromPath: registration.definedAt,
+        documentPath: options.path,
+        constrainToRoot: options.constrainToRoot,
+        hyogenPath: true,
+      });
 
   const source = await options.loader(componentPath);
   const { context: fmContext, body } = parseFrontMatter(source, componentPath);

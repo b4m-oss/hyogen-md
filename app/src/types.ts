@@ -31,6 +31,19 @@ export type RenderResult = {
   warnings: HyogenWarning[];
 };
 
+export type BuildOptions = RenderOptions & {
+  input: string | string[];
+  outDir: string;
+  includeUnderscoreEntries?: boolean;
+  context?: HyogenContext;
+  serverContext?: HyogenContext;
+};
+
+export type BuildResult = {
+  files: { path: string; markdown: string }[];
+  warnings: HyogenWarning[];
+};
+
 export type HgBlock = {
   start: number;
   end: number;

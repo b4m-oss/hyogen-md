@@ -32,7 +32,7 @@
 
 ### 周辺（方針メモ）
 
-- **プレイグラウンド**: 同リポジトリ内。ローカルで試せれば十分。npm 公開はプレイグラウンドの前提にしない（時期未定） → [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
+- **プレイグラウンド**: 同リポジトリ内。ローカルで試せれば十分。npm 公開はプレイグラウンドの前提にしない（時期未定） → [playground.md](./playground.md) / [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
 
 ---
 
@@ -50,6 +50,7 @@
 | [specs/api.md](./specs/api.md) | 公開 API・loader・エラーコード |
 | [specs/messages.en.json](./specs/messages.en.json) | 英語エラー・警告メッセージ |
 | [need_decision.md](./need_decision.md) | 未決定・後続定義事項 |
+| [playground.md](./playground.md) | プレイグラウンド製品仕様（v0.9.0） |
 | [roadmap.md](./roadmap.md) | 開発ロードマップ（現行 `v0.9.0`〜） |
 | [_archive/roadmap/](./_archive/roadmap/) | 完了ロードマップ（`v0.1.0`〜`v0.8.0`） |
 | [development.md](./development.md) | 開発方針（TDD） |
@@ -61,6 +62,7 @@
 | [app/test/specs/v0.6.0.md](../app/test/specs/v0.6.0.md) | v0.6.0 テスト仕様書 |
 | [app/test/specs/v0.7.0.md](../app/test/specs/v0.7.0.md) | v0.7.0 テスト仕様書 |
 | [app/test/specs/v0.8.0.md](../app/test/specs/v0.8.0.md) | v0.8.0 テスト仕様書 |
+| [app/test/specs/v0.9.0.md](../app/test/specs/v0.9.0.md) | v0.9.0 テスト仕様書 |
 
 ---
 

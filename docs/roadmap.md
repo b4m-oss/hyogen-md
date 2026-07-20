@@ -27,26 +27,30 @@
 
 同リポジトリ内のローカル向けプレイグラウンド。ドキュメントサイトは作らない。npm 公開は前提にしない。
 
-### 実装（メモ）
+製品仕様の正: [playground.md](./playground.md)
 
-- [ ] リポジトリ直下（または適切なパス）に `playground/` を追加
-- [ ] バーチャル FS（ブラウザ上にファイルを持つだけ。実ディスク操作は不要）
-- [ ] 左ペイン: 縦方向ファイラー（ディレクトリネスト可）
-- [ ] エディタ: Markdown + hyogen.md 構文
-- [ ] `src` 領域と `outDir` 領域の分離（仮想）
-- [ ] `hyogen-md/client` の `renderClient` + カスタム loader でプレビュー
-- [ ] Markdown 見た目プレビューは利用側（展開後 MD → HTML）。ライブラリは MD 出力のみ
-- [ ] ローカルで `npm` / Vite 等により起動・確認できれば十分
+### 実装
+
+- [ ] `playground/`（Vite + Vue + TypeScript + CodeMirror 6）
+- [ ] バーチャル FS（実ディスクなし）。`src` 編集可 / `outDir` 読み取り専用
+- [ ] 左ペインファイラー（ネスト・作成・削除・リネーム・フォルダ）
+- [ ] エディタ + 自動 render（デバウンス）。開いている 1 ファイルだけ `outDir` へ
+- [ ] プレビュー: 展開後 MD + HTML 見た目。診断パネル（エラー／警告）
+- [ ] `localStorage` 永続化 + 「Reset to demo」
+- [ ] デモ寄りシード（extend / if / each / component 等）
+- [ ] Vite alias で `../app` ソースを参照。固定 context（UI なし）
 
 ### テスト
 
-- [ ] テスト仕様書: `app/test/specs/v0.9.0.md`（または playground 側の検証方針を development に合わせて定義）
-- [ ] 仮想 FS loader 経由で include / component が解決できること
-- [ ] src → 展開結果が outDir 相当に反映されること（代表シナリオ）
+テスト仕様書: [app/test/specs/v0.9.0.md](../app/test/specs/v0.9.0.md)（[development.md](./development.md) の TDD 手順に従う。UI は手動）
+
+- [ ] 仮想 FS CRUD・永続化・Reset
+- [ ] loader 経由で include / component が解決できること
+- [ ] 開いている 1 ファイルの src → outDir 反映
 
 ### 参照
 
-[need_decision.md](./need_decision.md) / [api.md](./specs/api.md)（`renderClient` / loader）/ [main.md](./main.md)（周辺方針）
+[playground.md](./playground.md) / [need_decision.md](./need_decision.md) / [api.md](./specs/api.md) / [main.md](./main.md)
 
 ---
 

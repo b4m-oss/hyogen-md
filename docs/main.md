@@ -24,7 +24,7 @@
 - **mixin**（保留。component で代替）
 - 任意 JavaScript の評価（`eval` / `new Function` 等）
 - **HTML 出力**（Markdown 出力のみ。HTML 化は利用側）
-- **ドキュメントサイト**（当面作らない。動作確認は同リポのプレイグラウンドで足りる想定）
+- **ドキュメントサイト**（当面作らない。利用者向けは README 拡充。動作確認は同リポのプレイグラウンド）
 
 ### 表記
 
@@ -32,7 +32,8 @@
 
 ### 周辺（方針メモ）
 
-- **プレイグラウンド**: 同リポジトリ内。ローカルで試せれば十分。npm 公開はプレイグラウンドの前提にしない（時期未定） → [playground.md](./playground.md) / [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
+- **プレイグラウンド**: 同リポジトリ内。ローカルで試せれば十分。**npm パッケージには含めない** → [playground.md](./playground.md)
+- **npm 公開**: **v0.10.0 で初回公開**（`app/` のみ。git tag と npm 版を一致）→ [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
 
 ---
 
@@ -73,7 +74,7 @@
 
 1. **v0.9.1**: outDir の `_` 除外
 2. **v0.9.2**: 出力 Markdown の空行改善（ライブラリ本体）
-3. **v0.10.0**: プレイグラウンド UX（アクションメニュー + `@hg` ハイライト）
+3. **v0.10.0**: プレイグラウンド UX + **npm 初回公開**
 4. **v0.11.0**: データソースのインポート（API・複数ファイル）
 5. **v0.12.0**: TOC 専用ヘルパ
 6. **v0.13.0**: 許可メソッド（`.length` / `.slice` 等）

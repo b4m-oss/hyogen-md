@@ -25,6 +25,7 @@
 ### プレイグラウンド UX — v0.10.0
 - スリードット・アクションメニュー
 - `@hg` / `@@` シンタックスハイライト（Playground 限定）
+- **npm 初回公開**（`hyogen-md@0.10.0`。Playground は同梱しない）。詳細は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
 - 詳細は [playground.md](./playground.md)
 
 ### データソースのインポート — v0.11.0
@@ -40,6 +41,11 @@
 - 詳細は [dsl.md](./specs/dsl.md) / roadmap
 
 ## 採用時期未定（先送り）
+
+### Playground の Zip 出力（SRC / OUT）
+- 仮想 FS はブラウザメモリ（`VirtualFs` + `localStorage`）のみで、現状は端末への書き出しなし
+- `dumpFiles()` でパス→内容は取れるので、JSZip 等で SRC / OUT（または両方）を zip ダウンロードする出口を後から足せる
+- バージョン割当・UI 配置は未定
 
 ### エディタ向けシンタックスハイライト（VS Code 等）
 - Playground 上の `@hg` / `@@` ハイライト（v0.10.0・優先度高）とは **別物**

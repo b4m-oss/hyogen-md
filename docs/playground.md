@@ -1,6 +1,7 @@
 # プレイグラウンド（v0.9.0〜）
 
-同リポジトリ内の **ローカル向け** 動作確認 UI。ドキュメントサイトではない。npm 公開は前提にしない。
+同リポジトリ内の **ローカル向け** 動作確認 UI。ドキュメントサイトではない。  
+**npm パッケージ（`hyogen-md`）には含めない**（ライブラリ本体の公開とは別）。ライブラリ側の初回 npm 公開は **v0.10.0**（[roadmap.md](./roadmap.md) / [need_decision.md](./need_decision.md)）。
 
 方針の要約は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)。  
 ライブラリ本体の API は [specs/api.md](./specs/api.md)（`renderClient` / loader）が正。
@@ -24,7 +25,7 @@
 | パス | リポジトリ直下 `playground/` |
 | フレームワーク | Vite + Vue（TypeScript） |
 | エディタ | CodeMirror 6 |
-| hyogen-md 参照 | 開発時は Vite alias で `../app` の **ソース**を直接読む（npm 未公開） |
+| hyogen-md 参照 | 開発時は Vite alias で `../app` の **ソース**を直接読む。公開後もローカル開発は alias でよい（npm インストールは利用者向け） |
 | 起動 | ローカルで `npm` / Vite により確認できれば十分 |
 
 ## 仮想 FS

@@ -17,7 +17,7 @@
 
 1. **v0.9.1** — outDir の `_` 除外を仕様どおりに
 2. **v0.9.2** — 出力 Markdown の余分な空行の改善（ライブラリ本体）
-3. **v0.10.0** — プレイグラウンド UX（アクションメニュー + `@hg` ハイライト）
+3. **v0.10.0** — プレイグラウンド UX + npm 初回公開
 4. **v0.11.0** — データソースのインポート（API）
 5. **v0.12.0** — TOC 専用ヘルパ
 6. **v0.13.0** — 許可メソッド追加（`.length` / `.slice` 等）
@@ -113,16 +113,32 @@ Playground の outDir を、SSG / SSR のエントリ除外（[pipeline.md](./sp
 
 ---
 
-## v0.10.0 — プレイグラウンド UX
+## v0.10.0 — プレイグラウンド UX + npm 初回公開
 
-Playground の操作・可読性を製品として揃える（いずれも **優先度高**。仕様は [playground.md](./playground.md)）。
+Playground の操作・可読性を製品として揃える（いずれも **優先度高**。仕様は [playground.md](./playground.md)）。  
+あわせて **ライブラリ `hyogen-md@0.10.0` を npm 初回公開**する（Playground はパッケージに含めない）。
 
-### 実装
+### 実装（Playground）
 
 - [x] ファイル操作をスリードットのアクションメニューへ（`src`・フォルダ・ファイル右側）
 - [x] `@hg` / `@@` 内のシンタックスハイライト（**Playground 限定**。初版は JS 近似で可）
 - [x]（任意）`{{ }}` も見やすくする
 - [x] 非エントリ（layout 等）の ParseError を Diagnostics **note** に落とす（赤エラーと区別）。Preview はソース Markdown
+
+### 配布・ドキュメント（npm / GitHub）
+
+方針の正: [need_decision.md](./need_decision.md)「配布・公開」。
+
+- [ ] GitHub 公開リポジトリを用意し push（**homepage**）
+- [ ] **MIT** LICENSE を追加（`app/package.json` の `license` / `repository` / `homepage` 等も整備）
+- [ ] `app/package.json` の version を **`0.10.0`** に（git tag `v0.10.0` と一致。`app` にコード差分が無くても版は揃える）
+- [ ] **英語** `README.md` をリポジトリ根と **`app/README.md` で同内容同期**（インストール・API 要約・Playground は別物である旨）
+- [ ] 同内容の日本語 **`README_ja.md`**（根。`app/` も同期してよい）
+- [ ] README 内 **CHANGELOG**（過去コミット・タグを参照。ライブラリ変更と Playground 専用を区別して書く）
+- [ ] `docs/` は日本語のまま（仕様の正）
+- [ ] 公開前チェック: `npm test` / `npm run build` / `npm pack --dry-run` 等
+- [ ] git tag **`v0.10.0`**（正式リリース）を付与して npm publish。alpha の遡及タグは不要
+- [ ] roadmap / need_decision の「公開済み」状態へ更新（本節のチェック完了時）
 
 ### テスト
 
@@ -227,8 +243,8 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 | 項目 | 方針 |
 |------|------|
 | HTML 出力レイヤ | **対象外**。ライブラリは Markdown 出力のみ |
-| npm 公開 | **時期は未定**。プレイグラウンドのためには不要 |
-| ドキュメントサイト | 当面作らない（プレイグラウンドで足りる想定） |
+| npm 公開 | **v0.10.0 で初回公開**（`app/` の `dist` のみ。Playground は同梱しない）。詳細は上節「配布・ドキュメント」および [need_decision.md](./need_decision.md) |
+| ドキュメントサイト | 当面作らない。**README 拡充**で足りる想定（サイトは wishlist） |
 | mixin | 無期限保留（[need_decision.md](./need_decision.md)） |
 
 ---
@@ -239,6 +255,9 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 |--------|------|
 | 形式 | SemVer（`MAJOR.MINOR.PATCH`） |
 | 本ロードマップ | **`v0.n.0` = MINOR 相当の機能塊**。同一塊内の修正・仕様寄せは **PATCH**（例: `v0.9.1` / `v0.9.2`） |
+| git tag と npm | **一致させる**（例: tag `v0.10.0` ↔ npm `0.10.0`）。正式リリースの tag を切る。alpha の遡及付与は不要 |
+| `app` と版 | ライブラリに機能差分が無くても、リリース版では **`app/package.json` の version を tag / npm に揃える** |
+| README | 英語 `README.md` を **リポジトリ根と `app/README.md` で同内容同期**。日本語は `README_ja.md`。`docs/` は日本語のまま |
 | `v1.0.0` | API・仕様安定の宣言。タイミングはメンテナー判断 |
 | spec 変更 | 実装前に [specs/](./specs/) を更新し、ロードマップのチェック項目と同期する |
 | 完了バージョン | [_archive/roadmap/](./_archive/roadmap/) へ移す |

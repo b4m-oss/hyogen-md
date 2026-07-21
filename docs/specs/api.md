@@ -80,7 +80,7 @@ declare function formatDiagnosticLog(
 ): string;
 ```
 
-`formatDiagnosticLog` は `hyogen-md` および `hyogen-md/client` から export される。
+`formatDiagnosticLog` は `@b4moss/hyogen-md` および `@b4moss/hyogen-md/client` から export される。
 
 - 1 行目: `[hyogen:{kind}] {code}`
 - 以降: `details` の各キーを `  {key}: {value}`（インデント 2 スペース）。値は `String(value)`。`undefined` のキーは省略

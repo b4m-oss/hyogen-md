@@ -1,4 +1,4 @@
-import type { HyogenContext } from "hyogen-md/client";
+import type { HyogenContext } from "@b4moss/hyogen-md/client";
 import { isUnderscoreEntry } from "../fs/isUnderscoreEntry";
 import { isSrcPath } from "../fs/paths";
 import type { VirtualFs } from "../fs/virtualFs";

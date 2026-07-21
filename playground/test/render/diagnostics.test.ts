@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createHyogenError } from "hyogen-md/client";
+import { createHyogenError } from "@b4moss/hyogen-md/client";
 import {
   isSoftRenderError,
   toDiagnosticsView,

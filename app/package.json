@@ -1,8 +1,28 @@
 {
-  "name": "hyogen-md",
-  "version": "0.9.0",
-  "description": "Extended Markdown template engine",
+  "name": "@b4moss/hyogen-md",
+  "version": "0.10.0-beta.2",
+  "description": "Extended Markdown template engine (hyogen.md)",
   "type": "module",
+  "license": "MIT",
+  "author": "Kohki SHIKATA <kohki.shikata@gmail.com>",
+  "homepage": "https://github.com/b4m-oss/hyogen-md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b4m-oss/hyogen-md.git"
+  },
+  "bugs": {
+    "url": "https://github.com/b4m-oss/hyogen-md/issues"
+  },
+  "keywords": [
+    "markdown",
+    "template",
+    "hyogen",
+    "ssg",
+    "ssr"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -16,7 +36,10 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md",
+    "README_ja.md"
   ],
   "scripts": {
     "build": "vite build && vite build --config vite.client.config.ts",

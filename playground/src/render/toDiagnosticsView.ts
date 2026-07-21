@@ -1,4 +1,4 @@
-import type { HyogenWarning } from "hyogen-md/client";
+import type { HyogenWarning } from "@b4moss/hyogen-md/client";
 import type { RenderOpenResult } from "./renderOpenFile";
 
 export type DiagnosticsError = {

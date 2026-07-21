@@ -116,7 +116,7 @@ Playground の outDir を、SSG / SSR のエントリ除外（[pipeline.md](./sp
 ## v0.10.0 — プレイグラウンド UX + npm 初回公開
 
 Playground の操作・可読性を製品として揃える（いずれも **優先度高**。仕様は [playground.md](./playground.md)）。  
-あわせて **ライブラリ `hyogen-md@0.10.0` を npm 初回公開**する（Playground はパッケージに含めない）。
+あわせて **ライブラリ `@b4moss/hyogen-md@0.10.0` を npm 初回公開**する（Playground はパッケージに含めない）。
 
 ### 実装（Playground）
 
@@ -129,13 +129,14 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 
 方針の正: [need_decision.md](./need_decision.md)「配布・公開」。
 
-- [ ] GitHub 公開リポジトリを用意し push（**homepage**）
-- [ ] **MIT** LICENSE を追加（`app/package.json` の `license` / `repository` / `homepage` 等も整備）
-- [ ] `app/package.json` の version を **`0.10.0`** に（git tag `v0.10.0` と一致。`app` にコード差分が無くても版は揃える）
-- [ ] **英語** `README.md` をリポジトリ根と **`app/README.md` で同内容同期**（インストール・API 要約・Playground は別物である旨）
-- [ ] 同内容の日本語 **`README_ja.md`**（根。`app/` も同期してよい）
-- [ ] README 内 **CHANGELOG**（過去コミット・タグを参照。ライブラリ変更と Playground 専用を区別して書く）
-- [ ] `docs/` は日本語のまま（仕様の正）
+- [x] GitHub 公開リポジトリ（`b4m-oss/hyogen-md`）を用意し `develop` を push（**homepage**）
+- [x] **MIT** LICENSE を追加（根・`app/`。`app/package.json` の `license` / `repository` / `homepage` 等も整備）
+- [x] `app/package.json` の version をトラックに合わせる（現在 **`0.10.0-beta.2`**。正式は **`0.10.0`** = tag `v0.10.0`）
+- [x] **英語** `README.md` をリポジトリ根と **`app/README.md` で同内容同期**
+- [x] 同内容の日本語 **`README_ja.md`**（根・`app/` 同期）
+- [x] README 内 **CHANGELOG**（ライブラリ変更と Playground 専用を区別）
+- [x] パッケージ名 **`@b4moss/hyogen-md`**（Git リポ名も `hyogen-md`）
+- [ ] `docs/` は日本語のまま（仕様の正）— 維持
 - [ ] 公開前チェック: `npm test` / `npm run build` / `npm pack --dry-run` 等
 - [ ] git tag **`v0.10.0`**（正式リリース）を付与して npm publish。alpha の遡及タグは不要
 - [ ] roadmap / need_decision の「公開済み」状態へ更新（本節のチェック完了時）

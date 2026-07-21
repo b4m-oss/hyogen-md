@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { renderClient } from "hyogen-md/client";
+import { renderClient } from "@b4moss/hyogen-md/client";
 import { VirtualFs } from "../../src/fs/virtualFs";
 import {
   DEMO_ENTRY,

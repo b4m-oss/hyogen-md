@@ -1,4 +1,4 @@
-import type { Loader } from "hyogen-md/client";
+import type { Loader } from "@b4moss/hyogen-md/client";
 import type { VirtualFs } from "../fs/virtualFs";
 import { isSrcPath, normalizePath } from "../fs/paths";
 

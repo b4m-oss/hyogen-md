@@ -1,7 +1,7 @@
 # プレイグラウンド（v0.9.0〜）
 
 同リポジトリ内の **ローカル向け** 動作確認 UI。ドキュメントサイトではない。  
-**npm パッケージ（`hyogen-md`）には含めない**（ライブラリ本体の公開とは別）。ライブラリ側の初回 npm 公開は **v0.10.0**（[roadmap.md](./roadmap.md) / [need_decision.md](./need_decision.md)）。
+**npm パッケージ（`@b4moss/hyogen-md`）には含めない**（ライブラリ本体の公開とは別）。ライブラリ側の初回 npm 公開は **v0.10.0**（[roadmap.md](./roadmap.md) / [need_decision.md](./need_decision.md)）。
 
 方針の要約は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)。  
 ライブラリ本体の API は [specs/api.md](./specs/api.md)（`renderClient` / loader）が正。

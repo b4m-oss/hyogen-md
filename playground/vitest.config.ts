@@ -8,8 +8,8 @@ const appSrc = path.resolve(rootDir, "../app/src");
 export default defineConfig({
   resolve: {
     alias: {
-      "hyogen-md/client": path.join(appSrc, "client.ts"),
-      "hyogen-md": path.join(appSrc, "index.ts"),
+      "@b4moss/hyogen-md/client": path.join(appSrc, "client.ts"),
+      "@b4moss/hyogen-md": path.join(appSrc, "index.ts"),
       "node:path": "path-browserify",
       "node:fs": path.join(appSrc, "shims/fs-browser.ts"),
       "node:fs/promises": path.join(appSrc, "shims/fs-promises-browser.ts"),

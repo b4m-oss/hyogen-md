@@ -13,8 +13,8 @@
     "noEmit": true,
     "types": ["vite/client", "node"],
     "paths": {
-      "hyogen-md/client": ["../app/src/client.ts"],
-      "hyogen-md": ["../app/src/index.ts"]
+      "@b4moss/hyogen-md/client": ["../app/src/client.ts"],
+      "@b4moss/hyogen-md": ["../app/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.vue", "test/**/*.ts", "vite.config.ts", "vitest.config.ts"]

@@ -25,7 +25,7 @@
 ### プレイグラウンド UX — v0.10.0
 - スリードット・アクションメニュー
 - `@hg` / `@@` シンタックスハイライト（Playground 限定）
-- **npm 初回公開**（`hyogen-md@0.10.0`。Playground は同梱しない）。詳細は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
+- **npm 初回公開**（`@b4moss/hyogen-md@0.10.0`。Playground は同梱しない）。詳細は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
 - 詳細は [playground.md](./playground.md)
 
 ### データソースのインポート — v0.11.0

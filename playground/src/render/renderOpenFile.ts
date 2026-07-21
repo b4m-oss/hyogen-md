@@ -1,5 +1,5 @@
-import { renderClient } from "hyogen-md/client";
-import type { HyogenContext, HyogenWarning } from "hyogen-md/client";
+import { renderClient } from "@b4moss/hyogen-md/client";
+import type { HyogenContext, HyogenWarning } from "@b4moss/hyogen-md/client";
 import { isUnderscoreEntry } from "../fs/isUnderscoreEntry";
 import { purgeUnderscoreOutEntries } from "../fs/persist";
 import type { VirtualFs } from "../fs/virtualFs";

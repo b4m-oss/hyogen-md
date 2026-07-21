@@ -110,12 +110,12 @@
 
 ## 完成判定（docs.8）
 
-- [ ] Nuxt Content の docs サイトが Netlify 上で公開されている
-- [ ] Playground が同一サイト内で現行相当に動作する（ペイン幅のドラッグ可変を含む）
-- [ ] dark / light / system 切替がサイトと Playground で動作する
-- [ ] 公開 API すべてとテンプレート構文が索引可能な状態で掲載されている
-- [ ] README（英・日）からサイトへ導線がある
-- [ ] ライブラリ `package.json` version は **0.10.0 のまま**（docs のみ）
+- [x] Nuxt Content の docs サイトが Netlify 上で公開されている
+- [x] Playground が同一サイト内で現行相当に動作する（ペイン幅のドラッグ可変を含む）
+- [x] dark / light / system 切替がサイトと Playground で動作する
+- [x] 公開 API すべてとテンプレート構文が索引可能な状態で掲載されている
+- [x] README（英・日）からサイトへ導線がある
+- [x] ライブラリ `package.json` version は **0.10.0 のまま**（docs のみ）
 
 ---
 

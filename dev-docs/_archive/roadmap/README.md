@@ -17,6 +17,7 @@
 | [v0.9.2](./v0.9.2.md) | 出力 Markdown の空行改善 |
 | [v0.10.0](./v0.10.0.md) | プレイグラウンド UX + npm 初回公開 |
 | [v0.10.0-docs](./v0.10.0-docs.md) | リポジトリ整備・Netlify（docs.1〜4） |
+| [v0.10.0-docs-site](./v0.10.0-docs-site.md) | ドキュメントサイト・Playground 内包（docs.5〜8） |
 
 ---
 

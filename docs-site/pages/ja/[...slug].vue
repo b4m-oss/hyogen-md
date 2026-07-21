@@ -3,23 +3,19 @@ definePageMeta({ layout: 'default' })
 
 const route = useRoute()
 
-const contentPath = computed(() => {
+const slugParts = computed(() => {
   const slug = route.params.slug
-  const parts = Array.isArray(slug) ? slug : slug ? [slug] : []
-  const joined = parts.join('/')
-  if (joined === 'playground' || joined.startsWith('playground/')) {
-    return null
-  }
-  const suffix = parts.length ? `/${parts.join('/')}` : ''
-  return `/ja${suffix}`
+  return Array.isArray(slug) ? slug : slug ? [slug] : []
 })
 
+const contentPath = computed(() => slugToContentPath(slugParts.value, 'ja'))
+
 const { data: page } = await useAsyncData(
-  () => (contentPath.value ? `docs-ja-${contentPath.value}` : 'docs-ja-missing'),
+  () => (contentPath.value ? `docs-ja-${contentPath.value}` : 'docs-ja-skip'),
   () => (contentPath.value ? queryContent(contentPath.value).findOne() : Promise.resolve(null)),
 )
 
-if (!contentPath.value || !page.value) {
+if (contentPath.value && !page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 </script>

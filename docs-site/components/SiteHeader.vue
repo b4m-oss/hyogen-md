@@ -6,12 +6,18 @@ const links = computed(() =>
     ? [
         { to: navPath('/'), label: 'ホーム' },
         { to: navPath('/install'), label: 'インストール' },
+        { to: navPath('/api'), label: 'API' },
+        { to: navPath('/syntax'), label: '構文' },
         { to: '/playground', label: 'Playground' },
+        { to: navPath('/changelog'), label: '変更履歴' },
       ]
     : [
         { to: navPath('/'), label: 'Home' },
         { to: navPath('/install'), label: 'Install' },
+        { to: navPath('/api'), label: 'API' },
+        { to: navPath('/syntax'), label: 'Syntax' },
         { to: '/playground', label: 'Playground' },
+        { to: navPath('/changelog'), label: 'Changelog' },
       ],
 )
 </script>

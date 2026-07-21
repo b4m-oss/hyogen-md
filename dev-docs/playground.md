@@ -26,14 +26,13 @@
 
 | 項目 | 方針 |
 |------|------|
-| パス（現状） | リポジトリ直下 `playground/` |
-| パス（docs.6 以降） | **`docs-site/` 内**に移植（ルート例: `/playground`）。単独 `playground/` の残置方針は実装時 |
+| パス | リポジトリ直下 **`docs-site/components/playground/`**（ルート `/playground`） |
+| 単独 `playground/` | **削除済み**（docs.6）。テストは `docs-site/test/playground/` |
 | フレームワーク | Vite + Vue（TypeScript）。サイト移植後も Vue コンポーネントとして維持 |
 | エディタ | CodeMirror 6 |
 | hyogen-md 参照 | 開発時は alias で `../app` の **ソース**を直接読む |
 | 起動 | ローカルおよび Netlify。docs.6 以降はドキュメントサイトと同一デプロイ |
-| 公開（現状） | **https://hyogen-md.netlify.app**（[repository.md](./repository.md)） |
-| 公開（docs.6 以降） | ドキュメントサイトの一部。旧 URL はリダイレクトまたは載せ替え |
+| 公開 | **https://hyogen-md.netlify.app/playground**（ドキュメントサイトの一部。[repository.md](./repository.md)） |
 
 ## 仮想 FS
 

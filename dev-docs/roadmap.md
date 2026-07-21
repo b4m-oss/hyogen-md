@@ -7,7 +7,7 @@
 実装の進め方（TDD）: [development.md](./development.md)  
 リポジトリ運用: [repository.md](./repository.md)
 
-完了済み（`v0.1.0`〜`v0.10.0` / docs.1〜4）: [_archive/roadmap/](./_archive/roadmap/)
+完了済み（`v0.1.0`〜`v0.10.0` / docs.1〜8）: [_archive/roadmap/](./_archive/roadmap/)
 
 各バージョンの「テスト」節は [development.md](./development.md) の手順に従い、**テスト仕様書 → Red → Green → Refactor** で埋める。
 
@@ -15,51 +15,17 @@
 
 ## 優先順位（目安）
 
-1. **v0.10.0-docs.5〜docs.8** — ドキュメントサイト（Nuxt Content・Playground 内包・テーマ・API/構文網羅）→ [docs-site.md](./docs-site.md)
-2. **v0.11.0** — データソースのインポート（API）※ docs.8 完成後
-3. **v0.12.0** — TOC 専用ヘルパ
-4. **v0.13.0** — 許可メソッド追加（`.length` / `.slice` 等）
+1. **v0.11.0** — データソースのインポート（API）
+2. **v0.12.0** — TOC 専用ヘルパ
+3. **v0.13.0** — 許可メソッド追加（`.length` / `.slice` 等）
 
 詳細方針は [need_decision.md](./need_decision.md)。
-
-**方針:** docs.5〜8 のあいだは **ライブラリ新機能を追加しない**。機能開発はドキュメントサイト完成後に **v0.11.0** から再開する。
-
----
-
-## v0.10.0-docs.5〜docs.8 — ドキュメントサイト
-
-製品仕様の正: [docs-site.md](./docs-site.md)。版は **`v0.10.0-docs.5` から `docs.8` まで**。npm / `app` の SemVer は上げない。
-
-### 必須要件
-
-- [ ] **Nuxt Content** によるドキュメントサイト（`docs-site/`）
-- [ ] 現行 Playground を **サイト内へ移植**（Vue。機能パリティは [playground.md](./playground.md)）
-- [ ] **dark / light / system（OS 準拠）** の輝度モード切替（サイト全体 + Playground）
-- [ ] **現時点の公開 API すべて**と、**備えているテンプレート構文の網羅**（正は [api.md](./specs/api.md) / [specs/](./specs/)）
-- [ ] Netlify 公開 + README（英・日）導線
-
-### 実装単位
-
-| 版 | 内容 |
-|----|------|
-| **docs.5** | サイト骨格・Netlify・テーマ土台 |
-| **docs.6** | Playground 移植・テーマ共有・**ペイン幅ドラッグ可変** |
-| **docs.7** | API / テンプレート構文のコンテンツ網羅 |
-| **docs.8** | 仕上げ・導線・完成判定 |
-
-### 完了条件
-
-[docs-site.md](./docs-site.md)「完成判定」を満たしたら、本節をアーカイブし **v0.11.0** に進む。
-
-### 参照
-
-[docs-site.md](./docs-site.md) / [playground.md](./playground.md) / [repository.md](./repository.md)
 
 ---
 
 ## v0.11.0 — データソースのインポート（API）
 
-**前提:** v0.10.0-docs.8（ドキュメントサイト）完了後。
+**前提:** v0.10.0-docs.8（ドキュメントサイト）完了済み。
 
 外部データ（YAML / JSON / CSV 等）を **API 側のみ**で読み、変数へバインドする。DSL では読まない。
 
@@ -154,7 +120,7 @@
 |------|------|
 | HTML 出力レイヤ | **対象外**。ライブラリは Markdown 出力のみ |
 | npm 公開 | **v0.10.0 で初回公開済み**（`app/` の `dist` のみ）。サイト・Playground は同梱しない。CD は `release` → [repository.md](./repository.md) |
-| ドキュメントサイト | **v0.10.0-docs.5〜8 で構築**（[docs-site.md](./docs-site.md)）。利用者向けの正はサイト。`dev-docs/` はメンテナー向け |
+| ドキュメントサイト | **v0.10.0-docs.8 完了**（[docs-site.md](./docs-site.md)）。利用者向けの正は **https://hyogen-md.netlify.app** |
 | mixin | 無期限保留（[need_decision.md](./need_decision.md)） |
 
 ---

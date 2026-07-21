@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { marked } from "marked";
+import { highlightMarkdown } from "../preview/highlightMarkdown";
 
 const props = defineProps<{
   markdown: string;
@@ -15,6 +16,8 @@ const html = computed(() => {
     return "<p><em>Failed to render HTML preview</em></p>";
   }
 });
+
+const highlightedMarkdown = computed(() => highlightMarkdown(props.markdown || ""));
 </script>
 
 <template>
@@ -39,7 +42,11 @@ const html = computed(() => {
         Preview
       </button>
     </div>
-    <pre v-if="tab === 'markdown'" class="preview__md">{{ markdown }}</pre>
+    <pre
+      v-if="tab === 'markdown'"
+      class="preview__md hljs"
+      v-html="highlightedMarkdown"
+    />
     <div v-else class="preview__html" v-html="html" />
   </section>
 </template>
@@ -84,6 +91,48 @@ const html = computed(() => {
   font-size: 0.78rem;
   white-space: pre-wrap;
   word-break: break-word;
+  background: transparent;
+  color: var(--ink);
+}
+
+/* highlight.js markdown tokens — aligned with playground palette */
+.preview__md :deep(.hljs-section) {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.preview__md :deep(.hljs-strong) {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.preview__md :deep(.hljs-emphasis) {
+  color: var(--ink);
+  font-style: italic;
+}
+
+.preview__md :deep(.hljs-bullet),
+.preview__md :deep(.hljs-symbol) {
+  color: var(--ink-muted);
+}
+
+.preview__md :deep(.hljs-link),
+.preview__md :deep(.hljs-string) {
+  color: #0a5f8c;
+}
+
+.preview__md :deep(.hljs-quote) {
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.preview__md :deep(.hljs-code),
+.preview__md :deep(.hljs-literal) {
+  color: #6b3d7a;
+}
+
+.preview__md :deep(.hljs-comment) {
+  color: var(--ink-muted);
 }
 
 .preview__html {

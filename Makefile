@@ -63,7 +63,7 @@ pack: build ## npm pack --dry-run (shows tarball contents/size)
 size: build ## Report dist JS / gzip / npm pack sizes
 	@node scripts/report-size.mjs
 
-check: typecheck test build pack ## Pre-publish: typecheck + test + build + pack dry-run
+check: typecheck build test pack ## Pre-publish: typecheck + build + test + pack dry-run
 	@echo "check OK"
 
 check-docs: build-docs ## Verify docs-site static generation

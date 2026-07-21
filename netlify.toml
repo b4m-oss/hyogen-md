@@ -1,8 +1,10 @@
 # Playground on Netlify — production branch: main
 # Spec: dev-docs/repository.md
+# Vite aliases @b4moss/hyogen-md → ../app/src, so app/node_modules must exist
+# (resolution of yaml etc. is from app/, not playground/).
 
 [build]
-  command = "npm --prefix playground ci && npm --prefix playground run build"
+  command = "npm --prefix app ci && npm --prefix playground ci && npm --prefix playground run build"
   publish = "playground/dist"
 
 [build.environment]

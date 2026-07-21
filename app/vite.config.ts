@@ -9,7 +9,14 @@ export default defineConfig({
       fileName: "index",
     },
     rollupOptions: {
-      external: [/^node:/, "yaml", "fast-glob", "picomatch", "path-browserify"],
+      external: [
+        /^node:/,
+        "csv-parser",
+        "yaml",
+        "fast-glob",
+        "picomatch",
+        "path-browserify",
+      ],
     },
     sourcemap: true,
     minify: true,

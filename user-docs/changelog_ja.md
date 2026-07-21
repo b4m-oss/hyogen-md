@@ -4,9 +4,26 @@
 
 English: [changelog.md](./changelog.md)
 
+### 0.10.0-docs.8 — ドキュメントサイト完成
+
+- Playground を `/playground` に統合（ペイン幅ドラッグ・テーマ共有）
+- API / 構文リファレンス（英日）をサイトに掲載
+- 単独 `playground/` を削除。テストは `docs-site/test/playground/`
+- README から **https://hyogen-md.netlify.app** と `/playground` へ導線
+
+### 0.10.0-docs.6 — Playground をサイト内へ移植
+
+- `docs-site/` へ Playground 統合（Vite alias で `app/` 参照）
+- ペイン幅ドラッグ可変、dark / light / system テーマ
+
+### 0.10.0-docs.5 — ドキュメントサイト骨格
+
+- Nuxt Content、`docs-site/`、英日ルート、テーマ切替
+- Netlify は `main` から静的生成（`make build-docs`）
+
 ### 0.10.0-docs.3 — Playground（Netlify）
 
-- 根の `netlify.toml`（`playground/` をビルド、`main` からデプロイ）
+- 根の `netlify.toml`（`docs-site/` をビルド、`main` からデプロイ。Playground alias のため `app/` も必要）
 - README（英・日、根・`app/`）から **https://hyogen-md.netlify.app** へ導線
 - サイト接続手順は `dev-docs/repository.md`（ダッシュボード、サイト名 `hyogen-md`）
 

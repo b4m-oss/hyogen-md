@@ -1,16 +1,15 @@
-# Playground on Netlify — production branch: main
-# Spec: dev-docs/repository.md
-# Vite aliases @b4moss/hyogen-md → ../app/src, so app/node_modules must exist
-# (resolution of yaml etc. is from app/, not playground/).
+# Docs site on Netlify — production branch: main
+# Spec: dev-docs/docs-site.md (docs.5+)
+# Playground aliases ../app/src — install app deps first
 
 [build]
-  command = "npm --prefix app ci && npm --prefix playground ci && npm --prefix playground run build"
-  publish = "playground/dist"
+  command = "npm --prefix app ci && npm --prefix docs-site ci && npm --prefix docs-site run generate"
+  publish = "docs-site/.output/public"
 
 [build.environment]
   NODE_VERSION = "20"
 
-# Vite SPA fallback
+# SPA fallback for client-side routes
 [[redirects]]
   from = "/*"
   to = "/index.html"

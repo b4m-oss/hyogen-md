@@ -7,33 +7,34 @@
 - 現在のシーダーは、ベタガキ。これをVirtualFSと同じ構成のディレクトリ構成にする
 - なぜなら、複数パターンのサンプル構成をPlayground上で選択肢、都度シードし直せるようにしたいから
 - シンプルなパターン、複雑なパターン、イテレーションのみ、コンディションのみ、など
+- **採用時期未定**（ドキュメントサイト完了後に再検討可）
 
-## ドキュメントサイト
+## ドキュメントサイト — v0.10.0-docs.5〜8（進行中）
 
-- Playgroundとは別立てで作る
-- Nuxt Content採用
-- とりあえず、Netlifyで運用する
+確定仕様: [docs-site.md](./docs-site.md) / [roadmap.md](./roadmap.md)
 
-（Playground 自体の Netlify 公開は **採用済み** → [repository.md](./repository.md) / [playground.md](./playground.md)）
+- Nuxt Content
+- Playground をサイト内に移植
+- dark / light / system テーマ（Playground 含む）
+- 現時点 API・テンプレート構文の網羅
+- Netlify
 
 ## 方針が固まった候補（バージョン割当済み）
 
-### outDir の `_` 除外 — v0.9.1
-- 詳細は [playground.md](./playground.md) / [roadmap.md](./roadmap.md)
+### outDir の `_` 除外 — v0.9.1（完了）
+- [_archive/roadmap/v0.9.1.md](./_archive/roadmap/v0.9.1.md)
 
-### 出力 Markdown の空行改善 — v0.9.2
-- 詳細は [pipeline.md](./specs/pipeline.md) / [roadmap.md](./roadmap.md)
+### 出力 Markdown の空行改善 — v0.9.2（完了）
+- [_archive/roadmap/v0.9.2.md](./_archive/roadmap/v0.9.2.md)
 
-### プレイグラウンド UX — v0.10.0
-- スリードット・アクションメニュー
-- `@hg` / `@@` シンタックスハイライト（Playground 限定）
-- **npm 初回公開**（`@b4moss/hyogen-md@0.10.0`。Playground は同梱しない）。詳細は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
-- 詳細は [playground.md](./playground.md)
+### プレイグラウンド UX + npm — v0.10.0（完了）
+- [_archive/roadmap/v0.10.0.md](./_archive/roadmap/v0.10.0.md)
 
 ### データソースのインポート — v0.11.0
 - `.yaml`, `.json`, `csv` などのサポート
 - 変数としてバインディング
 - **DSL では読まない**（API 側のみ）。**複数ファイル**読込可
+- **docs.8 完了後**に着手
 
 ### TOC — v0.12.0
 - ページ内をパースして TOC を作る
@@ -50,7 +51,7 @@
 - バージョン割当・UI 配置は未定
 
 ### エディタ向けシンタックスハイライト（VS Code 等）
-- Playground 上の `@hg` / `@@` ハイライト（v0.10.0・優先度高）とは **別物**
+- Playground 上の `@hg` / `@@` ハイライトとは **別物**
 - エコシステム向けプラグイン化はだいぶ後。詳細は [playground.md](./playground.md)
 
 ### component の見出し適合

@@ -2,6 +2,12 @@
 
 個人メモ。確定方針の正は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)。
 
+## ドキュメントサイト
+
+- Playgroundとは別立てで作る
+- Nuxt Content採用
+- とりあえず、Netlifyで運用する
+
 ## 方針が固まった候補（バージョン割当済み）
 
 ### outDir の `_` 除外 — v0.9.1

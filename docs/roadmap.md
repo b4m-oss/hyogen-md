@@ -67,15 +67,20 @@ Playground の outDir を、SSG / SSR のエントリ除外（[pipeline.md](./sp
 
 ### 実装
 
-- [ ] `_` で始まるファイル名を outDir に書かない／ツリーに出さない
-- [ ] `_` で始まるディレクトリ配下を outDir に書かない／ツリーに出さない
-- [ ] `src` には `_` partial を置ける（include / component 参照用）。開いてプレビューすること自体は可
+- [x] `_` で始まるファイル名を outDir に書かない／ツリーに出さない
+- [x] `_` で始まるディレクトリ配下を outDir に書かない／ツリーに出さない
+- [x] `src` には `_` partial を置ける（include / component 参照用）。開いてプレビューすること自体は可
+- [x] SRC リネーム直後に OUT ミラーを同期（子ファイル選択を待たない）
+- [x] `_` → 非 `_` リネーム後も OUT を埋める（ファイルは render、ディレクトリは配下一括 render）
 
 ### テスト
 
-- [ ] テスト仕様書: `app/test/specs/v0.9.1.md`（または playground 側相当）
-- [ ] `_` ファイル・`_` ディレクトリ配下が outDir に出ないこと
-- [ ] 通常エントリの src → outDir は従来どおり
+- [x] テスト仕様書: [app/test/specs/v0.9.1.md](../app/test/specs/v0.9.1.md)
+- [x] `_` ファイル・`_` ディレクトリ配下が outDir に出ないこと
+- [x] 通常エントリの src → outDir は従来どおり
+- [x] hydrate 後に旧 `/out/_...` が残らないこと
+- [x] underscore を render してもプレビュー用 `markdown` は返ること
+- [x] SRC リネーム直後に OUT が正しいこと（ディレクトリ／ファイル、`_` 化・`_` 解除含む）
 
 ### 参照
 

@@ -6,14 +6,17 @@ import PreviewPane from "./components/PreviewPane.vue";
 import DiagnosticsPanel from "./components/DiagnosticsPanel.vue";
 import { loadOrSeed, resetToDemo, save } from "./fs/persist";
 import { isOutPath, isSrcPath, parentPath, srcToOut } from "./fs/paths";
+import { syncOutAfterSrcRename } from "./fs/syncOutAfterSrcRename";
 import type { VirtualFs } from "./fs/virtualFs";
 import { DEMO_ENTRY, FIXED_CONTEXT } from "./seed/demoSeed";
 import { renderOpenFile } from "./render/renderOpenFile";
+import { renderSrcTreeToOut } from "./render/renderSrcTreeToOut";
 import {
   toDiagnosticsView,
   type DiagnosticsView,
 } from "./render/toDiagnosticsView";
 import { RENDER_DEBOUNCE_MS } from "./render/debounceMs";
+import { isUnderscoreEntry } from "./fs/isUnderscoreEntry";
 
 const fs = shallowRef<VirtualFs>(loadOrSeed(localStorage));
 const selectedPath = ref<string | null>(DEMO_ENTRY);
@@ -186,15 +189,41 @@ function onRename() {
   const name = promptName("Rename to", base);
   if (!name || name === base) return;
   const dest = `${parentPath(path)}/${name}`.replace(/\/+/g, "/");
+  const fromWasUnderscore = isUnderscoreEntry(path);
   try {
     fs.value.rename(path, dest);
+    syncOutAfterSrcRename(fs.value, path, dest);
     selectedPath.value = dest;
     loadSelectedIntoEditor();
     persist();
-    if (fs.value.statKind(dest) === "file") scheduleRender();
+    const destKind = fs.value.statKind(dest);
+    const destIsLive = !isUnderscoreEntry(dest);
+    if (destKind === "file" && destIsLive) {
+      // Includes underscore → normal file (sync no-ops; render creates /out).
+      scheduleRender();
+    } else if (
+      fromWasUnderscore &&
+      destIsLive &&
+      destKind === "directory"
+    ) {
+      // sync no-ops (no /out mirror to move); populate /out by rendering the tree once.
+      void populateOutAfterUnderscoreDirUnhide(dest);
+    }
   } catch (e) {
     window.alert(String(e));
   }
+}
+
+/** After `_dir` → `dir`, render each eligible src file into /out (one persist at end). */
+async function populateOutAfterUnderscoreDirUnhide(rootSrcPath: string) {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+    debounceTimer = null;
+  }
+  const seq = ++renderSeq;
+  await renderSrcTreeToOut(fs.value, rootSrcPath, FIXED_CONTEXT);
+  if (seq !== renderSeq) return;
+  persist();
 }
 
 function onRemove() {

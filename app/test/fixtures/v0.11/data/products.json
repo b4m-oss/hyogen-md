@@ -1,0 +1,7 @@
+{
+  "count": 2,
+  "items": [
+    { "sku": "A1", "name": "Widget" },
+    { "sku": "B2", "name": "Gadget" }
+  ]
+}

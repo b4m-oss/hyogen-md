@@ -17,10 +17,13 @@
 
 | バージョン | 項目 | 方針 | 参照 |
 |------------|------|------|------|
-| **v0.9.0** | プレイグラウンド | **最優先**。詳細は [playground.md](./playground.md) に確定転記 | [playground.md](./playground.md), [roadmap.md](./roadmap.md) |
-| **v0.10.0** | データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数。**複数ファイル**可。詳細 API は実装前に spec 更新 | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
-| **v0.11.0** | TOC | **専用ヘルパ**。構文・配置・見出し抽出の詳細は後で詰める | [roadmap.md](./roadmap.md) |
-| **v0.12.0** | 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。追加候補: `.length` / `.slice` など配列操作系 | [dsl.md](./specs/dsl.md) |
+| **v0.9.0** | プレイグラウンド基盤 | **完了**。詳細は [playground.md](./playground.md) | [playground.md](./playground.md), [roadmap.md](./roadmap.md) |
+| **v0.9.1** | outDir の `_` 除外 | `_` ファイル・`_` ディレクトリを outDir に出さない（SSG エントリ除外に揃える） | [playground.md](./playground.md), [pipeline.md](./specs/pipeline.md) |
+| **v0.9.2** | 出力 Markdown の空行改善 | 手書き Markdown に寄せる。**本体で直す**（Playground 補正のみは不可） | [pipeline.md](./specs/pipeline.md) |
+| **v0.10.0** | プレイグラウンド UX | スリードット・アクションメニュー、`@hg`/`@@` シンタックスハイライト（**優先度高・Playground 限定**） | [playground.md](./playground.md) |
+| **v0.11.0** | データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数。**複数ファイル**可。詳細 API は実装前に spec 更新 | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
+| **v0.12.0** | TOC | **専用ヘルパ**。構文・配置・見出し抽出の詳細は後で詰める | [roadmap.md](./roadmap.md) |
+| **v0.13.0** | 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。追加候補: `.length` / `.slice` など配列操作系 | [dsl.md](./specs/dsl.md) |
 
 ## トリガー待ち・方針のみ
 
@@ -39,6 +42,7 @@
 | ナビゲーション機能 | 現状維持（詳細未定義のまま先送り） | — |
 | front matter の `@hg` 内読み込み | 採用時期未定 | [variables.md](./specs/variables.md) |
 | `@hg` 内の `echo`（変数の本文展開） | 採用時期未定。現状は `{{ }}` を使う | [dsl.md](./specs/dsl.md) |
+| エディタ向けシンタックスハイライト（VS Code 等） | 採用時期未定。Playground 上のハイライトとは別 | [playground.md](./playground.md), [wishlist.md](./wishlist.md) |
 
 ## 対象外（ロードマップから除外）
 
@@ -58,7 +62,7 @@
 | 診断ログ形式 | `formatDiagnosticLog`（console 自動出力なし） | [api.md](./specs/api.md) |
 | suspicious 正規表現 | security.md に確定転記済み | [security.md](./specs/security.md) |
 | each 内 component | 可・ループ変数は props に見える。公式例あり | [templating.md](./specs/templating.md) |
-| プレイグラウンド UI | Vite+Vue / CM6 / 仮想 FS / 自動 render 等。確定内容は playground.md | [playground.md](./playground.md) |
+| プレイグラウンド UI | Vite+Vue / CM6 / 仮想 FS / 自動 render 等。確定内容は playground.md。`_` → outDir は v0.9.1、アクションメニューと `@hg` ハイライトは v0.10.0 | [playground.md](./playground.md), [roadmap.md](./roadmap.md) |
 
 ---
 

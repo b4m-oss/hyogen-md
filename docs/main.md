@@ -50,8 +50,8 @@
 | [specs/api.md](./specs/api.md) | 公開 API・loader・エラーコード |
 | [specs/messages.en.json](./specs/messages.en.json) | 英語エラー・警告メッセージ |
 | [need_decision.md](./need_decision.md) | 未決定・後続定義事項 |
-| [playground.md](./playground.md) | プレイグラウンド製品仕様（v0.9.0） |
-| [roadmap.md](./roadmap.md) | 開発ロードマップ（現行 `v0.9.0`〜） |
+| [playground.md](./playground.md) | プレイグラウンド製品仕様（v0.9.0〜） |
+| [roadmap.md](./roadmap.md) | 開発ロードマップ（現行 `v0.9.1`〜） |
 | [_archive/roadmap/](./_archive/roadmap/) | 完了ロードマップ（`v0.1.0`〜`v0.8.0`） |
 | [development.md](./development.md) | 開発方針（TDD） |
 | [app/test/specs/v0.1.0.md](../app/test/specs/v0.1.0.md) | v0.1.0 テスト仕様書 |
@@ -68,10 +68,12 @@
 
 ## 実装優先度（目安）
 
-1. **v0.9.0**: 同リポ・ローカル向けプレイグラウンド
-2. **v0.10.0**: データソースのインポート（API・複数ファイル）
-3. **v0.11.0**: TOC 専用ヘルパ
-4. **v0.12.0**: 許可メソッド（`.length` / `.slice` 等）
+1. **v0.9.1**: outDir の `_` 除外
+2. **v0.9.2**: 出力 Markdown の空行改善（ライブラリ本体）
+3. **v0.10.0**: プレイグラウンド UX（アクションメニュー + `@hg` ハイライト）
+4. **v0.11.0**: データソースのインポート（API・複数ファイル）
+5. **v0.12.0**: TOC 専用ヘルパ
+6. **v0.13.0**: 許可メソッド（`.length` / `.slice` 等）
 
 詳細: [roadmap.md](./roadmap.md)
 

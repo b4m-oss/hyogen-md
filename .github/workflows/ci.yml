@@ -50,5 +50,4 @@ jobs:
         working-directory: playground
 
       - name: docs-site generate
-        run: npm run generate
-        working-directory: docs-site
+        run: make build-docs

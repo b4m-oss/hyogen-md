@@ -138,6 +138,7 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 
 - `make check`（app typecheck / test / build / pack）
 - `make test-pg` および playground `npm run build`
+- `make build-docs`（docs-site 静的生成）
 
 ---
 

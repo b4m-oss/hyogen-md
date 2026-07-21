@@ -91,6 +91,9 @@ make size          # dist / gzip / npm pack 容量
 make pack          # npm pack --dry-run
 make check         # 公開前: typecheck + test + build + pack
 make dev-pg        # playground 開発サーバ
+make dev-docs      # docs-site 開発サーバ
+make build-docs    # docs-site 静的生成（Netlify 向け）
+make check-docs    # docs-site 静的生成の確認
 ```
 
 `app/` 直下でも同様:

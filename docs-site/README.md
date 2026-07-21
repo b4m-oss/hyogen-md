@@ -6,8 +6,8 @@ Nuxt Content site for **@b4moss/hyogen-md**. Spec: [`dev-docs/docs-site.md`](../
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run generate # static output → .output/public
+make dev-docs      # http://localhost:3000
+make build-docs    # static output → .output/public
 ```
 
 ## Structure

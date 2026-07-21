@@ -44,8 +44,8 @@
 | npm 名 | **`@b4moss/hyogen-md`**（製品名 hyogen.md とは別に、パス／パッケージは `hyogen-md`） | [note.md](./note.md) |
 | LICENSE | **MIT**（リポジトリ根および `app/package.json` の `license`） | — |
 | README | **英語**の `README.md` をリポジトリ根と **`app/README.md` で同内容同期**。同内容の日本語を `README_ja.md`（根・必要なら `app/` も同期） | [roadmap.md](./roadmap.md) |
-| CHANGELOG | README 内に CHANGELOG 節を置き、過去のコミット・タグを参照して記載 | — |
-| docs/ | **日本語のまま**（仕様の正）。利用者向けの要約は README 側 | [main.md](./main.md) |
+| CHANGELOG | **`user-docs/changelog.md`**（日本語: `changelog_ja.md`）。README からはリンクする | — |
+| `dev-docs/` | **日本語のまま**（仕様の正・メンテナー向け）。利用者向けは `user-docs/` / README | [main.md](./main.md) |
 | 公開前チェック | `build` / `test` / `npm pack --dry-run` 等を実施してから publish | [roadmap.md](./roadmap.md) |
 | ドキュメントサイト | 当面作らない。README 拡充で足りる想定（サイトは [wishlist.md](./wishlist.md)） | [wishlist.md](./wishlist.md) |
 

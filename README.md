@@ -1,5 +1,12 @@
 # hyogen.md (`@b4moss/hyogen-md`)
 
+![masthead](https://raw.githubusercontent.com/b4m-oss/hyogen-md/develop/user-docs/hyogen-md-masthead.png)
+
+[![npm version](https://img.shields.io/npm/v/@b4moss/hyogen-md.svg)](https://www.npmjs.com/package/@b4moss/hyogen-md)
+[![license](https://img.shields.io/github/license/b4m-oss/hyogen-md)](./LICENSE)
+[![node](https://img.shields.io/node/v/@b4moss/hyogen-md.svg)](https://www.npmjs.com/package/@b4moss/hyogen-md)
+[![coverage](https://img.shields.io/badge/coverage-84%25-brightgreen)](#status)
+
 Extended Markdown template engine for TypeScript / JavaScript.
 
 Control flow and templating live in HTML comments (`@hg` … `@endhg` or `@@` … `@@`), so source files stay preview-friendly. The library outputs **Markdown only** (HTML is left to the consumer).
@@ -8,7 +15,8 @@ Control flow and templating live in HTML comments (`@hg` … `@endhg` or `@@` �
 - **Product name:** hyogen.md（表現.md）
 - **License:** MIT
 - **Japanese README:** [README_ja.md](./README_ja.md)
-- **Specs (Japanese):** [docs/](https://github.com/b4m-oss/hyogen-md/tree/develop/docs)
+- **Changelog:** [user-docs/changelog.md](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog.md)
+- **Specs (Japanese, maintainers):** [dev-docs/](https://github.com/b4m-oss/hyogen-md/tree/develop/dev-docs)
 
 > **Homepage:** [https://github.com/b4m-oss/hyogen-md](https://github.com/b4m-oss/hyogen-md)
 
@@ -75,7 +83,7 @@ const { files, warnings } = await build({
 });
 ```
 
-API details: [docs/specs/api.md](https://github.com/b4m-oss/hyogen-md/blob/develop/docs/specs/api.md).
+API details: [dev-docs/specs/api.md](https://github.com/b4m-oss/hyogen-md/blob/develop/dev-docs/specs/api.md).
 
 ---
 
@@ -85,7 +93,8 @@ API details: [docs/specs/api.md](https://github.com/b4m-oss/hyogen-md/blob/devel
 |------|------|
 | `app/` | Library published to npm (`files`: `dist`, plus README / LICENSE) |
 | `playground/` | Local Vite + Vue playground (**not** published to npm) |
-| `docs/` | Specs and roadmap (**Japanese**) |
+| `user-docs/` | User-facing docs (e.g. [changelog](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog.md)) |
+| `dev-docs/` | Specs and roadmap (**Japanese**, maintainers) |
 
 ### Playground (local only)
 
@@ -102,82 +111,17 @@ Uses `../app` via Vite alias. Virtual FS + `localStorage` only (no real disk I/O
 ## Status
 
 This is **0.x**. APIs and output may change until `1.0.0`.  
-Formal npm release target: **`0.10.0`** (git tag `v0.10.0`). Current prep track: `0.10.0-beta.2`.
+Formal npm release target: **`0.10.0`** (git tag `v0.10.0`). Current prep track: `0.10.0-beta.3`.
 
 Playground UX is part of the **v0.10.0** product milestone but is **not** included in the npm tarball.
+
+The coverage badge reflects approximate **statement coverage for `app/`** (library) from Vitest (~84%). Initial release goal is ≥50%. It is not yet wired to CI / Codecov.
 
 ---
 
 ## Changelog
 
-Library vs Playground-only changes are labeled. Alpha tags are development markers; the formal release tag is `v0.10.0`.
-
-### 0.10.0-beta.2
-
-- **Docs / packaging:** MIT LICENSE, bilingual README + CHANGELOG, `@b4moss/hyogen-md` package name, GitHub homepage `b4m-oss/hyogen-md`.
-
-### 0.10.0-beta.1
-
-- **Docs:** npm first-publish policy (tag ↔ npm version, MIT, README sync, GitHub homepage).
-
-### 0.10.0 (planned) — Playground UX + first npm publish
-
-Playground (not in npm package):
-
-- Action menus (⋯) for file operations
-- `@hg` / `@@` syntax highlighting (JS-approx) and light `{{ }}` marks
-- Soft Diagnostics **note** for non-entry files (e.g. layouts); Preview shows source Markdown
-- Filer UX (OUT read-only styling, icons); Reset re-renders full `/src` tree into `/out`
-- Markdown tab highlighting via highlight.js
-
-Library packaging:
-
-- Publish `@b4moss/hyogen-md@0.10.0` from `app/` (`dist` only + docs/license)
-- git tag `v0.10.0` matches npm version
-
-### 0.9.2 — Library
-
-- Tighten extra blank lines in expanded Markdown (`stripHgComments` / layout / include seams). Notable output change vs earlier builds.
-
-### 0.9.1 — Playground
-
-- Exclude `_`-prefixed files/dirs from outDir; sync OUT after SRC rename / unhide.
-
-### 0.9.0 — Playground
-
-- Local playground: virtual FS, filer, CodeMirror editor, auto-render, preview, diagnostics, demo seed, `localStorage`.
-
-### 0.8.0 — Library
-
-- `formatDiagnosticLog`; `each` + `component` with expression props; cross-spec tests / docs polish.
-
-### 0.7.0 — Library
-
-- `@@` shorthand; ternary / template literals; `for` / `do`–`while`; suspicious context warnings.
-
-### 0.6.0 — Library
-
-- `renderClient` and `@b4moss/hyogen-md/client` browser-oriented entry.
-
-### 0.5.0 — Library
-
-- `build`, `serverContext`, remote loader support.
-
-### 0.4.0 — Library
-
-- `extend` / `block` layout inheritance.
-
-### 0.3.0 — Library
-
-- Declarations and `if` / `each` control blocks; expression operators.
-
-### 0.2.0 — Library
-
-- Path resolution, Node loader, `component`.
-
-### 0.1.0 — Library
-
-- Pipeline MVP: `@hg` blocks, front matter, `{{ }}`, `include`.
+See **[user-docs/changelog.md](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog.md)** (Japanese: [changelog_ja.md](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog_ja.md)).
 
 ---
 

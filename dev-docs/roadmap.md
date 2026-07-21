@@ -131,12 +131,12 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 
 - [x] GitHub 公開リポジトリ（`b4m-oss/hyogen-md`）を用意し `develop` を push（**homepage**）
 - [x] **MIT** LICENSE を追加（根・`app/`。`app/package.json` の `license` / `repository` / `homepage` 等も整備）
-- [x] `app/package.json` の version をトラックに合わせる（現在 **`0.10.0-beta.2`**。正式は **`0.10.0`** = tag `v0.10.0`）
+- [x] `app/package.json` の version をトラックに合わせる（現在 **`0.10.0-beta.3`**。正式は **`0.10.0`** = tag `v0.10.0`）
 - [x] **英語** `README.md` をリポジトリ根と **`app/README.md` で同内容同期**
 - [x] 同内容の日本語 **`README_ja.md`**（根・`app/` 同期）
 - [x] README 内 **CHANGELOG**（ライブラリ変更と Playground 専用を区別）
 - [x] パッケージ名 **`@b4moss/hyogen-md`**（Git リポ名も `hyogen-md`）
-- [ ] `docs/` は日本語のまま（仕様の正）— 維持
+- [x] `dev-docs/` は日本語のまま（仕様の正）— 維持。利用者向けは `user-docs/`
 - [ ] 公開前チェック: `npm test` / `npm run build` / `npm pack --dry-run` 等
 - [ ] git tag **`v0.10.0`**（正式リリース）を付与して npm publish。alpha の遡及タグは不要
 - [ ] roadmap / need_decision の「公開済み」状態へ更新（本節のチェック完了時）
@@ -258,7 +258,7 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 | 本ロードマップ | **`v0.n.0` = MINOR 相当の機能塊**。同一塊内の修正・仕様寄せは **PATCH**（例: `v0.9.1` / `v0.9.2`） |
 | git tag と npm | **一致させる**（例: tag `v0.10.0` ↔ npm `0.10.0`）。正式リリースの tag を切る。alpha の遡及付与は不要 |
 | `app` と版 | ライブラリに機能差分が無くても、リリース版では **`app/package.json` の version を tag / npm に揃える** |
-| README | 英語 `README.md` を **リポジトリ根と `app/README.md` で同内容同期**。日本語は `README_ja.md`。`docs/` は日本語のまま |
+| README | 英語 `README.md` を **リポジトリ根と `app/README.md` で同内容同期**。日本語は `README_ja.md`。`dev-docs/` は日本語のまま。CHANGELOG は `user-docs/` |
 | `v1.0.0` | API・仕様安定の宣言。タイミングはメンテナー判断 |
 | spec 変更 | 実装前に [specs/](./specs/) を更新し、ロードマップのチェック項目と同期する |
 | 完了バージョン | [_archive/roadmap/](./_archive/roadmap/) へ移す |

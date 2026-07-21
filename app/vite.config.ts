@@ -12,6 +12,7 @@ export default defineConfig({
       external: [/^node:/, "yaml", "fast-glob", "picomatch", "path-browserify"],
     },
     sourcemap: true,
+    minify: true,
     outDir: "dist",
     emptyOutDir: true,
   },

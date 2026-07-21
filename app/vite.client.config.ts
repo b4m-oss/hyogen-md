@@ -23,6 +23,7 @@ export default defineConfig({
       external: ["yaml"],
     },
     sourcemap: true,
+    minify: true,
     outDir: "dist",
     emptyOutDir: false,
   },

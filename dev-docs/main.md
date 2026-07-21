@@ -24,7 +24,7 @@
 - **mixin**（保留。component で代替）
 - 任意 JavaScript の評価（`eval` / `new Function` 等）
 - **HTML 出力**（Markdown 出力のみ。HTML 化は利用側）
-- **ドキュメントサイト**（当面作らない。利用者向けは README 拡充。動作確認は同リポのプレイグラウンド）
+- **ドキュメントサイト**（当面作らない。利用者向けは README / `user-docs/`。仕様の正は `dev-docs/`。動作確認は同リポのプレイグラウンド）
 
 ### 表記
 
@@ -38,6 +38,8 @@
 ---
 
 ## ドキュメント構成
+
+本ディレクトリ（`dev-docs/`）はメンテナー向け仕様の正。利用者向けはリポジトリ根の README と [`user-docs/`](../user-docs/)（例: [changelog](../user-docs/changelog_ja.md)）。
 
 | 文書 | 内容 |
 |------|------|

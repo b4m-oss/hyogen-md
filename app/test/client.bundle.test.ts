@@ -16,6 +16,7 @@ describe("hyogen-md/client bundle (v0.6)", () => {
     const source = readFileSync(path.join(distDir, "client.js"), "utf8");
     assert.equal(source.includes("createFsLoader"), false);
     assert.equal(source.includes("createNodeLoader"), false);
+    assert.equal(source.includes("loadDataSources"), false);
     assert.equal(source.includes("fast-glob"), false);
     assert.equal(source.includes("node:fs"), false);
     assert.equal(source.includes("renderServer"), false);

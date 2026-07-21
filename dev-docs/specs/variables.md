@@ -37,6 +37,19 @@
 - 後段の MD→HTML や呼び出し側の責任とする
 - 危険そうな値が context に載っている場合は **警告ログのみ**（サニタイズしない）。パターンは [security.md](./security.md)
 
+## データファイル（API `dataSources`）
+
+`renderServer` / `build` の `dataSources` で読み込んだ外部ファイルの値は、**テンプレート変数**として `{{ }}` / `@hg` から参照できる。
+
+| 項目 | 方針 |
+|------|------|
+| 読込経路 | **API のみ**（[api.md](./api.md)）。DSL の `import` / `require` は不可 |
+| 変数名 | `dataSources` マップの **キー**（例: `{ site: "./data/site.yaml" }` → `{{ site.title }}`） |
+| 値の形 | JSON / YAML はパース結果をそのまま束縛。CSV は **オブジェクト配列** |
+| トップレベル配列 | **許可**（例: JSON `[1,2,3]` → `{{ items.0 }}`）。front matter の YAML 制約とは別 |
+| マージ | `dataSources` → `context` → `serverContext` の順で浅いマージ（後勝ち） |
+| front matter との関係 | front matter は `renderDocument` 内で **さらに後**から適用され、同名キーを上書きしうる |
+
 ## Front matter
 
 - **YAML のみ**

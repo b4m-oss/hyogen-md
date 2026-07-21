@@ -31,8 +31,12 @@ type RenderOptions = {
   root?: string;
 };
 
+type DataSourcesMap = Record<string, string>;
+
 type ServerRenderOptions = RenderOptions & {
   serverContext?: HyogenContext;
+  /** 変数名 → ルート相対のデータファイルパス（YAML / JSON / CSV） */
+  dataSources?: DataSourcesMap;
 };
 
 type Loader = (path: string) => Promise<string>;
@@ -69,9 +73,19 @@ type BuildOptions = RenderOptions & {
   includeUnderscoreEntries?: boolean;
   context?: HyogenContext;
   serverContext?: HyogenContext;
+  dataSources?: DataSourcesMap;
 };
 
 declare function build(options: BuildOptions): Promise<BuildResult>;
+
+/**
+ * 複数データファイルを読み込み、変数名 → 値の HyogenContext を返す。
+ * renderServer / build の dataSources と同じパース規則。
+ */
+declare function loadDataSources(
+  sources: DataSourcesMap,
+  options?: { root?: string; loader?: Loader },
+): Promise<HyogenContext>;
 
 /** 診断を api.md 例形式の複数行テキストに整形する。console へは出力しない。 */
 declare function formatDiagnosticLog(
@@ -99,6 +113,69 @@ await renderServer("./page.md", { title: "public" }, {
   serverContext: { apiKey: "secret" },
 });
 ```
+
+## データソースのインポート（v0.11.0）
+
+外部データ（YAML / JSON / CSV）を **API 側のみ**で読み、テンプレート変数へバインドする。DSL の `import` / `require` は **引き続き禁止**（[dsl.md](./dsl.md)）。
+
+### オプション `dataSources`
+
+`renderServer` / `build` の options に **変数名 → ファイルパス** のマップを渡す。
+
+```ts
+await renderServer("./page.md", {}, {
+  root: "./site",
+  dataSources: {
+    site: "./data/site.yaml",
+    products: "./data/products.json",
+    rows: "./data/rows.csv",
+  },
+});
+```
+
+- パスは `options.root`（省略時は `.doc_root` 探索結果または cwd）からの **相対パス**
+- **リモート URL** は v0.11.0 では **非対応**（`file_not_found` または `load_failed`）
+- `renderClient` に `dataSources` を渡した場合は **`data_sources_on_client`** で中断
+
+### 関数 `loadDataSources`
+
+プログラムから先に読み込み、手動で context に合成してもよい。
+
+```ts
+const fromFiles = await loadDataSources(
+  { site: "./data/site.yaml" },
+  { root: "./site" },
+);
+await renderServer("./page.md", { ...fromFiles, extra: 1 });
+```
+
+`@b4moss/hyogen-md`（サーバ向け）のみ export。`@b4moss/hyogen-md/client` には **載せない**。
+
+### context へのマージ順
+
+`renderServer` / `build` では次の順で浅いマージ（[variables.md](./variables.md)）:
+
+1. `loadDataSources(dataSources)` の結果
+2. 呼び出し側 `context`（`build` の `options.context`）
+3. `serverContext`
+
+同名キーは **後勝ち**。front matter は `renderDocument` 内でさらに後から適用される（従来どおり）。
+
+### 形式別パース
+
+| 拡張子 | パース結果（変数に束縛される値） |
+|--------|--------------------------------|
+| `.json` | `JSON.parse` の結果（オブジェクト / 配列 / プリミティブ） |
+| `.yaml` / `.yml` | `yaml` パッケージでパースした結果 |
+| `.csv` | **ヘッダー行あり**の CSV → **オブジェクト配列**（1 行 = 1 レコード） |
+
+- 空ファイル → **`parse_error`**
+- 未対応拡張子 → **`parse_error`**（`details.format` に拡張子）
+- CSV: **`csv-parser`**（npm）を `Readable.from` 経由の薄いラッパで利用。RFC 4180 簡易（カンマ区切り、ダブルクォートでフィールド囲み・エスケープ、`\r\n` / `\n` 改行）
+
+### build での扱い
+
+- `dataSources` は **エントリループの前に 1 回**読み込み、全エントリで同一のマージ済み context を使う（`context` / `serverContext` と同様）
 
 ## loader
 
@@ -140,6 +217,7 @@ await renderServer("./page.md", { title: "public" }, {
 | `parse_error` | ホワイトリスト外構文・不正 DSL |
 | `component_multiline_output` | component 結果が複数行 |
 | `server_context_on_client` | `renderClient` に `serverContext` 相当 |
+| `data_sources_on_client` | `renderClient` に `dataSources` |
 | `load_failed` | loader のその他失敗 |
 
 ### 中断しない警告
@@ -165,7 +243,6 @@ await renderServer("./page.md", { title: "public" }, {
 
 ## 後続候補（未実装）
 
-- **データソースのインポート**: DSL では読まない。**API 側のみ**で YAML / JSON / CSV 等を読み、変数へバインド。**複数ファイル**対応。具体 API 形は後続（[need_decision.md](../need_decision.md)）
 - **TOC 専用ヘルパ**: 入れる方針。構文・詳細は後続
 
 ## 関連

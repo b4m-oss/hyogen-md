@@ -131,15 +131,15 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 
 - [x] GitHub 公開リポジトリ（`b4m-oss/hyogen-md`）を用意し `develop` を push（**homepage**）
 - [x] **MIT** LICENSE を追加（根・`app/`。`app/package.json` の `license` / `repository` / `homepage` 等も整備）
-- [x] `app/package.json` の version をトラックに合わせる（現在 **`0.10.0-beta.3`**。正式は **`0.10.0`** = tag `v0.10.0`）
+- [x] `app/package.json` の version を **`0.10.0`** に揃える（= tag `v0.10.0`）
 - [x] **英語** `README.md` をリポジトリ根と **`app/README.md` で同内容同期**
 - [x] 同内容の日本語 **`README_ja.md`**（根・`app/` 同期）
 - [x] README 内 **CHANGELOG**（ライブラリ変更と Playground 専用を区別）
 - [x] パッケージ名 **`@b4moss/hyogen-md`**（Git リポ名も `hyogen-md`）
 - [x] `dev-docs/` は日本語のまま（仕様の正）— 維持。利用者向けは `user-docs/`
-- [ ] 公開前チェック: `npm test` / `npm run build` / `npm pack --dry-run` 等
-- [ ] git tag **`v0.10.0`**（正式リリース）を付与して npm publish。alpha の遡及タグは不要
-- [ ] roadmap / need_decision の「公開済み」状態へ更新（本節のチェック完了時）
+- [x] 公開前チェック: `npm test` / `npm run build` / `npm pack --dry-run` 等（`make check` / `make size` 通過）
+- [x] git tag **`v0.10.0`**（正式リリース）を付与して npm publish。alpha の遡及タグは不要
+- [x] roadmap / need_decision の「公開済み」状態へ更新
 
 ### テスト
 
@@ -244,7 +244,7 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 | 項目 | 方針 |
 |------|------|
 | HTML 出力レイヤ | **対象外**。ライブラリは Markdown 出力のみ |
-| npm 公開 | **v0.10.0 で初回公開**（`app/` の `dist` のみ。Playground は同梱しない）。詳細は上節「配布・ドキュメント」および [need_decision.md](./need_decision.md) |
+| npm 公開 | **v0.10.0 で初回公開済み**（`app/` の `dist` のみ。Playground は同梱しない）。詳細は上節「配布・ドキュメント」および [need_decision.md](./need_decision.md) |
 | ドキュメントサイト | 当面作らない。**README 拡充**で足りる想定（サイトは wishlist） |
 | mixin | 無期限保留（[need_decision.md](./need_decision.md)） |
 

@@ -33,7 +33,7 @@
 ### 周辺（方針メモ）
 
 - **プレイグラウンド**: 同リポジトリ内。ローカルで試せれば十分。**npm パッケージには含めない** → [playground.md](./playground.md)
-- **npm 公開**: **v0.10.0 で初回公開**（`@b4moss/hyogen-md`。`app/` のみ。git リポ名も `hyogen-md`。tag と npm 版を一致）→ [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
+- **npm 公開**: **v0.10.0 で初回公開済み**（`@b4moss/hyogen-md`。`app/` のみ。git リポ名も `hyogen-md`。tag と npm 版を一致）→ [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)
 
 ---
 

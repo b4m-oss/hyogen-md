@@ -4,6 +4,22 @@
 
 English: [changelog.md](./changelog.md)
 
+### 0.10.0 — Playground UX + npm 初回公開
+
+Playground（npm 非同梱）:
+
+- ファイル操作のアクションメニュー（⋯）
+- `@hg` / `@@` シンタックスハイライト（JS 近似）と `{{ }}` の軽い装飾
+- 非エントリ向け Diagnostics **note**（例: layout）。Preview はソース Markdown
+- ファイラー UX（OUT の read-only 見た目、アイコン）。Reset 時は `/src` 全体を `/out` へ再 render
+- Markdown タブの highlight.js 色分け
+
+ライブラリ配布:
+
+- `app/` から `@b4moss/hyogen-md@0.10.0` を初回公開（`dist` + README / LICENSE。`*.map` 除外）
+- git tag `v0.10.0` と npm 版を一致
+- ドキュメント構成: `dev-docs/`（メンテナー）、`user-docs/`（changelog 等）
+
 ### 0.10.0-beta.3
 
 - **Packaging:** npm tarball から `*.map` を除外。Vite `minify: true` を明示
@@ -17,21 +33,6 @@ English: [changelog.md](./changelog.md)
 ### 0.10.0-beta.1
 
 - **Docs:** npm 初回公開方針（tag ↔ npm 版、MIT、README 同期、GitHub homepage）
-
-### 0.10.0（予定）— Playground UX + npm 初回公開
-
-Playground（npm 非同梱）:
-
-- ファイル操作のアクションメニュー（⋯）
-- `@hg` / `@@` シンタックスハイライト（JS 近似）と `{{ }}` の軽い装飾
-- 非エントリ向け Diagnostics **note**（例: layout）。Preview はソース Markdown
-- ファイラー UX（OUT の read-only 見た目、アイコン）。Reset 時は `/src` 全体を `/out` へ再 render
-- Markdown タブの highlight.js 色分け
-
-ライブラリ配布:
-
-- `app/` から `@b4moss/hyogen-md@0.10.0` を公開（`dist` + ドキュメント / ライセンス）
-- git tag `v0.10.0` と npm 版を一致
 
 ### 0.9.2 — ライブラリ
 

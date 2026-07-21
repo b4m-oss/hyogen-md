@@ -4,6 +4,22 @@ Library vs Playground-only changes are labeled. Alpha tags are development marke
 
 Japanese: [changelog_ja.md](./changelog_ja.md)
 
+### 0.10.0 — Playground UX + first npm publish
+
+Playground (not in npm package):
+
+- Action menus (⋯) for file operations
+- `@hg` / `@@` syntax highlighting (JS-approx) and light `{{ }}` marks
+- Soft Diagnostics **note** for non-entry files (e.g. layouts); Preview shows source Markdown
+- Filer UX (OUT read-only styling, icons); Reset re-renders full `/src` tree into `/out`
+- Markdown tab highlighting via highlight.js
+
+Library packaging:
+
+- First publish of `@b4moss/hyogen-md@0.10.0` from `app/` (`dist` + README / LICENSE; `*.map` excluded)
+- git tag `v0.10.0` matches npm version
+- Docs layout: `dev-docs/` (maintainers), `user-docs/` (changelog, etc.)
+
 ### 0.10.0-beta.3
 
 - **Packaging:** exclude `*.map` from npm tarball; explicit Vite `minify: true`
@@ -17,21 +33,6 @@ Japanese: [changelog_ja.md](./changelog_ja.md)
 ### 0.10.0-beta.1
 
 - **Docs:** npm first-publish policy (tag ↔ npm version, MIT, README sync, GitHub homepage).
-
-### 0.10.0 (planned) — Playground UX + first npm publish
-
-Playground (not in npm package):
-
-- Action menus (⋯) for file operations
-- `@hg` / `@@` syntax highlighting (JS-approx) and light `{{ }}` marks
-- Soft Diagnostics **note** for non-entry files (e.g. layouts); Preview shows source Markdown
-- Filer UX (OUT read-only styling, icons); Reset re-renders full `/src` tree into `/out`
-- Markdown tab highlighting via highlight.js
-
-Library packaging:
-
-- Publish `@b4moss/hyogen-md@0.10.0` from `app/` (`dist` only + docs/license)
-- git tag `v0.10.0` matches npm version
 
 ### 0.9.2 — Library
 

@@ -111,7 +111,7 @@ Uses `../app` via Vite alias. Virtual FS + `localStorage` only (no real disk I/O
 ## Status
 
 This is **0.x**. APIs and output may change until `1.0.0`.  
-Formal npm release target: **`0.10.0`** (git tag `v0.10.0`). Current prep track: `0.10.0-beta.3`.
+Published: **`@b4moss/hyogen-md@0.10.0`** (git tag `v0.10.0`).
 
 Playground UX is part of the **v0.10.0** product milestone but is **not** included in the npm tarball.
 

@@ -1,0 +1,95 @@
+.playground-root {
+  --pg-bg: #e8eef2;
+  --pg-bg-panel: #f7fafb;
+  --pg-bg-deep: #d5dee5;
+  --pg-ink: #1a242c;
+  --pg-ink-muted: #5a6b76;
+  --pg-line: #b8c5ce;
+  --pg-accent: #0d6e6e;
+  --pg-accent-soft: #d4ecec;
+  --pg-danger: #a32d2d;
+  --pg-danger-soft: #f5e0e0;
+  --pg-warn: #8a5a12;
+  --pg-warn-soft: #f3ead8;
+  --pg-font: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+  --pg-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --pg-toolbar-h: 2.5rem;
+  --pg-diag-h: 9rem;
+
+  --bg: var(--pg-bg);
+  --bg-panel: var(--pg-bg-panel);
+  --bg-deep: var(--pg-bg-deep);
+  --ink: var(--pg-ink);
+  --ink-muted: var(--pg-ink-muted);
+  --line: var(--pg-line);
+  --accent: var(--pg-accent);
+  --accent-soft: var(--pg-accent-soft);
+  --danger: var(--pg-danger);
+  --danger-soft: var(--pg-danger-soft);
+  --warn: var(--pg-warn);
+  --warn-soft: var(--pg-warn-soft);
+  --font: var(--pg-font);
+  --mono: var(--pg-mono);
+  --header-h: var(--pg-toolbar-h);
+  --diag-h: var(--pg-diag-h);
+
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #c5dde0 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #d9e3ea 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg) 0%, #dfe7ec 100%);
+}
+
+html[data-theme='dark'] .playground-root {
+  --pg-bg: #0f1720;
+  --pg-bg-panel: #15202b;
+  --pg-bg-deep: #0a1018;
+  --pg-ink: #e2e8f0;
+  --pg-ink-muted: #94a3b8;
+  --pg-line: #334155;
+  --pg-accent: #5eead4;
+  --pg-accent-soft: #134e4a;
+  --pg-danger: #fca5a5;
+  --pg-danger-soft: #450a0a;
+  --pg-warn: #fcd34d;
+  --pg-warn-soft: #422006;
+
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #1e293b 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #0f172a 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg) 0%, #0b1120 100%);
+}
+
+.playground-root button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.playground-root button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.playground-separator {
+  width: 4px;
+  cursor: col-resize;
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.playground-separator::after {
+  content: '';
+  position: absolute;
+  inset: 0 -3px;
+}
+
+.playground-separator:hover,
+.playground-separator.is-active {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}

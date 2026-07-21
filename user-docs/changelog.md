@@ -4,9 +4,26 @@ Library vs Playground-only changes are labeled. Alpha tags are development marke
 
 Japanese: [changelog_ja.md](./changelog_ja.md)
 
+### 0.10.0-docs.8 — Documentation site complete
+
+- Playground integrated at `/playground` (pane resize, theme shared with docs UI)
+- English + Japanese API and syntax reference on the site
+- Removed standalone `playground/`; tests live in `docs-site/test/playground/`
+- README links to **https://hyogen-md.netlify.app** and `/playground`
+
+### 0.10.0-docs.6 — Playground in docs site
+
+- Migrated Playground into `docs-site/` (Nuxt + Vite aliases to `app/`)
+- Draggable pane widths; dark / light / system theme on Playground
+
+### 0.10.0-docs.5 — Docs site scaffold
+
+- `docs-site/` with Nuxt Content, EN/JA routes, theme toggle
+- Netlify builds docs site from `main` (`make build-docs`)
+
 ### 0.10.0-docs.3 — Playground on Netlify
 
-- Root `netlify.toml` (build `playground/`, deploy from `main`)
+- Root `netlify.toml` (build `docs-site/`, deploy from `main`; requires `app/` for Playground aliases)
 - README (en/ja, root + `app/`) links to **https://hyogen-md.netlify.app**
 - Site connect steps in `dev-docs/repository.md` (dashboard; site name `hyogen-md`)
 

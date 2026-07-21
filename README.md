@@ -16,7 +16,8 @@ Control flow and templating live in HTML comments (`@hg` â€¦ `@endhg` or `@@` â€
 - **License:** MIT
 - **Japanese README:** [README_ja.md](./README_ja.md)
 - **Changelog:** [user-docs/changelog.md](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog.md)
-- **Playground:** [https://hyogen-md.netlify.app](https://hyogen-md.netlify.app) (Netlify; not in the npm package)
+- **Documentation:** [https://hyogen-md.netlify.app](https://hyogen-md.netlify.app) (Nuxt Content; not in npm)
+- **Playground:** [https://hyogen-md.netlify.app/playground](https://hyogen-md.netlify.app/playground) (same site; not in npm)
 - **Specs (Japanese, maintainers):** [dev-docs/](https://github.com/b4m-oss/hyogen-md/tree/develop/dev-docs)
 
 > **Homepage:** [https://github.com/b4m-oss/hyogen-md](https://github.com/b4m-oss/hyogen-md)
@@ -93,23 +94,23 @@ API details: [dev-docs/specs/api.md](https://github.com/b4m-oss/hyogen-md/blob/d
 | Path | Role |
 |------|------|
 | `app/` | Library published to npm (`files`: `dist`, plus README / LICENSE) |
-| `playground/` | Vite + Vue playground on [Netlify](https://hyogen-md.netlify.app) (**not** in npm) |
+| `docs-site/` | Documentation site + Playground on [Netlify](https://hyogen-md.netlify.app) (**not** in npm) |
 | `user-docs/` | User-facing docs (e.g. [changelog](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog.md)) |
 | `dev-docs/` | Specs and roadmap (**Japanese**, maintainers) |
 
-### Playground
+### Documentation & Playground
 
-Online: **[https://hyogen-md.netlify.app](https://hyogen-md.netlify.app)** (deploys from `main`).
+**Site:** **[https://hyogen-md.netlify.app](https://hyogen-md.netlify.app)** (deploys from `main`).  
+**Playground:** **[https://hyogen-md.netlify.app/playground](https://hyogen-md.netlify.app/playground)**
 
 Local:
 
 ```bash
-cd playground
-npm install
-npm run dev
+make install-docs
+make dev-docs
 ```
 
-Uses `../app` via Vite alias. Virtual FS + `localStorage` only (no real disk I/O).
+Open `http://localhost:3000` (docs) and `/playground`. Uses `../app` via Vite alias. Virtual FS + `localStorage` only.
 
 ---
 

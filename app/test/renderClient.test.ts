@@ -51,6 +51,30 @@ describe("renderClient (v0.6)", () => {
     );
   });
 
+  it("throws data_sources_on_client when dataSources is passed", async () => {
+    await assert.rejects(
+      () =>
+        renderClient("# Hi", {}, {
+          dataSources: { x: "./x.json" },
+          loader: async () => "# x",
+        }),
+      (error: unknown) => {
+        assertHyogenError(error, "data_sources_on_client");
+        return true;
+      },
+    );
+  });
+
+  it("allows an empty dataSources object", async () => {
+    const result = await renderClient("# Hi", {}, {
+      dataSources: {},
+      loader: async () => {
+        throw new Error("loader should not be called");
+      },
+    });
+    assert.match(result.markdown, /# Hi/);
+  });
+
   it("throws parse_error when loader is missing", async () => {
     await assert.rejects(
       () => renderClient("# Hi", {}),

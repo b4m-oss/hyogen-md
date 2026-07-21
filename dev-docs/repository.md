@@ -125,7 +125,7 @@ flowchart LR
 
 Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 
-- `make check`（app typecheck / test / build / pack）
+- `make check`（app typecheck / build / test / pack）
 - `make test-pg`（docs-site 内 Playground テスト）
 - `make build-docs`（docs-site 静的生成）
 

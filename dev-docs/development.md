@@ -89,7 +89,7 @@ make test-watch    # app 監視モード
 make build         # app/dist（minify あり）
 make size          # dist / gzip / npm pack 容量
 make pack          # npm pack --dry-run
-make check         # 公開前: typecheck + test + build + pack
+make check         # 公開前: typecheck + build + test + pack
 make dev-docs      # docs-site 開発サーバ（/playground 含む）
 make build-docs    # docs-site 静的生成（Netlify 向け）
 make check-docs    # docs-site 静的生成の確認

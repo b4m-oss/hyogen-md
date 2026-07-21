@@ -16,6 +16,7 @@ Control flow and templating live in HTML comments (`@hg` â€¦ `@endhg` or `@@` â€
 - **License:** MIT
 - **Japanese README:** [README_ja.md](./README_ja.md)
 - **Changelog:** [user-docs/changelog.md](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog.md)
+- **Playground:** [https://hyogen-md.netlify.app](https://hyogen-md.netlify.app) (Netlify; not in the npm package)
 - **Specs (Japanese, maintainers):** [dev-docs/](https://github.com/b4m-oss/hyogen-md/tree/develop/dev-docs)
 
 > **Homepage:** [https://github.com/b4m-oss/hyogen-md](https://github.com/b4m-oss/hyogen-md)
@@ -92,11 +93,15 @@ API details: [dev-docs/specs/api.md](https://github.com/b4m-oss/hyogen-md/blob/d
 | Path | Role |
 |------|------|
 | `app/` | Library published to npm (`files`: `dist`, plus README / LICENSE) |
-| `playground/` | Local Vite + Vue playground (**not** published to npm) |
+| `playground/` | Vite + Vue playground on [Netlify](https://hyogen-md.netlify.app) (**not** in npm) |
 | `user-docs/` | User-facing docs (e.g. [changelog](https://github.com/b4m-oss/hyogen-md/blob/develop/user-docs/changelog.md)) |
 | `dev-docs/` | Specs and roadmap (**Japanese**, maintainers) |
 
-### Playground (local only)
+### Playground
+
+Online: **[https://hyogen-md.netlify.app](https://hyogen-md.netlify.app)** (deploys from `main`).
+
+Local:
 
 ```bash
 cd playground

@@ -169,8 +169,8 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 
 - [x] 長期ブランチ `main` / `release` を作成（`develop` 維持）— **docs.1**
 - [x] CI: PR → `dev-v*` / `develop`（`.github/workflows/ci.yml`）— **docs.1**
-- [ ] GitHub branch protection（`main` 直接マージ禁止、`@kohki-shikata` force push 例外）— **docs.2**
-- [ ] CD: `release` マージ → npm publish — **docs.2**
+- [x] CD: `release` マージ → npm publish（既存版スキップ）— **docs.2**
+- [x] GitHub branch protection（手順・Rulesets）— **docs.2**
 - [ ] Playground を Netlify 公開し、README（英・日）へ導線 — **docs.3**
 
 ### 参照

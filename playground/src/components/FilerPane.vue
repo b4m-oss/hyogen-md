@@ -1,56 +1,49 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { provide, ref } from "vue";
 import type { TreeNode } from "../fs/virtualFs";
 import FilerTree from "./FilerTree.vue";
+import NodeActionMenu, { NODE_ACTION_MENU_OPEN_ID } from "./NodeActionMenu.vue";
 
-const props = defineProps<{
+defineProps<{
   srcTree: TreeNode[];
   outTree: TreeNode[];
   selectedPath: string | null;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   select: [path: string];
-  createFile: [];
-  createFolder: [];
-  rename: [];
-  remove: [];
+  createFile: [parentPath: string];
+  createFolder: [parentPath: string];
+  rename: [path: string];
+  remove: [path: string];
 }>();
 
-const selectedIsSrc = computed(
-  () => props.selectedPath != null && props.selectedPath.startsWith("/src/"),
-);
+/** Only one NodeActionMenu open under this pane (src-root + tree). */
+provide(NODE_ACTION_MENU_OPEN_ID, ref<string | null>(null));
 </script>
 
 <template>
   <aside class="filer">
-    <div class="filer__actions">
-      <button type="button" title="New file" @click="emit('createFile')">+ file</button>
-      <button type="button" title="New folder" @click="emit('createFolder')">+ folder</button>
-      <button
-        type="button"
-        title="Rename"
-        :disabled="!selectedIsSrc"
-        @click="emit('rename')"
-      >
-        rename
-      </button>
-      <button
-        type="button"
-        title="Delete"
-        :disabled="!selectedIsSrc"
-        @click="emit('remove')"
-      >
-        delete
-      </button>
-    </div>
-
     <section class="filer__section">
-      <h2>src</h2>
+      <div class="filer__heading">
+        <h2>src</h2>
+        <NodeActionMenu
+          kind="src-root"
+          path="/src"
+          parent-path="/src"
+          @create-file="$emit('createFile', $event)"
+          @create-folder="$emit('createFolder', $event)"
+        />
+      </div>
       <FilerTree
         :nodes="srcTree"
         :selected-path="selectedPath"
-        @select="emit('select', $event)"
+        mutable
+        @select="$emit('select', $event)"
+        @create-file="$emit('createFile', $event)"
+        @create-folder="$emit('createFolder', $event)"
+        @rename="$emit('rename', $event)"
+        @remove="$emit('remove', $event)"
       />
     </section>
 
@@ -59,7 +52,7 @@ const selectedIsSrc = computed(
       <FilerTree
         :nodes="outTree"
         :selected-path="selectedPath"
-        @select="emit('select', $event)"
+        @select="$emit('select', $event)"
       />
     </section>
   </aside>
@@ -77,27 +70,26 @@ const selectedIsSrc = computed(
   border-right: 1px solid var(--line);
 }
 
-.filer__actions {
+.filer__heading {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.35rem;
+  margin-bottom: 0.35rem;
 }
 
-.filer__actions button {
-  border: 1px solid var(--line);
-  background: var(--bg-deep);
-  color: var(--ink);
-  padding: 0.2rem 0.45rem;
-  font-size: 0.75rem;
-}
-
-.filer__section h2 {
-  margin: 0 0 0.35rem;
+.filer__heading h2,
+.filer__section > h2 {
+  margin: 0;
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-muted);
   font-weight: 600;
+}
+
+.filer__section > h2 {
+  margin-bottom: 0.35rem;
 }
 
 .readonly {

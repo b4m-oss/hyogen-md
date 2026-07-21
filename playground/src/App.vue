@@ -143,19 +143,9 @@ function promptName(message: string, initial = ""): string | null {
   return trimmed.length ? trimmed : null;
 }
 
-function resolveSrcParent(): string {
-  const path = selectedPath.value;
-  if (path && isSrcPath(path)) {
-    if (fs.value.statKind(path) === "directory") return path;
-    return parentPath(path);
-  }
-  return "/src";
-}
-
-function onCreateFile() {
+function onCreateFile(parent: string) {
   const name = promptName("New file name (e.g. page.md)", "untitled.md");
   if (!name) return;
-  const parent = resolveSrcParent();
   const path = `${parent}/${name}`.replace(/\/+/g, "/");
   try {
     fs.value.writeSrc(path, "# New file\n");
@@ -168,10 +158,9 @@ function onCreateFile() {
   }
 }
 
-function onCreateFolder() {
+function onCreateFolder(parent: string) {
   const name = promptName("New folder name", "folder");
   if (!name) return;
-  const parent = resolveSrcParent();
   const path = `${parent}/${name}`.replace(/\/+/g, "/");
   try {
     fs.value.mkdir(path);
@@ -182,8 +171,7 @@ function onCreateFolder() {
   }
 }
 
-function onRename() {
-  const path = selectedPath.value;
+function onRename(path: string) {
   if (!path || !isSrcPath(path) || path === "/src") return;
   const base = path.slice(path.lastIndexOf("/") + 1);
   const name = promptName("Rename to", base);
@@ -226,8 +214,7 @@ async function populateOutAfterUnderscoreDirUnhide(rootSrcPath: string) {
   persist();
 }
 
-function onRemove() {
-  const path = selectedPath.value;
+function onRemove(path: string) {
   if (!path || !isSrcPath(path) || path === "/src") return;
   if (!window.confirm(`Delete ${path}?`)) return;
   try {

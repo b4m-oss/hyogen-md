@@ -1,6 +1,6 @@
 {
   "name": "hyogen-md-playground",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@codemirror/commands": "^6.8.0",
+    "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/lang-markdown": "^6.3.2",
     "@codemirror/language": "^6.11.0",
     "@codemirror/state": "^6.5.2",

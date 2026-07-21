@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { EditorState } from "@codemirror/state";
 import { EditorView, keymap, lineNumbers, placeholder } from "@codemirror/view";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
-import { markdown } from "@codemirror/lang-markdown";
+import { hyogenMarkdown } from "../editor/hyogenMarkdown";
 
 const props = defineProps<{
   modelValue: string;
@@ -24,7 +24,7 @@ function createState(doc: string) {
     extensions: [
       lineNumbers(),
       history(),
-      markdown(),
+      hyogenMarkdown(),
       keymap.of([...defaultKeymap, ...historyKeymap]),
       placeholder(props.readOnly ? "Select a file" : "Edit markdown…"),
       EditorView.editable.of(!props.readOnly),

@@ -17,10 +17,10 @@
 
 | バージョン | 項目 | 方針 | 参照 |
 |------------|------|------|------|
-| **v0.9.0** | プレイグラウンド基盤 | **完了**。詳細は [playground.md](./playground.md) | [playground.md](./playground.md), [roadmap.md](./roadmap.md) |
-| **v0.9.1** | outDir の `_` 除外 | `_` ファイル・`_` ディレクトリを outDir に出さない（SSG エントリ除外に揃える） | [playground.md](./playground.md), [pipeline.md](./specs/pipeline.md) |
-| **v0.9.2** | 出力 Markdown の空行改善 | 手書き Markdown に寄せる。**本体で直す**（Playground 補正のみは不可） | [pipeline.md](./specs/pipeline.md) |
-| **v0.10.0** | プレイグラウンド UX + **npm 初回公開** | **完了**。`@b4moss/hyogen-md@0.10.0` 公開済み。Playground はパッケージに含めない | [playground.md](./playground.md), [roadmap.md](./roadmap.md) |
+| **v0.9.0** | プレイグラウンド基盤 | **完了**。詳細は [playground.md](./playground.md) | [_archive/roadmap/v0.9.0.md](./_archive/roadmap/v0.9.0.md) |
+| **v0.9.1** | outDir の `_` 除外 | **完了** | [playground.md](./playground.md), [_archive/roadmap/v0.9.1.md](./_archive/roadmap/v0.9.1.md) |
+| **v0.9.2** | 出力 Markdown の空行改善 | **完了** | [pipeline.md](./specs/pipeline.md), [_archive/roadmap/v0.9.2.md](./_archive/roadmap/v0.9.2.md) |
+| **v0.10.0** | プレイグラウンド UX + **npm 初回公開** | **完了**。`@b4moss/hyogen-md@0.10.0` 公開済み。Playground はパッケージに含めない | [playground.md](./playground.md), [_archive/roadmap/v0.10.0.md](./_archive/roadmap/v0.10.0.md) |
 | **v0.11.0** | データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数。**複数ファイル**可。詳細 API は実装前に spec 更新 | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
 | **v0.12.0** | TOC | **専用ヘルパ**。構文・配置・見出し抽出の詳細は後で詰める | [roadmap.md](./roadmap.md) |
 | **v0.13.0** | 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。追加候補: `.length` / `.slice` など配列操作系 | [dsl.md](./specs/dsl.md) |

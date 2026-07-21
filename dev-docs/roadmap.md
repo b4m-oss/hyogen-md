@@ -1,13 +1,13 @@
 # 開発ロードマップ
 
 [SemVer](https://semver.org/) に従う。`v1.0.0` への引き上げ判断はメンテナーが行う。  
-本ロードマップは **`v0.n.0` を機能単位の区切り**として記述する（日付・リリース時期の約束はしない）。  
-プレイグラウンド基盤（`v0.9.0`）直後の修正は **`v0.9.1` / `v0.9.2`（PATCH）** で切り出す。
+本ロードマップは **`v0.n.0` を機能単位の区切り**として記述する（日付・リリース時期の約束はしない）。
 
 仕様の正: [main.md](./main.md)、[specs/](./specs/)、[need_decision.md](./need_decision.md)  
-実装の進め方（TDD）: [development.md](./development.md)
+実装の進め方（TDD）: [development.md](./development.md)  
+リポジトリ運用: [repository.md](./repository.md)
 
-完了済み（`v0.1.0`〜`v0.8.0`）: [_archive/roadmap/](./_archive/roadmap/)
+完了済み（`v0.1.0`〜`v0.10.0` / docs）: [_archive/roadmap/](./_archive/roadmap/)
 
 各バージョンの「テスト」節は [development.md](./development.md) の手順に従い、**テスト仕様書 → Red → Green → Refactor** で埋める。
 
@@ -15,167 +15,11 @@
 
 ## 優先順位（目安）
 
-1. **v0.9.1** — outDir の `_` 除外を仕様どおりに
-2. **v0.9.2** — 出力 Markdown の余分な空行の改善（ライブラリ本体）
-3. **v0.10.0** — プレイグラウンド UX + npm 初回公開
-4. **v0.10.0-docs.n** — Playground Netlify・ブランチ／CI/CD 整備（[repository.md](./repository.md)）
-5. **v0.11.0** — データソースのインポート（API）
-6. **v0.12.0** — TOC 専用ヘルパ
-7. **v0.13.0** — 許可メソッド追加（`.length` / `.slice` 等）
+1. **v0.11.0** — データソースのインポート（API）
+2. **v0.12.0** — TOC 専用ヘルパ
+3. **v0.13.0** — 許可メソッド追加（`.length` / `.slice` 等）
 
 詳細方針は [need_decision.md](./need_decision.md)。
-
----
-
-## v0.9.0 — プレイグラウンド（完了）
-
-同リポジトリ内のローカル向けプレイグラウンド。ドキュメントサイトは作らない。npm 公開は前提にしない。
-
-製品仕様の正: [playground.md](./playground.md)
-
-### 実装
-
-- [x] `playground/`（Vite + Vue + TypeScript + CodeMirror 6）
-- [x] バーチャル FS（実ディスクなし）。`src` 編集可 / `outDir` 読み取り専用
-- [x] 左ペインファイラー（ネスト・作成・削除・リネーム・フォルダ）
-- [x] エディタ + 自動 render（デバウンス）。開いている 1 ファイルだけ `outDir` へ
-- [x] プレビュー: 展開後 MD + HTML 見た目。診断パネル（エラー／警告）
-- [x] `localStorage` 永続化 + 「Reset to demo」
-- [x] デモ寄りシード（extend / if / each / component 等）
-- [x] Vite alias で `../app` ソースを参照。固定 context（UI なし）
-
-### テスト
-
-テスト仕様書: [app/test/specs/v0.9.0.md](../app/test/specs/v0.9.0.md)
-
-- [x] 仮想 FS CRUD・永続化・Reset
-- [x] loader 経由で include / component が解決できること
-- [x] 開いている 1 ファイルの src → outDir 反映
-
-### 参照
-
-[playground.md](./playground.md) / [need_decision.md](./need_decision.md) / [api.md](./specs/api.md) / [main.md](./main.md)
-
-後続 PATCH / MINOR: `v0.9.1`〜`v0.10.0`。
-
----
-
-## v0.9.1 — outDir の `_` 除外
-
-Playground の outDir を、SSG / SSR のエントリ除外（[pipeline.md](./specs/pipeline.md)）に揃える。
-
-製品仕様: [playground.md](./playground.md)
-
-### 実装
-
-- [x] `_` で始まるファイル名を outDir に書かない／ツリーに出さない
-- [x] `_` で始まるディレクトリ配下を outDir に書かない／ツリーに出さない
-- [x] `src` には `_` partial を置ける（include / component 参照用）。開いてプレビューすること自体は可
-- [x] SRC リネーム直後に OUT ミラーを同期（子ファイル選択を待たない）
-- [x] `_` → 非 `_` リネーム後も OUT を埋める（ファイルは render、ディレクトリは配下一括 render）
-
-### テスト
-
-- [x] テスト仕様書: [app/test/specs/v0.9.1.md](../app/test/specs/v0.9.1.md)
-- [x] `_` ファイル・`_` ディレクトリ配下が outDir に出ないこと
-- [x] 通常エントリの src → outDir は従来どおり
-- [x] hydrate 後に旧 `/out/_...` が残らないこと
-- [x] underscore を render してもプレビュー用 `markdown` は返ること
-- [x] SRC リネーム直後に OUT が正しいこと（ディレクトリ／ファイル、`_` 化・`_` 解除含む）
-
-### 参照
-
-[playground.md](./playground.md) / [pipeline.md](./specs/pipeline.md) / [need_decision.md](./need_decision.md)
-
----
-
-## v0.9.2 — 出力 Markdown の空行改善
-
-ディレクティブ除去・`each` 等の副作用で増える空行を抑え、手書き Markdown に寄せる。**ライブラリ本体で直す**（Playground のみの補正はしない）。
-
-方針の正: [pipeline.md](./specs/pipeline.md)
-
-### 実装
-
-- [x] 実装前に [pipeline.md](./specs/pipeline.md) のアルゴリズム詳細を詰める（隣接改行の畳み方、`each` 展開時の opener/closer 扱い等）
-- [x] `stripHgComments` / 構造展開まわりで、意図したブロック構造（連続リスト・段落）が保たれるようにする
-- [x] 著者ソースに明示された空行は尊重する
-
-### テスト
-
-- [x] テスト仕様書: [app/test/specs/v0.9.2.md](../app/test/specs/v0.9.2.md)
-- [x] `each` で生成したリストが項目間の余分な空行で切れないこと
-- [x] hyogen コメント除去後にリスト・段落が不必要に開かないこと
-- [x] `preserveHgComments: true` は従来どおり raw が残ること
-
-### 参照
-
-[pipeline.md](./specs/pipeline.md) / [need_decision.md](./need_decision.md) / [playground.md](./playground.md)
-
----
-
-## v0.10.0 — プレイグラウンド UX + npm 初回公開
-
-Playground の操作・可読性を製品として揃える（いずれも **優先度高**。仕様は [playground.md](./playground.md)）。  
-あわせて **ライブラリ `@b4moss/hyogen-md@0.10.0` を npm 初回公開**する（Playground はパッケージに含めない）。
-
-### 実装（Playground）
-
-- [x] ファイル操作をスリードットのアクションメニューへ（`src`・フォルダ・ファイル右側）
-- [x] `@hg` / `@@` 内のシンタックスハイライト（**Playground 限定**。初版は JS 近似で可）
-- [x]（任意）`{{ }}` も見やすくする
-- [x] 非エントリ（layout 等）の ParseError を Diagnostics **note** に落とす（赤エラーと区別）。Preview はソース Markdown
-
-### 配布・ドキュメント（npm / GitHub）
-
-方針の正: [need_decision.md](./need_decision.md)「配布・公開」。
-
-- [x] GitHub 公開リポジトリ（`b4m-oss/hyogen-md`）を用意し `develop` を push（**homepage**）
-- [x] **MIT** LICENSE を追加（根・`app/`。`app/package.json` の `license` / `repository` / `homepage` 等も整備）
-- [x] `app/package.json` の version を **`0.10.0`** に揃える（= tag `v0.10.0`）
-- [x] **英語** `README.md` をリポジトリ根と **`app/README.md` で同内容同期**
-- [x] 同内容の日本語 **`README_ja.md`**（根・`app/` 同期）
-- [x] README 内 **CHANGELOG**（ライブラリ変更と Playground 専用を区別）
-- [x] パッケージ名 **`@b4moss/hyogen-md`**（Git リポ名も `hyogen-md`）
-- [x] `dev-docs/` は日本語のまま（仕様の正）— 維持。利用者向けは `user-docs/`
-- [x] 公開前チェック: `npm test` / `npm run build` / `npm pack --dry-run` 等（`make check` / `make size` 通過）
-- [x] git tag **`v0.10.0`**（正式リリース）を付与して npm publish。alpha の遡及タグは不要
-- [x] roadmap / need_decision の「公開済み」状態へ更新
-
-### テスト
-
-- [x] テスト仕様書: [app/test/specs/v0.10.0.md](../app/test/specs/v0.10.0.md)（純ロジック + 手動）
-- [x]（手動）アクションメニューから create / rename / delete できること
-- [ ]（手動）`@hg` / `@@` 内がコメント一色ではなく色分けされること
-- [x] `menuItemsForNode` / `findHyogenRegions` 等の単体テスト
-- [x] orphan block 等を soft note + source Preview にする単体テスト
-
-### 参照
-
-[playground.md](./playground.md) / [need_decision.md](./need_decision.md) / [dsl.md](./specs/dsl.md)
-
----
-
-## v0.10.0-docs.n — リポジトリ整備・Playground 公開
-
-運用仕様の正: [repository.md](./repository.md)。版は **`v0.10.0-docs.1` から**インクリメント。
-
-### 仕様（確定）
-
-- [x] ブランチ戦略・CI/CD・docs 版・Netlify 方針を [repository.md](./repository.md) に記載
-- [x] [need_decision.md](./need_decision.md) / [playground.md](./playground.md) / [main.md](./main.md) からリンク
-
-### 実装（docs.n で消化）
-
-- [x] 長期ブランチ `main` / `release` を作成（`develop` 維持）— **docs.1**
-- [x] CI: PR → `dev-v*` / `develop`（`.github/workflows/ci.yml`）— **docs.1**
-- [x] CD: `release` マージ → npm publish（既存版スキップ）— **docs.2**
-- [x] GitHub branch protection（手順・Rulesets）— **docs.2**
-- [x] Playground を Netlify 公開し、README（英・日）へ導線 — **docs.3**（サイト名 `hyogen-md`。接続はダッシュボード）
-
-### 参照
-
-[repository.md](./repository.md) / [playground.md](./playground.md)
 
 ---
 
@@ -268,7 +112,7 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 | 項目 | 方針 |
 |------|------|
 | HTML 出力レイヤ | **対象外**。ライブラリは Markdown 出力のみ |
-| npm 公開 | **v0.10.0 で初回公開済み**（`app/` の `dist` のみ。Playground は同梱しない）。詳細は上節「配布・ドキュメント」および [need_decision.md](./need_decision.md) |
+| npm 公開 | **v0.10.0 で初回公開済み**（`app/` の `dist` のみ。Playground は同梱しない）。CD は `release` → [repository.md](./repository.md) / [need_decision.md](./need_decision.md) |
 | ドキュメントサイト | 当面作らない。**README 拡充**で足りる想定（サイトは wishlist） |
 | mixin | 無期限保留（[need_decision.md](./need_decision.md)） |
 

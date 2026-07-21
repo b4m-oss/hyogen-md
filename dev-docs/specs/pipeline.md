@@ -95,7 +95,7 @@ TypeScript で実装し、npm パッケージとして配布する。
 
 - ファイル全体の `\n\n\n+` → `\n\n` 一括圧縮など、グローバルな余白正規化
 
-テスト仕様: [app/test/specs/v0.9.2.md](../../app/test/specs/v0.9.2.md) / ロードマップ: [roadmap.md](../roadmap.md)
+テスト仕様: [app/test/specs/v0.9.2.md](../../app/test/specs/v0.9.2.md) / ロードマップ（完了）: [_archive/roadmap/v0.9.2.md](../_archive/roadmap/v0.9.2.md)
 
 ## 関連
 

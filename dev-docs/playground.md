@@ -12,10 +12,10 @@
 
 | バージョン | 内容 |
 |------------|------|
-| **v0.9.0** | 基盤（完了） |
-| **v0.9.1** | outDir の `_` 除外 |
-| **v0.10.0** | アクションメニュー、`@hg` / `@@` シンタックスハイライト |
-| **v0.10.0-docs.n** | Netlify 公開・README 導線・リポジトリ運用（[repository.md](./repository.md)） |
+| **v0.9.0** | 基盤（完了）→ [_archive/roadmap/v0.9.0.md](./_archive/roadmap/v0.9.0.md) |
+| **v0.9.1** | outDir の `_` 除外（完了）→ [_archive/roadmap/v0.9.1.md](./_archive/roadmap/v0.9.1.md) |
+| **v0.10.0** | アクションメニュー、`@hg` / `@@` シンタックスハイライト（完了）→ [_archive/roadmap/v0.10.0.md](./_archive/roadmap/v0.10.0.md) |
+| **v0.10.0-docs.n** | Netlify・リポジトリ運用（完了）→ [_archive/roadmap/v0.10.0-docs.md](./_archive/roadmap/v0.10.0-docs.md) / [repository.md](./repository.md) |
 
 （出力の空行改善 **v0.9.2** はライブラリ本体。[pipeline.md](./specs/pipeline.md)）
 

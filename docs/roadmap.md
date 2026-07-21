@@ -126,7 +126,7 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 ### テスト
 
 - [x] テスト仕様書: [app/test/specs/v0.10.0.md](../app/test/specs/v0.10.0.md)（純ロジック + 手動）
-- [ ]（手動）アクションメニューから create / rename / delete できること
+- [x]（手動）アクションメニューから create / rename / delete できること
 - [ ]（手動）`@hg` / `@@` 内がコメント一色ではなく色分けされること
 - [x] `menuItemsForNode` / `findHyogenRegions` 等の単体テスト
 

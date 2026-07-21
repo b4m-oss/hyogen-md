@@ -9,10 +9,11 @@ import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { javascriptLanguage } from "@codemirror/lang-javascript";
 import {
   defaultHighlightStyle,
+  LRLanguage,
   syntaxHighlighting,
-  type LRLanguage,
 } from "@codemirror/language";
 import { parseMixed } from "@lezer/common";
+import type { LRParser } from "@lezer/lr";
 import type { Extension } from "@codemirror/state";
 import {
   findHyogenRegions,
@@ -60,8 +61,7 @@ const mustacheTheme = EditorView.baseTheme({
  * plus light `{{ }}` decorations.
  */
 export function hyogenMarkdown(): Extension {
-  // markdownLanguage is defined as LRLanguage; public type is Language.
-  const mixedMarkdown = (markdownLanguage as LRLanguage).configure({
+  const mixedParser = (markdownLanguage.parser as LRParser).configure({
     wrap: parseMixed((node, input) => {
       if (!node.type.isTop) return null;
       const text = input.read(node.from, node.to);
@@ -75,6 +75,11 @@ export function hyogenMarkdown(): Extension {
         })),
       };
     }),
+  });
+
+  const mixedMarkdown = LRLanguage.define({
+    name: "hyogenMarkdown",
+    parser: mixedParser,
   });
 
   return [

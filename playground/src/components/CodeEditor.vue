@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { EditorState } from "@codemirror/state";
 import { EditorView, keymap, lineNumbers, placeholder } from "@codemirror/view";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import { markdown } from "@codemirror/lang-markdown";
 import { hyogenMarkdown } from "../editor/hyogenMarkdown";
 
 const props = defineProps<{
@@ -19,12 +20,19 @@ let view: EditorView | null = null;
 let applyingExternal = false;
 
 function createState(doc: string) {
+  let languageExt;
+  try {
+    languageExt = hyogenMarkdown();
+  } catch (err) {
+    console.error("[CodeEditor] hyogenMarkdown failed; falling back to markdown", err);
+    languageExt = markdown();
+  }
   return EditorState.create({
     doc,
     extensions: [
       lineNumbers(),
       history(),
-      hyogenMarkdown(),
+      languageExt,
       keymap.of([...defaultKeymap, ...historyKeymap]),
       placeholder(props.readOnly ? "Select a file" : "Edit markdown…"),
       EditorView.editable.of(!props.readOnly),

@@ -96,4 +96,22 @@ describe("executeHgBlocks", () => {
       assertHyogenError(error, "parse_error");
     }
   });
+
+  it("removes component blocks without stacking blank lines", () => {
+    const source = [
+      "# Title",
+      "",
+      "<!--@hg\ncomponent ./badge.md as badge\n@endhg-->",
+      "",
+      "<!--@hg\ninclude ./intro.md\n@endhg-->",
+      "",
+      "Next",
+    ].join("\n");
+    const { source: replaced, directives } = executeHgBlocks(source);
+    assert.equal(directives.length, 1);
+    assert.equal(
+      replaced,
+      `# Title\n\n\u0000HYOGEN_INCLUDE_0\u0000\n\nNext`,
+    );
+  });
 });

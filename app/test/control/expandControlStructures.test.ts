@@ -8,20 +8,28 @@ function hg(line: string): string {
 }
 
 describe("expandControlStructures", () => {
-  it("outputs true if branch only", async () => {
-    const source = `${hg("if true")}YES${hg("else")}NO${hg("endif")}`;
+  it("outputs true if branch body only without comments", async () => {
+    const source = `${hg("if true")}Yes\n${hg("else")}No\n${hg("endif")}`;
     const result = await expandControlStructures(source, { context: {} });
-    assert.match(result, /YES/);
-    assert.doesNotMatch(result, /\nNO/);
+    assert.equal(result, "Yes\n");
+    assert.doesNotMatch(result, /@hg|<!--/);
   });
 
-  it("outputs else branch when if is false", async () => {
-    const source = `${hg("if false")}NO${hg("else")}YES${hg("endif")}`;
+  it("outputs else branch body only when if is false", async () => {
+    const source = `${hg("if false")}No\n${hg("else")}Yes\n${hg("endif")}`;
     const result = await expandControlStructures(source, { context: {} });
-    assert.match(result, /YES/);
+    assert.equal(result, "Yes\n");
+    assert.doesNotMatch(result, /@hg|<!--/);
   });
 
-  it("selects first matching else if branch", async () => {
+  it("outputs empty when if is false and else is absent", async () => {
+    const source = `${hg("if false")}No\n${hg("endif")}`;
+    const result = await expandControlStructures(source, { context: {} });
+    assert.equal(result.trim(), "");
+    assert.doesNotMatch(result, /@hg|<!--/);
+  });
+
+  it("selects first matching else if branch body only", async () => {
     const source = [
       hg("if false"),
       "A",
@@ -32,43 +40,80 @@ describe("expandControlStructures", () => {
       hg("endif"),
     ].join("");
     const result = await expandControlStructures(source, { context: {} });
-    assert.match(result, /B/);
-    assert.doesNotMatch(result, /A/);
-    assert.doesNotMatch(result, /C/);
+    assert.equal(result, "B");
+    assert.doesNotMatch(result, /@hg|<!--/);
   });
 
-  it("expands each over array items", async () => {
-    const source = `${hg("each item in data")}- {{ item }}\n${hg("endeach")}`;
+  it("keeps if opener/closer raw when preserveHgComments is true", async () => {
+    const source = `${hg("if true")}Yes\n${hg("else")}No\n${hg("endif")}`;
     const result = await expandControlStructures(source, {
-      context: { data: ["apple", "banana"] },
+      context: {},
+      preserveHgComments: true,
     });
-    assert.match(result, /apple/);
-    assert.match(result, /banana/);
+    assert.match(result, /@hg/);
+    assert.match(result, /Yes/);
+    assert.doesNotMatch(result, /\nNo/);
   });
 
-  it("returns empty for empty each", async () => {
+  it("expands each over array items as continuous list without comments", async () => {
+    const source = `${hg("each name in features")}- {{ name }}\n${hg("endeach")}`;
+    const result = await expandControlStructures(source, {
+      context: { features: ["a", "b", "c"] },
+    });
+    assert.equal(result, "- a\n- b\n- c\n");
+    assert.doesNotMatch(result, /@hg|<!--/);
+  });
+
+  it("chomps newline after each opener so list items stay continuous", async () => {
+    const source = [hg("each name in features"), "- {{ name }}", hg("endeach")].join(
+      "\n",
+    );
+    const result = await expandControlStructures(source, {
+      context: { features: ["a", "b", "c"] },
+    });
+    assert.equal(result, "- a\n- b\n- c\n");
+    assert.doesNotMatch(result, /@hg|<!--/);
+  });
+
+  it("expands each for a single item body only", async () => {
+    const source = `${hg("each name in features")}- {{ name }}\n${hg("endeach")}`;
+    const result = await expandControlStructures(source, {
+      context: { features: ["solo"] },
+    });
+    assert.equal(result, "- solo\n");
+    assert.doesNotMatch(result, /@hg|<!--/);
+  });
+
+  it("returns empty for empty each without comment residue", async () => {
     const source = `${hg("each item in data")}- x${hg("endeach")}`;
     const result = await expandControlStructures(source, {
       context: { data: [] },
     });
-    assert.equal(result.trim(), "");
+    assert.equal(result, "");
+    assert.doesNotMatch(result, /@hg|<!--/);
   });
 
-  it("returns empty for non-iterable each without warning", async () => {
+  it("returns empty for non-iterable each without warning or comments", async () => {
     const source = `${hg("each item in data")}- x${hg("endeach")}`;
     const warnings: import("../../src/types.js").HyogenWarning[] = [];
     const result = await expandControlStructures(source, {
       context: { data: null },
       warnings,
     });
-    assert.equal(result.trim(), "");
+    assert.equal(result, "");
     assert.equal(warnings.length, 0);
+    assert.doesNotMatch(result, /@hg|<!--/);
   });
 
-  it("keeps control hg blocks in output for later strip", async () => {
-    const source = `${hg("if true")}X${hg("endif")}`;
-    const result = await expandControlStructures(source, { context: {} });
+  it("keeps each opener/closer raw when preserveHgComments is true", async () => {
+    const source = `${hg("each name in features")}- {{ name }}\n${hg("endeach")}`;
+    const result = await expandControlStructures(source, {
+      context: { features: ["a", "b"] },
+      preserveHgComments: true,
+    });
     assert.match(result, /@hg/);
+    assert.match(result, /a/);
+    assert.match(result, /b/);
   });
 
   it("skips block at nest depth 21 with warning", async () => {

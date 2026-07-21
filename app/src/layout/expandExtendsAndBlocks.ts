@@ -10,6 +10,7 @@ import { extractHgBlockLines } from "../logic/hgBlockUtils.js";
 import { parseExtendDirective } from "./parseExtendDirective.js";
 import { parseBlockStructures } from "./parseBlockStructures.js";
 import type { BlockStructure } from "./parseBlockStructures.js";
+import { joinRemovalSeam } from "../pipeline/joinRemovalSeam.js";
 
 export type ExpandExtendsAndBlocksOptions = {
   path?: string;
@@ -64,15 +65,17 @@ function createSkipOutput(childBlocks: BlockStructure[]): string {
 function mergeLayoutWithBlocks(layoutSource: string, layoutBlocks: BlockStructure[], childBlocksByName: Map<string, string>): string {
   const sorted = [...layoutBlocks].sort((a, b) => a.start - b.start);
 
-  let result = "";
+  // Alternate layout slices and block bodies. Each junction is an opener or
+  // closer removal, so join with the shared seam rule (max newlines).
+  const parts: string[] = [];
   let cursor = 0;
   for (const block of sorted) {
-    result += layoutSource.slice(cursor, block.start);
-    result += childBlocksByName.get(block.name) ?? block.body;
+    parts.push(layoutSource.slice(cursor, block.start));
+    parts.push(childBlocksByName.get(block.name) ?? block.body);
     cursor = block.end;
   }
-  result += layoutSource.slice(cursor);
-  return result;
+  parts.push(layoutSource.slice(cursor));
+  return parts.reduce((acc, part) => joinRemovalSeam(acc, part));
 }
 
 function updateViaForLoaderErrors(

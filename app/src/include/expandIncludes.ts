@@ -1,6 +1,7 @@
 import { formatWarningMessage } from "../errors/formatMessage.js";
 import { resolveIncludePath } from "../io/resolveIncludePath.js";
 import { renderChildDocument } from "../pipeline/renderDocument.js";
+import { joinRemovalSeam } from "../pipeline/joinRemovalSeam.js";
 import type { ComponentRegistry } from "../component/ComponentRegistry.js";
 import type { VisitStack } from "./VisitStack.js";
 import type { HyogenContext, HyogenWarning, IncludeDirective, Loader } from "../types.js";
@@ -19,6 +20,20 @@ export type ExpandIncludesOptions = {
   registry?: ComponentRegistry;
   constrainToRoot?: boolean;
 };
+
+function replaceMarker(
+  source: string,
+  marker: string,
+  replacement: string,
+): string {
+  const start = source.indexOf(marker);
+  if (start < 0) {
+    return source;
+  }
+  const left = source.slice(0, start);
+  const right = source.slice(start + marker.length);
+  return joinRemovalSeam(joinRemovalSeam(left, replacement), right);
+}
 
 export async function expandIncludes(
   options: ExpandIncludesOptions,
@@ -52,7 +67,7 @@ export async function expandIncludes(
             via: "include",
           },
         });
-        result = result.replace(directive.marker, "");
+        result = replaceMarker(result, directive.marker, "");
         continue;
       }
       options.visitStack.push(absolutePath);
@@ -78,7 +93,7 @@ export async function expandIncludes(
           ? `${directive.raw}\n${childMarkdown}`
           : childMarkdown;
 
-      result = result.replace(directive.marker, replacement);
+      result = replaceMarker(result, directive.marker, replacement);
     } finally {
       options.visitStack?.pop();
     }

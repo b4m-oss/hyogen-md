@@ -96,15 +96,16 @@ Playground の outDir を、SSG / SSR のエントリ除外（[pipeline.md](./sp
 
 ### 実装
 
-- [ ] 実装前に [pipeline.md](./specs/pipeline.md) のアルゴリズム詳細を詰める（隣接改行の畳み方、`each` 展開時の opener/closer 扱い等）
-- [ ] `stripHgComments` / 構造展開まわりで、意図したブロック構造（連続リスト・段落）が保たれるようにする
-- [ ] 著者ソースに明示された空行は尊重する
+- [x] 実装前に [pipeline.md](./specs/pipeline.md) のアルゴリズム詳細を詰める（隣接改行の畳み方、`each` 展開時の opener/closer 扱い等）
+- [x] `stripHgComments` / 構造展開まわりで、意図したブロック構造（連続リスト・段落）が保たれるようにする
+- [x] 著者ソースに明示された空行は尊重する
 
 ### テスト
 
-- [ ] テスト仕様書: `app/test/specs/v0.9.2.md`
-- [ ] `each` で生成したリストが項目間の余分な空行で切れないこと
-- [ ] hyogen コメント除去後にリスト・段落が不必要に開かないこと
+- [x] テスト仕様書: [app/test/specs/v0.9.2.md](../app/test/specs/v0.9.2.md)
+- [x] `each` で生成したリストが項目間の余分な空行で切れないこと
+- [x] hyogen コメント除去後にリスト・段落が不必要に開かないこと
+- [x] `preserveHgComments: true` は従来どおり raw が残ること
 
 ### 参照
 

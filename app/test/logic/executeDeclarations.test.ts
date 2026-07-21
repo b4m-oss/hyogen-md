@@ -29,7 +29,7 @@ describe("executeDeclarations", () => {
   it("removes declaration blocks from source", async () => {
     const source = "A\n<!--@hg\nconst x = 1\n@endhg-->\nB";
     const { source: result, context } = await executeDeclarations(source);
-    assert.equal(result, "A\n\nB");
+    assert.equal(result, "A\nB");
     assert.equal(context.x, 1);
   });
 

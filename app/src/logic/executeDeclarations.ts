@@ -12,6 +12,10 @@ import {
 } from "./parseStatement.js";
 import { extractHgBlockLines, isControlDirectiveLine } from "./hgBlockUtils.js";
 import { parseExtendBlock } from "../layout/parseExtendBlock.js";
+import {
+  joinRemovalSeam,
+  removalSeamNewlineDelta,
+} from "../pipeline/joinRemovalSeam.js";
 
 export type ExecuteDeclarationsOptions = {
   path?: string;
@@ -108,8 +112,10 @@ export async function executeDeclarations(
 
     const start = block.start - offset;
     const end = block.end - offset;
-    result = result.slice(0, start) + result.slice(end);
-    offset += block.raw.length;
+    const left = result.slice(0, start);
+    const right = result.slice(end);
+    result = joinRemovalSeam(left, right);
+    offset += block.raw.length + removalSeamNewlineDelta(left, right);
   }
 
   return { source: result, context, declarationUpdates };

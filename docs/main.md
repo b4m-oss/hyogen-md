@@ -64,6 +64,7 @@
 | [app/test/specs/v0.8.0.md](../app/test/specs/v0.8.0.md) | v0.8.0 テスト仕様書 |
 | [app/test/specs/v0.9.0.md](../app/test/specs/v0.9.0.md) | v0.9.0 テスト仕様書 |
 | [app/test/specs/v0.9.1.md](../app/test/specs/v0.9.1.md) | v0.9.1 テスト仕様書 |
+| [app/test/specs/v0.9.2.md](../app/test/specs/v0.9.2.md) | v0.9.2 テスト仕様書 |
 
 ---
 

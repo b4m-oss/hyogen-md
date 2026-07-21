@@ -3,8 +3,18 @@ import { describe, it } from "vitest";
 import { stripHgComments } from "../../src/pipeline/stripHgComments.js";
 
 describe("stripHgComments", () => {
-  it("removes hyogen comment blocks", () => {
+  it("removes hyogen comment blocks without leaving a blank seam", () => {
     const source = "Hello\n<!--\n@hg\ninclude ./a.md\n@endhg\n-->\nWorld";
+    assert.equal(stripHgComments(source), "Hello\nWorld");
+  });
+
+  it("removes same-line minify hyogen comments", () => {
+    const source = "Hello<!--@hg\ninclude ./a.md\n@endhg-->World";
+    assert.equal(stripHgComments(source), "HelloWorld");
+  });
+
+  it("preserves author blank lines around removed comments", () => {
+    const source = "Hello\n\n<!--@hg\ninclude ./a.md\n@endhg-->\n\nWorld";
     assert.equal(stripHgComments(source), "Hello\n\nWorld");
   });
 

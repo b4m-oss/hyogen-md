@@ -74,7 +74,28 @@ TypeScript で実装し、npm パッケージとして配布する。
 - 目標は「制御構文を除去したあとも、意図したブロック構造（連続リスト・段落）が保たれる」こと
 - 著者ソースに明示された空行は尊重する。問題にするのは **ディレクティブ除去・構造展開の副作用で増える空行**
 
-詳細アルゴリズム（隣接改行の畳み方、`each` 展開時に raw コメントを載せるか否か等）は実装前に本節または関連テスト仕様で詰める。実装割当: **v0.9.2**（[roadmap.md](../roadmap.md)）
+#### 確定アルゴリズム（v0.9.2）
+
+**A. 構造展開**（`expandControlStructures`）:
+
+- `preserveHgComments !== true` のとき:
+  - `each`: 反復ごとに **body のみ**連結。opener / closer の raw は載せない
+  - `if`: 選ばれた branch の **body のみ**。他 branch の opener や closer raw は載せない
+- `preserveHgComments === true`: 現行どおり opener / closer raw を残す（デバッグ用）
+
+**B. ディレクティブ除去の縫い目**（`joinRemovalSeam` / `stripHgComments` ほか）:
+
+- hyogen ディレクティブを除去（または `block` opener/closer を子 body に置換）したとき、接合部の改行は **max(左側の末尾改行, 右側の先頭改行)** でつなぐ
+- 適用箇所: 最終 `stripHgComments`、`component` 除去、宣言ブロック除去、`extend`/`block` マージ、`include` 置換
+- 例: `Hello\n<!-- ... -->\nWorld` → `Hello\nWorld`
+- 著者がコメントの外側に明示した空行（段落区切り）は残す
+- 連続するディレクティブ除去で空行が積み上がらない（デモの H1 直下など）
+
+**C. やらないこと:**
+
+- ファイル全体の `\n\n\n+` → `\n\n` 一括圧縮など、グローバルな余白正規化
+
+テスト仕様: [app/test/specs/v0.9.2.md](../../app/test/specs/v0.9.2.md) / ロードマップ: [roadmap.md](../roadmap.md)
 
 ## 関連
 

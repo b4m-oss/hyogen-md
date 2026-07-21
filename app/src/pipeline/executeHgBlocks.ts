@@ -14,6 +14,10 @@ import {
 } from "../logic/hgBlockUtils.js";
 import { isExecutableBlockSource } from "../logic/parseStatement.js";
 import { isDeclarationSource } from "../logic/parseDeclaration.js";
+import {
+  joinRemovalSeam,
+  removalSeamNewlineDelta,
+} from "./joinRemovalSeam.js";
 
 const MARKER_PREFIX = "\u0000HYOGEN_INCLUDE_";
 
@@ -139,8 +143,10 @@ export function executeHgBlocks(
           path,
         );
       }
-      result = result.slice(0, start) + result.slice(end);
-      offset += block.raw.length;
+      const left = result.slice(0, start);
+      const right = result.slice(end);
+      result = joinRemovalSeam(left, right);
+      offset += block.raw.length + removalSeamNewlineDelta(left, right);
       continue;
     }
 

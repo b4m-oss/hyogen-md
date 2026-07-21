@@ -1,6 +1,15 @@
 import { scanHgBlocks } from "../parse/scanHgBlocks.js";
+import {
+  joinRemovalSeam,
+  removalSeamNewlineDelta,
+} from "./joinRemovalSeam.js";
 
-/** Removes complete hyogen HTML comment blocks from source. */
+/**
+ * Removes complete hyogen HTML comment blocks from source.
+ * At each removal seam, joins surrounding newline runs with max(left, right)
+ * so directive removal does not invent an extra blank line, while author
+ * blank lines around the comment are preserved.
+ */
 export function stripHgComments(
   source: string,
   preserveHgComments = false,
@@ -20,8 +29,11 @@ export function stripHgComments(
   for (const block of blocks) {
     const start = block.start - offset;
     const end = block.end - offset;
-    result = result.slice(0, start) + result.slice(end);
-    offset += block.raw.length;
+    const left = result.slice(0, start);
+    const right = result.slice(end);
+
+    result = joinRemovalSeam(left, right);
+    offset += block.raw.length + removalSeamNewlineDelta(left, right);
   }
 
   return result;

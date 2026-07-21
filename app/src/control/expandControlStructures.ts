@@ -27,6 +27,11 @@ function createNestLimitWarning(path?: string): HyogenWarning {
   };
 }
 
+/** Drop the newline that typically follows an opener / closer line. */
+function chompLeadingNewline(text: string): string {
+  return text.startsWith("\n") ? text.slice(1) : text;
+}
+
 export async function expandControlStructures(
   source: string,
   options: EvaluateExpressionOptions,
@@ -44,10 +49,18 @@ async function expandNodes(
   tracker: StructureNestTracker,
   warnings: HyogenWarning[],
 ): Promise<string> {
+  const preserve = options.preserveHgComments === true;
   let result = "";
+  let chompNextLeadingNewline = false;
 
   for (const node of nodes) {
-    result += await expandNode(node, options, tracker, warnings);
+    let piece = await expandNode(node, options, tracker, warnings);
+    if (chompNextLeadingNewline) {
+      piece = chompLeadingNewline(piece);
+    }
+    result += piece;
+    chompNextLeadingNewline =
+      !preserve && (node.kind === "if" || node.kind === "each");
   }
 
   return result;
@@ -99,15 +112,24 @@ async function expandIf(
       }
     }
 
+    const preserve = options.preserveHgComments === true;
     let result = "";
     for (let i = 0; i < node.branches.length; i++) {
       const branch = node.branches[i]!;
-      result += branch.opener.raw;
+      if (preserve) {
+        result += branch.opener.raw;
+      }
       if (i === selectedIndex) {
-        result += await expandNodes(branch.body, options, tracker, warnings);
+        let body = await expandNodes(branch.body, options, tracker, warnings);
+        if (!preserve) {
+          body = chompLeadingNewline(body);
+        }
+        result += body;
       }
     }
-    result += node.closer.raw;
+    if (preserve) {
+      result += node.closer.raw;
+    }
     return result;
   } finally {
     tracker.exit();
@@ -132,14 +154,20 @@ async function expandEach(
       return "";
     }
 
+    const preserve = options.preserveHgComments === true;
     let result = "";
     for (const item of iterable) {
       const scopedContext = { ...options.context, [node.item]: item };
-      result += node.opener.raw;
-      const bodyText = await expandNodes(node.body, {
+      if (preserve) {
+        result += node.opener.raw;
+      }
+      let bodyText = await expandNodes(node.body, {
         ...options,
         context: scopedContext,
       }, tracker, warnings);
+      if (!preserve) {
+        bodyText = chompLeadingNewline(bodyText);
+      }
 
       const interpolated = await interpolateExpressions(bodyText, scopedContext, {
         path: options.path,
@@ -154,7 +182,9 @@ async function expandEach(
       });
 
       result += interpolated;
-      result += node.closer.raw;
+      if (preserve) {
+        result += node.closer.raw;
+      }
     }
 
     return result;

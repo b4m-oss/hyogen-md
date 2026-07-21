@@ -8,19 +8,55 @@ export type DiagnosticsError = {
 };
 
 export type DiagnosticsView = {
+  /** Hard render failure only. Soft notes keep `ok: true`. */
   ok: boolean;
   markdown: string | null;
   warnings: HyogenWarning[];
   error: DiagnosticsError | null;
+  /** Library parse issues that are expected for non-entry files (layouts, etc.). */
+  note: DiagnosticsError | null;
 };
 
-export function toDiagnosticsView(result: RenderOpenResult): DiagnosticsView {
+export type ToDiagnosticsViewOptions = {
+  /** Used as Preview when the failure is classified as a soft note. */
+  sourceMarkdown?: string;
+};
+
+/** Library errors that Playground softens (not red Diagnostics). */
+const SOFT_PARSE_MESSAGES = ["orphan block without extend"] as const;
+
+export function isSoftRenderError(error: unknown): boolean {
+  const normalized = normalizeError(error);
+  return SOFT_PARSE_MESSAGES.some((m) => normalized.message.includes(m));
+}
+
+export function toDiagnosticsView(
+  result: RenderOpenResult,
+  options: ToDiagnosticsViewOptions = {},
+): DiagnosticsView {
   if ("error" in result) {
+    const normalized = normalizeError(result.error);
+    if (isSoftRenderError(result.error)) {
+      return {
+        ok: true,
+        markdown: options.sourceMarkdown ?? null,
+        warnings: [],
+        error: null,
+        note: {
+          code: "not_render_entry",
+          message:
+            "Not rendered as an entry — preview shows source Markdown. " +
+            `(${normalized.message})`,
+          path: normalized.path,
+        },
+      };
+    }
     return {
       ok: false,
       markdown: null,
       warnings: [],
-      error: normalizeError(result.error),
+      error: normalized,
+      note: null,
     };
   }
   return {
@@ -28,6 +64,7 @@ export function toDiagnosticsView(result: RenderOpenResult): DiagnosticsView {
     markdown: result.markdown,
     warnings: result.warnings,
     error: null,
+    note: null,
   };
 }
 

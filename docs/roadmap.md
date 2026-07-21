@@ -122,6 +122,7 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 - [x] ファイル操作をスリードットのアクションメニューへ（`src`・フォルダ・ファイル右側）
 - [x] `@hg` / `@@` 内のシンタックスハイライト（**Playground 限定**。初版は JS 近似で可）
 - [x]（任意）`{{ }}` も見やすくする
+- [x] 非エントリ（layout 等）の ParseError を Diagnostics **note** に落とす（赤エラーと区別）。Preview はソース Markdown
 
 ### テスト
 
@@ -129,6 +130,7 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 - [x]（手動）アクションメニューから create / rename / delete できること
 - [ ]（手動）`@hg` / `@@` 内がコメント一色ではなく色分けされること
 - [x] `menuItemsForNode` / `findHyogenRegions` 等の単体テスト
+- [x] orphan block 等を soft note + source Preview にする単体テスト
 
 ### 参照
 

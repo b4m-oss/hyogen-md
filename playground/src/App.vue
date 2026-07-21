@@ -28,6 +28,7 @@ const diagnostics = ref<DiagnosticsView>({
   markdown: null,
   warnings: [],
   error: null,
+  note: null,
 });
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
@@ -68,6 +69,8 @@ function loadSelectedIntoEditor() {
 
 async function runRender(srcPath: string) {
   const seq = ++renderSeq;
+  const sourceMarkdown =
+    fs.value.statKind(srcPath) === "file" ? fs.value.read(srcPath) : "";
   const result = await renderOpenFile({
     fs: fs.value,
     srcPath,
@@ -75,10 +78,11 @@ async function runRender(srcPath: string) {
   });
   if (seq !== renderSeq) return;
 
-  const view = toDiagnosticsView(result);
+  const view = toDiagnosticsView(result, { sourceMarkdown });
   diagnostics.value = view;
 
   if (view.ok && view.markdown != null) {
+    // Success: expanded MD. Soft note (e.g. layout): source MD as Preview.
     previewMarkdown.value = view.markdown;
   } else {
     try {
@@ -123,6 +127,7 @@ function onSelect(path: string) {
       markdown: previewMarkdown.value,
       warnings: [],
       error: null,
+      note: null,
     };
   }
 }

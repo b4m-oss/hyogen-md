@@ -9,12 +9,20 @@ defineProps<{
 <template>
   <section
     class="diag"
-    :class="{ 'is-error': !diagnostics.ok, 'is-warn': diagnostics.ok && diagnostics.warnings.length }"
+    :class="{
+      'is-error': !diagnostics.ok,
+      'is-warn': diagnostics.ok && !diagnostics.note && diagnostics.warnings.length,
+      'is-note': diagnostics.ok && !!diagnostics.note,
+    }"
   >
     <header>
       <strong>Diagnostics</strong>
-      <span v-if="diagnostics.ok && !diagnostics.warnings.length" class="ok">ok</span>
+      <span
+        v-if="diagnostics.ok && !diagnostics.note && !diagnostics.warnings.length"
+        class="ok"
+      >ok</span>
       <span v-else-if="!diagnostics.ok" class="err">error</span>
+      <span v-else-if="diagnostics.note" class="note">note</span>
       <span v-else class="warn">{{ diagnostics.warnings.length }} warning(s)</span>
     </header>
 
@@ -22,6 +30,12 @@ defineProps<{
       <code>{{ diagnostics.error.code }}</code>
       <p>{{ diagnostics.error.message }}</p>
       <p v-if="diagnostics.error.path" class="path">{{ diagnostics.error.path }}</p>
+    </div>
+
+    <div v-else-if="diagnostics.note" class="diag__note">
+      <code>{{ diagnostics.note.code }}</code>
+      <p>{{ diagnostics.note.message }}</p>
+      <p v-if="diagnostics.note.path" class="path">{{ diagnostics.note.path }}</p>
     </div>
 
     <ul v-if="diagnostics.warnings.length" class="diag__warns">
@@ -50,6 +64,11 @@ defineProps<{
   background: var(--warn-soft);
 }
 
+.diag.is-note {
+  background: color-mix(in srgb, var(--bg-deep) 35%, var(--bg-panel));
+  border-top-color: color-mix(in srgb, var(--ink-muted) 35%, var(--line));
+}
+
 header {
   display: flex;
   align-items: baseline;
@@ -72,13 +91,25 @@ header {
   font-weight: 600;
 }
 
-.diag__error p {
+.note {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.diag__error p,
+.diag__note p {
   margin: 0.25rem 0 0;
   font-size: 0.85rem;
 }
 
+.diag__note {
+  color: var(--ink-muted);
+}
+
 .diag__error .path,
 .diag__error code,
+.diag__note .path,
+.diag__note code,
 .diag__warns code {
   font-family: var(--mono);
   font-size: 0.78rem;

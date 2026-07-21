@@ -1,11 +1,18 @@
 import { createHyogenError } from "./errors/createError.js";
 import { mergeContext } from "./context/mergeContext.js";
 import { renderDocument } from "./pipeline/renderDocument.js";
-import type { HyogenContext, RenderOptions, RenderResult } from "./types.js";
+import type {
+  DataSourcesMap,
+  HyogenContext,
+  RenderOptions,
+  RenderResult,
+} from "./types.js";
 
 type ClientRenderOptions = RenderOptions & {
   /** Rejected on client — use renderServer/build instead */
   serverContext?: HyogenContext;
+  /** Rejected on client — use renderServer/build instead */
+  dataSources?: DataSourcesMap;
 };
 
 /**
@@ -24,6 +31,17 @@ export async function renderClient(
   ) {
     throw createHyogenError({
       code: "server_context_on_client",
+    });
+  }
+
+  if (
+    options != null &&
+    "dataSources" in options &&
+    options.dataSources != null &&
+    Object.keys(options.dataSources).length > 0
+  ) {
+    throw createHyogenError({
+      code: "data_sources_on_client",
     });
   }
 

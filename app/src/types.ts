@@ -13,6 +13,8 @@ export type HyogenError = Error & HyogenDiagnostic;
 
 export type Loader = (path: string) => Promise<string>;
 
+export type DataSourcesMap = Record<string, string>;
+
 export type RenderOptions = {
   preserveFrontMatter?: boolean;
   preserveHgComments?: boolean;
@@ -24,6 +26,8 @@ export type RenderOptions = {
 
 export type ServerRenderOptions = RenderOptions & {
   serverContext?: HyogenContext;
+  /** Variable name → root-relative data file path (YAML / JSON / CSV). */
+  dataSources?: DataSourcesMap;
 };
 
 export type RenderResult = {
@@ -37,6 +41,7 @@ export type BuildOptions = RenderOptions & {
   includeUnderscoreEntries?: boolean;
   context?: HyogenContext;
   serverContext?: HyogenContext;
+  dataSources?: DataSourcesMap;
 };
 
 export type BuildResult = {

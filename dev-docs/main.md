@@ -24,7 +24,7 @@
 - **mixin**（保留。component で代替）
 - 任意 JavaScript の評価（`eval` / `new Function` 等）
 - **HTML 出力**（Markdown 出力のみ。HTML 化は利用側）
-- **ドキュメントサイト**（当面作らない。利用者向けは README / `user-docs/`。仕様の正は `dev-docs/`。動作確認は同リポのプレイグラウンド）
+- **ドキュメントサイトを npm に同梱すること**（サイトは別デプロイ。利用者向けはサイト＋ README / `user-docs/`。仕様の正は `dev-docs/`）
 
 ### 表記
 
@@ -32,15 +32,16 @@
 
 ### 周辺（方針メモ）
 
-- **プレイグラウンド**: 同リポジトリ内。**Netlify 公開**＋ローカル。**npm パッケージには含めない** → [playground.md](./playground.md) / [repository.md](./repository.md)
-- **npm 公開**: **v0.10.0 で初回公開済み**。以降の publish は **`release` ブランチ**経由（CD）→ [repository.md](./repository.md) / [need_decision.md](./need_decision.md)
+- **ドキュメントサイト**: **v0.10.0-docs.5〜8**（Nuxt Content・Playground 内包）→ [docs-site.md](./docs-site.md)
+- **プレイグラウンド**: 当面単独 Netlify。docs.6 でサイト内移植。**npm には含めない** → [playground.md](./playground.md)
+- **npm 公開**: **v0.10.0 で初回公開済み**。以降は **`release`** 経由（CD）→ [repository.md](./repository.md)
 - **ブランチ・CI/CD**: [repository.md](./repository.md)
 
 ---
 
 ## ドキュメント構成
 
-本ディレクトリ（`dev-docs/`）はメンテナー向け仕様の正。利用者向けはリポジトリ根の README と [`user-docs/`](../user-docs/)（例: [changelog](../user-docs/changelog_ja.md)）。
+本ディレクトリ（`dev-docs/`）はメンテナー向け仕様の正。利用者向けはドキュメントサイト（構築中）とリポジトリ根の README・[`user-docs/`](../user-docs/)。
 
 | 文書 | 内容 |
 |------|------|
@@ -54,10 +55,11 @@
 | [specs/api.md](./specs/api.md) | 公開 API・loader・エラーコード |
 | [specs/messages.en.json](./specs/messages.en.json) | 英語エラー・警告メッセージ |
 | [need_decision.md](./need_decision.md) | 未決定・後続定義事項 |
-| [repository.md](./repository.md) | ブランチ戦略・CI/CD・Playground Netlify・docs 版 |
+| [repository.md](./repository.md) | ブランチ戦略・CI/CD・Netlify・docs 版 |
+| [docs-site.md](./docs-site.md) | ドキュメントサイト製品仕様（docs.5〜8） |
 | [playground.md](./playground.md) | プレイグラウンド製品仕様（v0.9.0〜） |
-| [roadmap.md](./roadmap.md) | 開発ロードマップ（現行 `v0.11.0`〜） |
-| [_archive/roadmap/](./_archive/roadmap/) | 完了ロードマップ（`v0.1.0`〜`v0.10.0` / docs） |
+| [roadmap.md](./roadmap.md) | 開発ロードマップ（現行: docs.5〜8 → v0.11.0〜） |
+| [_archive/roadmap/](./_archive/roadmap/) | 完了ロードマップ（`v0.1.0`〜`v0.10.0` / docs.1〜4） |
 | [development.md](./development.md) | 開発方針（TDD） |
 | [app/test/specs/v0.1.0.md](../app/test/specs/v0.1.0.md) | v0.1.0 テスト仕様書 |
 | [app/test/specs/v0.2.0.md](../app/test/specs/v0.2.0.md) | v0.2.0 テスト仕様書 |
@@ -76,9 +78,10 @@
 
 ## 実装優先度（目安）
 
-1. **v0.11.0**: データソースのインポート（API・複数ファイル）
-2. **v0.12.0**: TOC 専用ヘルパ
-3. **v0.13.0**: 許可メソッド（`.length` / `.slice` 等）
+1. **v0.10.0-docs.5〜8**: ドキュメントサイト（[docs-site.md](./docs-site.md)）
+2. **v0.11.0**: データソースのインポート（API・複数ファイル）※ docs.8 後
+3. **v0.12.0**: TOC 専用ヘルパ
+4. **v0.13.0**: 許可メソッド（`.length` / `.slice` 等）
 
 詳細: [roadmap.md](./roadmap.md)
 

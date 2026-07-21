@@ -21,7 +21,8 @@
 | **v0.9.1** | outDir の `_` 除外 | **完了** | [playground.md](./playground.md), [_archive/roadmap/v0.9.1.md](./_archive/roadmap/v0.9.1.md) |
 | **v0.9.2** | 出力 Markdown の空行改善 | **完了** | [pipeline.md](./specs/pipeline.md), [_archive/roadmap/v0.9.2.md](./_archive/roadmap/v0.9.2.md) |
 | **v0.10.0** | プレイグラウンド UX + **npm 初回公開** | **完了**。`@b4moss/hyogen-md@0.10.0` 公開済み。Playground はパッケージに含めない | [playground.md](./playground.md), [_archive/roadmap/v0.10.0.md](./_archive/roadmap/v0.10.0.md) |
-| **v0.11.0** | データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数。**複数ファイル**可。詳細 API は実装前に spec 更新 | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
+| **v0.10.0-docs.5〜8** | ドキュメントサイト | **進行中**。Nuxt Content・Playground 内包・dark/light/system・API/構文網羅。ライブラリ新機能なし。完了後に v0.11.0 | [docs-site.md](./docs-site.md), [roadmap.md](./roadmap.md) |
+| **v0.11.0** | データソースのインポート | **DSL では読まない**。**API 側のみ**。YAML / JSON / CSV 等 → 変数。**複数ファイル**可。詳細 API は実装前に spec 更新。**docs.8 完了後** | [api.md](./specs/api.md), [dsl.md](./specs/dsl.md) |
 | **v0.12.0** | TOC | **専用ヘルパ**。構文・配置・見出し抽出の詳細は後で詰める | [roadmap.md](./roadmap.md) |
 | **v0.13.0** | 許可メソッドの追加 | 実装は当面 `.toLocaleString` のみ。追加候補: `.length` / `.slice` など配列操作系 | [dsl.md](./specs/dsl.md) |
 
@@ -47,7 +48,7 @@
 | CHANGELOG | **`user-docs/changelog.md`**（日本語: `changelog_ja.md`）。README からはリンクする | — |
 | `dev-docs/` | **日本語のまま**（仕様の正・メンテナー向け）。利用者向けは `user-docs/` / README | [main.md](./main.md) |
 | 公開前チェック | `build` / `test` / `npm pack --dry-run` 等を実施してから publish | [roadmap.md](./roadmap.md) |
-| ドキュメントサイト | 当面作らない。README 拡充で足りる想定（サイトは [wishlist.md](./wishlist.md)） | [wishlist.md](./wishlist.md) |
+| ドキュメントサイト | **v0.10.0-docs.5〜8** で構築（Nuxt Content・Playground 内包）。正: [docs-site.md](./docs-site.md) | [docs-site.md](./docs-site.md), [roadmap.md](./roadmap.md) |
 
 ## リポジトリ運用（v0.10.0-docs で確定）
 
@@ -61,7 +62,8 @@
 | docs / hotfix | docs は `main` 直マージ可。hotfix は `main` → `release` 可 | 同上 |
 | CI | GitHub PR（base: `dev-v*` / `develop`） | 同上 |
 | CD | **`release` へマージ → npm publish** | 同上 |
-| Playground | **Netlify 公開**＋ README 導線。npm 非同梱 | [playground.md](./playground.md), [repository.md](./repository.md) |
+| Playground | 当面 Netlify 単独公開。**docs.6 でドキュメントサイト内へ移植**（[docs-site.md](./docs-site.md)）。npm 非同梱 | [playground.md](./playground.md), [docs-site.md](./docs-site.md) |
+| ドキュメントサイト | `docs-site/` + Netlify。docs.8 完成後が利用者向けの正 | [docs-site.md](./docs-site.md) |
 | `main` 直接更新 | 通常禁止。例外: **`@kohki-shikata` の force push** | [repository.md](./repository.md) |
 
 ## 採用時期未定（先送り）
@@ -92,7 +94,7 @@
 | 診断ログ形式 | `formatDiagnosticLog`（console 自動出力なし） | [api.md](./specs/api.md) |
 | suspicious 正規表現 | security.md に確定転記済み | [security.md](./specs/security.md) |
 | each 内 component | 可・ループ変数は props に見える。公式例あり | [templating.md](./specs/templating.md) |
-| プレイグラウンド UI | Vite+Vue / CM6 / 仮想 FS / 自動 render 等。確定内容は playground.md。`_` → outDir は v0.9.1、アクションメニューと `@hg` ハイライトは v0.10.0 | [playground.md](./playground.md), [roadmap.md](./roadmap.md) |
+| プレイグラウンド UI | Vite+Vue / CM6 / 仮想 FS / 自動 render 等。確定内容は playground.md。docs.6 でサイト内移植。テーマ dark/light/system は docs.5〜 | [playground.md](./playground.md), [docs-site.md](./docs-site.md) |
 
 ---
 
@@ -108,3 +110,5 @@
 | DSL / ショートハンド `@@` | [dsl.md](./specs/dsl.md) |
 | 完了ロードマップ | [_archive/roadmap/](./_archive/roadmap/) |
 | プレイグラウンド | [playground.md](./playground.md) |
+| ドキュメントサイト | [docs-site.md](./docs-site.md) |
+| リポジトリ運用 | [repository.md](./repository.md) |

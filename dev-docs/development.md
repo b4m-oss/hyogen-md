@@ -1,7 +1,8 @@
 # 開発方針
 
 機能仕様は [specs/](./specs/) が正。本書は **実装の進め方** を定める。  
-ブランチ・CI/CD・公開運用は [repository.md](./repository.md)。
+ブランチ・CI/CD・公開運用は [repository.md](./repository.md)。  
+ドキュメントサイトは [docs-site.md](./docs-site.md)（docs.5〜8）。
 
 ---
 

@@ -94,17 +94,30 @@ flowchart LR
 
 ---
 
-## Playground の公開（Netlify）
+## Playground / ドキュメントサイトの公開（Netlify）
+
+### 現状（docs.1〜4 時点）
 
 | 項目 | 方針 |
 |------|------|
-| ホスティング | **Netlify** に Playground を公開する |
-| npm | **引き続きパッケージに含めない**（[playground.md](./playground.md)） |
-| 利用者導線 | リポジトリ根および `app/` の **[README.md](../README.md) / [README_ja.md](../README_ja.md)** から公開 URL へリンクする |
-| デプロイ元 | **`main`**（production branch）。ビルド設定はリポジトリ根 `netlify.toml` |
-| URL | **https://hyogen-md.netlify.app**（サイト名 `hyogen-md`。README からリンク） |
+| ホスティング | **Netlify** に Playground を公開済み |
+| npm | **パッケージに含めない**（[playground.md](./playground.md)） |
+| デプロイ元 | **`main`**。ビルドはリポジトリ根 `netlify.toml`（`playground/`） |
+| URL | **https://hyogen-md.netlify.app** |
 
-### Netlify 接続手順（初回・人手）
+### 予定（docs.5〜8）
+
+製品仕様: [docs-site.md](./docs-site.md)。
+
+| 項目 | 方針 |
+|------|------|
+| サイト | **`docs-site/`**（Nuxt Content）。Playground を **サイト内に移植** |
+| テーマ | dark / light / system をサイトと Playground で共有 |
+| デプロイ | **`main`**。Netlify のビルド設定を docs-site 向けに更新（または載せ替え） |
+| 旧 Playground URL | 統合後はリダイレクトまたは同一ホストでルート変更。README を更新 |
+| npm | サイト・Playground とも **含めない** |
+
+### Netlify 接続手順（Playground 初回・参照用）
 
 1. [Netlify](https://app.netlify.com/) で **Add new site → Import an existing project**
 2. GitHub の **`b4m-oss/hyogen-md`** を選択
@@ -171,5 +184,6 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 - [x] CI: PR → `dev-v*` / `develop`（`.github/workflows/ci.yml`）
 - [x] CD: `release` マージ → npm publish（`.github/workflows/publish.yml` + 既存版スキップ）
 - [x] Playground を Netlify 公開し、README から導線（`netlify.toml` + `https://hyogen-md.netlify.app`。サイト接続はダッシュボード手順）
+- [ ] ドキュメントサイト（docs.5〜8）: Nuxt Content・Playground 内包・テーマ・API/構文網羅 → [docs-site.md](./docs-site.md)
 
 以上

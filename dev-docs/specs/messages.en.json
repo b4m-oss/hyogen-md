@@ -8,6 +8,7 @@
     "parse_error": "Parse error in {path}: {message}",
     "component_multiline_output": "Component \"{alias}\" returned multiline output (single line required)",
     "server_context_on_client": "serverContext is not allowed with renderClient",
+    "data_sources_on_client": "dataSources is not allowed with renderClient",
     "load_failed": "Failed to load {path}: {reason}"
   },
   "warnings": {

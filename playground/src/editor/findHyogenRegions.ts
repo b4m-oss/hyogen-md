@@ -11,6 +11,12 @@ export type MustacheRegion = {
   to: number;
 };
 
+/** Opener / closer tokens only (`@hg`, `@endhg`, `@@`). */
+export type HyogenDirectiveMark = {
+  from: number;
+  to: number;
+};
+
 type Span = { from: number; to: number };
 
 /** Half-open fence spans (opening ``` through closing ```). Unclosed → EOF. */
@@ -61,6 +67,26 @@ export function findHyogenRegions(source: string): TextRegion[] {
   }
 
   return regions;
+}
+
+/**
+ * Start/end directive tokens for each fence-outside hyogen region
+ * (`@hg` + `@endhg`, or opening/closing `@@`).
+ */
+export function findHyogenDirectiveMarks(
+  source: string,
+): HyogenDirectiveMark[] {
+  const marks: HyogenDirectiveMark[] = [];
+  for (const region of findHyogenRegions(source)) {
+    if (region.kind === "hg-block") {
+      marks.push({ from: region.from, to: region.from + "@hg".length });
+      marks.push({ from: region.to - "@endhg".length, to: region.to });
+    } else {
+      marks.push({ from: region.from, to: region.from + "@@".length });
+      marks.push({ from: region.to - "@@".length, to: region.to });
+    }
+  }
+  return marks;
 }
 
 /**

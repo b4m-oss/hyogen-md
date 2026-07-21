@@ -35,7 +35,44 @@ defineEmits<{
           }"
           @click="$emit('select', node.path)"
         >
-          {{ node.name }}
+          <span class="tree__icon" aria-hidden="true">
+            <svg
+              v-if="node.type === 'directory'"
+              class="tree__glyph"
+              viewBox="0 0 16 16"
+              width="14"
+              height="14"
+            >
+              <path
+                fill="currentColor"
+                d="M1.75 3.75A1.25 1.25 0 0 1 3 2.5h3.1c.3 0 .59.11.81.31L8.1 4h4.9c.69 0 1.25.56 1.25 1.25v6.5c0 .69-.56 1.25-1.25 1.25H3c-.69 0-1.25-.56-1.25-1.25V3.75Z"
+              />
+            </svg>
+            <svg
+              v-else
+              class="tree__glyph tree__glyph--file"
+              viewBox="0 0 16 16"
+              width="14"
+              height="14"
+              fill="none"
+            >
+              <path
+                stroke="currentColor"
+                stroke-width="1.25"
+                stroke-linejoin="round"
+                d="M4.25 2.25h4.44L12.75 6.3v7.45c0 .55-.45 1-1 1h-7.5c-.55 0-1-.45-1-1V3.25c0-.55.45-1 1-1Z"
+              />
+              <path
+                stroke="currentColor"
+                stroke-width="1.25"
+                stroke-linejoin="round"
+                d="M8.5 2.4v3.35c0 .41.34.75.75.75h3.25"
+              />
+            </svg>
+          </span>
+          <span class="tree__label"
+            >{{ node.name }}{{ node.type === "directory" ? "/" : "" }}</span
+          >
         </button>
         <NodeActionMenu
           v-if="mutable"
@@ -84,7 +121,9 @@ defineEmits<{
 .tree__item {
   flex: 1;
   min-width: 0;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   text-align: left;
   border: 0;
   background: transparent;
@@ -93,6 +132,29 @@ defineEmits<{
   font-size: 0.78rem;
   color: var(--ink);
   border-radius: 2px;
+}
+
+.tree__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  color: var(--ink-muted);
+  line-height: 0;
+}
+
+.tree__glyph--file {
+  color: color-mix(in srgb, var(--ink-muted) 55%, white);
+}
+
+.tree__item.is-selected .tree__icon {
+  color: var(--accent);
+}
+
+.tree__item.is-selected .tree__glyph--file {
+  color: color-mix(in srgb, var(--accent) 55%, white);
+}
+
+.tree__label {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

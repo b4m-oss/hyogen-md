@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  findHyogenDirectiveMarks,
   findHyogenRegions,
   findMustacheRegions,
 } from "../../src/editor/findHyogenRegions";
@@ -95,6 +96,29 @@ const x = 1
 
   it("returns empty for empty string", () => {
     expect(findHyogenRegions("")).toEqual([]);
+  });
+});
+
+describe("findHyogenDirectiveMarks", () => {
+  it("marks only @hg and @endhg", () => {
+    const src = `<!--
+@hg
+const x = 1
+@endhg
+-->`;
+    const marks = findHyogenDirectiveMarks(src);
+    expect(marks).toHaveLength(2);
+    expect(src.slice(marks[0]!.from, marks[0]!.to)).toBe("@hg");
+    expect(src.slice(marks[1]!.from, marks[1]!.to)).toBe("@endhg");
+  });
+
+  it("marks both @@ delimiters for shorthand", () => {
+    const src = `<!--@@ const x = 1 @@-->`;
+    const marks = findHyogenDirectiveMarks(src);
+    expect(marks).toHaveLength(2);
+    expect(src.slice(marks[0]!.from, marks[0]!.to)).toBe("@@");
+    expect(src.slice(marks[1]!.from, marks[1]!.to)).toBe("@@");
+    expect(marks[0]!.from).toBeLessThan(marks[1]!.from);
   });
 });
 

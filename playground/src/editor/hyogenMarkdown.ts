@@ -16,11 +16,20 @@ import { parseMixed } from "@lezer/common";
 import type { LRParser } from "@lezer/lr";
 import type { Extension } from "@codemirror/state";
 import {
+  findHyogenDirectiveMarks,
   findHyogenRegions,
   findMustacheRegions,
 } from "./findHyogenRegions";
 
+const hyogenDirectiveMark = Decoration.mark({ class: "cm-hg-directive" });
 const mustacheMark = Decoration.mark({ class: "cm-hg-mustache" });
+
+function buildHyogenDirectiveDecorations(docText: string): DecorationSet {
+  const ranges = findHyogenDirectiveMarks(docText).map((mark) =>
+    hyogenDirectiveMark.range(mark.from, mark.to),
+  );
+  return Decoration.set(ranges, true);
+}
 
 function buildMustacheDecorations(docText: string): DecorationSet {
   const ranges = findMustacheRegions(docText).map((region) =>
@@ -28,6 +37,27 @@ function buildMustacheDecorations(docText: string): DecorationSet {
   );
   return Decoration.set(ranges, true);
 }
+
+const hyogenDirectiveHighlight = ViewPlugin.fromClass(
+  class {
+    decorations: DecorationSet;
+
+    constructor(view: EditorView) {
+      this.decorations = buildHyogenDirectiveDecorations(
+        view.state.doc.toString(),
+      );
+    }
+
+    update(update: ViewUpdate) {
+      if (update.docChanged) {
+        this.decorations = buildHyogenDirectiveDecorations(
+          update.state.doc.toString(),
+        );
+      }
+    }
+  },
+  { decorations: (v) => v.decorations },
+);
 
 const mustacheHighlight = ViewPlugin.fromClass(
   class {
@@ -47,6 +77,15 @@ const mustacheHighlight = ViewPlugin.fromClass(
   },
   { decorations: (v) => v.decorations },
 );
+
+/** Soft red for `@hg` / `@endhg` / `@@` delimiters only. */
+const hyogenDirectiveTheme = EditorView.baseTheme({
+  ".cm-hg-directive": {
+    color: "#c45c5c",
+    backgroundColor: "color-mix(in srgb, #c45c5c 12%, transparent)",
+    borderRadius: "2px",
+  },
+});
 
 const mustacheTheme = EditorView.baseTheme({
   ".cm-hg-mustache": {
@@ -85,6 +124,8 @@ export function hyogenMarkdown(): Extension {
   return [
     markdown({ base: mixedMarkdown }),
     syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    hyogenDirectiveHighlight,
+    hyogenDirectiveTheme,
     mustacheHighlight,
     mustacheTheme,
   ];

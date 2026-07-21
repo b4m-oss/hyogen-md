@@ -10,10 +10,11 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "postinstall": "nuxt prepare",
     "preview": "nuxt preview",
     "typecheck": "nuxt typecheck",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "nuxt prepare && vitest run",
+    "test:watch": "nuxt prepare && vitest"
   },
   "dependencies": {
     "@codemirror/commands": "^6.8.0",

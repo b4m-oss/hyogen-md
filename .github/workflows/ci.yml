@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   check:
-    name: app + playground
+    name: app + playground + docs-site
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -25,6 +25,7 @@ jobs:
           cache-dependency-path: |
             app/package-lock.json
             playground/package-lock.json
+            docs-site/package-lock.json
 
       - name: Install app dependencies
         run: npm ci
@@ -33,6 +34,10 @@ jobs:
       - name: Install playground dependencies
         run: npm ci
         working-directory: playground
+
+      - name: Install docs-site dependencies
+        run: npm ci
+        working-directory: docs-site
 
       - name: make check
         run: make check
@@ -43,3 +48,7 @@ jobs:
       - name: playground build
         run: npm run build
         working-directory: playground
+
+      - name: docs-site generate
+        run: npm run generate
+        working-directory: docs-site

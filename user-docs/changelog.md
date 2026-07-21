@@ -4,6 +4,12 @@ Library vs Playground-only changes are labeled. Alpha tags are development marke
 
 Japanese: [changelog_ja.md](./changelog_ja.md)
 
+### 0.10.0-docs.1 — Repository ops
+
+- Long-lived branches **`main`** / **`release`** (from `develop` at `v0.10.0`); `develop` unchanged
+- GitHub Actions CI on PRs to `develop` / `dev-v*` (`.github/workflows/ci.yml`)
+- Spec: [`dev-docs/repository.md`](https://github.com/b4m-oss/hyogen-md/blob/develop/dev-docs/repository.md) (Netlify deploys from **`main`**)
+
 ### 0.10.0 — Playground UX + first npm publish
 
 Playground (not in npm package):

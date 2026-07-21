@@ -18,9 +18,10 @@
 1. **v0.9.1** — outDir の `_` 除外を仕様どおりに
 2. **v0.9.2** — 出力 Markdown の余分な空行の改善（ライブラリ本体）
 3. **v0.10.0** — プレイグラウンド UX + npm 初回公開
-4. **v0.11.0** — データソースのインポート（API）
-5. **v0.12.0** — TOC 専用ヘルパ
-6. **v0.13.0** — 許可メソッド追加（`.length` / `.slice` 等）
+4. **v0.10.0-docs.n** — Playground Netlify・ブランチ／CI/CD 整備（[repository.md](./repository.md)）
+5. **v0.11.0** — データソースのインポート（API）
+6. **v0.12.0** — TOC 専用ヘルパ
+7. **v0.13.0** — 許可メソッド追加（`.length` / `.slice` 等）
 
 詳細方針は [need_decision.md](./need_decision.md)。
 
@@ -155,6 +156,29 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 
 ---
 
+## v0.10.0-docs.n — リポジトリ整備・Playground 公開
+
+運用仕様の正: [repository.md](./repository.md)。版は **`v0.10.0-docs.1` から**インクリメント。
+
+### 仕様（確定）
+
+- [x] ブランチ戦略・CI/CD・docs 版・Netlify 方針を [repository.md](./repository.md) に記載
+- [x] [need_decision.md](./need_decision.md) / [playground.md](./playground.md) / [main.md](./main.md) からリンク
+
+### 実装（docs.n で消化）
+
+- [x] 長期ブランチ `main` / `release` を作成（`develop` 維持）— **docs.1**
+- [x] CI: PR → `dev-v*` / `develop`（`.github/workflows/ci.yml`）— **docs.1**
+- [ ] GitHub branch protection（`main` 直接マージ禁止、`@kohki-shikata` force push 例外）— **docs.2**
+- [ ] CD: `release` マージ → npm publish — **docs.2**
+- [ ] Playground を Netlify 公開し、README（英・日）へ導線 — **docs.3**
+
+### 参照
+
+[repository.md](./repository.md) / [playground.md](./playground.md)
+
+---
+
 ## v0.11.0 — データソースのインポート（API）
 
 外部データ（YAML / JSON / CSV 等）を **API 側のみ**で読み、変数へバインドする。DSL では読まない。
@@ -256,7 +280,9 @@ Playground の操作・可読性を製品として揃える（いずれも **優
 |--------|------|
 | 形式 | SemVer（`MAJOR.MINOR.PATCH`） |
 | 本ロードマップ | **`v0.n.0` = MINOR 相当の機能塊**。同一塊内の修正・仕様寄せは **PATCH**（例: `v0.9.1` / `v0.9.2`） |
-| git tag と npm | **一致させる**（例: tag `v0.10.0` ↔ npm `0.10.0`）。正式リリースの tag を切る。alpha の遡及付与は不要 |
+| git tag と npm | **一致させる**（例: tag `v0.10.0` ↔ npm `0.10.0`）。正式リリースの tag を切る。alpha の遡及付与は不要。**npm publish は `release` マージ（CD）** → [repository.md](./repository.md) |
+| docs トラック | リポジトリ／導線整備は **`v0.10.0-docs.n`**（npm は上げない）→ [repository.md](./repository.md) |
+| ブランチ | `feat` → `dev-vX.Y.Z` → `develop` → `main` → `release`。詳細は [repository.md](./repository.md) |
 | `app` と版 | ライブラリに機能差分が無くても、リリース版では **`app/package.json` の version を tag / npm に揃える** |
 | README | 英語 `README.md` を **リポジトリ根と `app/README.md` で同内容同期**。日本語は `README_ja.md`。`dev-docs/` は日本語のまま。CHANGELOG は `user-docs/` |
 | `v1.0.0` | API・仕様安定の宣言。タイミングはメンテナー判断 |

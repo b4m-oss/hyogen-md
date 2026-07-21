@@ -102,9 +102,15 @@ flowchart LR
 | npm | **引き続きパッケージに含めない**（[playground.md](./playground.md)） |
 | 利用者導線 | リポジトリ根および `app/` の **[README.md](../README.md) / [README_ja.md](../README_ja.md)** から公開 URL へリンクする |
 | デプロイ元 | **`main`**（production branch）。ビルド設定はリポジトリ根 `netlify.toml` |
-| URL | 初回デプロイ後に確定し README へ記載 |
+| URL | **https://hyogen-md.netlify.app**（サイト名 `hyogen-md`。README からリンク） |
 
-製品 UI 仕様は [playground.md](./playground.md)。
+### Netlify 接続手順（初回・人手）
+
+1. [Netlify](https://app.netlify.com/) で **Add new site → Import an existing project**
+2. GitHub の **`b4m-oss/hyogen-md`** を選択
+3. Branch: **`main`**。Build settings はリポジトリ根の `netlify.toml` を使用
+4. Site name を **`hyogen-md`**（URL: `https://hyogen-md.netlify.app`）にする。取れない場合は別名にし README を更新
+5. Deploy。以降 `main` への push で自動デプロイ
 
 ---
 
@@ -164,6 +170,6 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 - [x] hotfix は `main` → `release` 可（方針確定）
 - [x] CI: PR → `dev-v*` / `develop`（`.github/workflows/ci.yml`）
 - [x] CD: `release` マージ → npm publish（`.github/workflows/publish.yml` + 既存版スキップ）
-- [ ] Playground を Netlify 公開し、README から導線
+- [x] Playground を Netlify 公開し、README から導線（`netlify.toml` + `https://hyogen-md.netlify.app`。サイト接続はダッシュボード手順）
 
 以上

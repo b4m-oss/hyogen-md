@@ -4,6 +4,12 @@ Library vs Playground-only changes are labeled. Alpha tags are development marke
 
 Japanese: [changelog_ja.md](./changelog_ja.md)
 
+### 0.10.0-docs.3 — Playground on Netlify
+
+- Root `netlify.toml` (build `playground/`, deploy from `main`)
+- README (en/ja, root + `app/`) links to **https://hyogen-md.netlify.app**
+- Site connect steps in `dev-docs/repository.md` (dashboard; site name `hyogen-md`)
+
 ### 0.10.0-docs.2 — CD / branch protection
 
 - GitHub Actions CD on push to **`release`** (`.github/workflows/publish.yml`); skip if `name@version` already on npm

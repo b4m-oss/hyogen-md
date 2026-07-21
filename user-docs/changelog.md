@@ -4,6 +4,11 @@ Library vs Playground-only changes are labeled. Alpha tags are development marke
 
 Japanese: [changelog_ja.md](./changelog_ja.md)
 
+### 0.10.0-docs.2 — CD / branch protection
+
+- GitHub Actions CD on push to **`release`** (`.github/workflows/publish.yml`); skip if `name@version` already on npm
+- Document `NPM_TOKEN` secret and branch protection (`main` / `release` / `develop`) in `dev-docs/repository.md`
+
 ### 0.10.0-docs.1 — Repository ops
 
 - Long-lived branches **`main`** / **`release`** (from `develop` at `v0.10.0`); `develop` unchanged

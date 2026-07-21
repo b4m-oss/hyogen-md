@@ -4,6 +4,11 @@
 
 English: [changelog.md](./changelog.md)
 
+### 0.10.0-docs.2 — CD / ブランチ保護
+
+- **`release`** への push で npm publish（`.github/workflows/publish.yml`）。既存 `name@version` はスキップ
+- `NPM_TOKEN` と branch protection（`main` / `release` / `develop`）を `dev-docs/repository.md` に記載
+
 ### 0.10.0-docs.1 — リポジトリ運用
 
 - 長期ブランチ **`main`** / **`release`**（`v0.10.0` 時点の `develop` から）。`develop` は維持

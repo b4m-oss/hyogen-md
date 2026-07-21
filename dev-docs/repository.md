@@ -108,19 +108,17 @@ flowchart LR
 
 ---
 
-## CI（GitHub Actions 想定）
+## CI（GitHub Actions）
 
 | トリガ | 対象 |
 |--------|------|
 | **GitHub PR** | base が **`dev-v*`**（`dev-v0.11.0` 等） |
 | **GitHub PR** | base が **`develop`** |
 
-実施内容（最低）:
+Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 
-- `app/`: typecheck / test / build（既存 `make check` 相当を目標）
-- 必要に応じて `playground/` の test / build
-
-`main` / `release` への PR や push での CI 追加は後続でよい（本仕様の必須は上表）。
+- `make check`（app typecheck / test / build / pack）
+- `make test-pg` および playground `npm run build`
 
 ---
 
@@ -128,24 +126,33 @@ flowchart LR
 
 | 項目 | 方針 |
 |------|------|
-| トリガ | **`release` ブランチへマージされたとき** |
-| 動作 | `@b4moss/hyogen-md` を **npm publish**（`app/`。`publishConfig.access: public`） |
-| 版 | git tag と `app/package.json` の version を **一致**させる（従来方針） |
-| 注意 | docs のみ・Playground のみの変更で誤 publish しないよう、`release` へ載せる内容と version bump をリリース手順で明示する |
+| トリガ | **`release` への push**（マージ含む） |
+| Workflow | [`.github/workflows/publish.yml`](../.github/workflows/publish.yml) |
+| 動作 | `app/` で build のあと `npm publish --access public` |
+| 既存版 | registry に **同じ `name@version` がある場合は publish をスキップ**（成功終了）。初期 `release` = `0.10.0` でも再公開しない |
+| 版 | git tag と `app/package.json` の version を **一致**させてから `release` へ載せる |
+| Secret | リポジトリ Secrets に **`NPM_TOKEN`**（npm Automation / Granular Access Token。`@b4moss` への publish 権限） |
+
+### NPM_TOKEN の登録手順
+
+1. [npmjs.com](https://www.npmjs.com/) で Access Token を発行（Automation 推奨）
+2. GitHub リポジトリ **Settings → Secrets and variables → Actions**
+3. Name: `NPM_TOKEN`、Value: トークンを保存
+4. 対象リポジトリは **`b4m-oss/hyogen-md`**（github リモートを正とする）
 
 初回公開済みの前提・パッケージ境界は [need_decision.md](./need_decision.md)「配布・公開」。
 
 ---
 
-## ブランチ保護・権限（方針）
+## ブランチ保護・権限
 
-実装は GitHub の branch protection / Rulesets で行う。
+対象は **GitHub `b4m-oss/hyogen-md`**（社内 `origin` はブランチ同期のみでよい）。
 
-| ルール | 内容 |
-|--------|------|
-| `main` | 直接マージ禁止をルール化。例外は **`@kohki-shikata` の force push 受け入れ** |
-| `release` | 不用意な直接 push を制限。マージ＋CD を前提 |
-| `develop` / `dev-v*` | PR + CI 必須を推奨 |
+| ブランチ | 設定 |
+|----------|------|
+| `main` | PR 必須。**Allow force pushes = ON**（クラシック保護。意図する利用者は **`@kohki-shikata`**。書き込み権限のある他ユーザーも force push 可能な点に注意。Rulesets でアクター限定できる場合はそちらへ移行） |
+| `release` | PR 必須。force push 不可。マージ後の push で CD 起動 |
+| `develop` | PR 必須。force push 不可。CI 安定後に status check **`app + playground`** を Require に追加推奨 |
 
 ---
 
@@ -156,7 +163,7 @@ flowchart LR
 - [x] docs は `v0.10.0-docs.n`。必要なら `main` 直マージ可（方針確定）
 - [x] hotfix は `main` → `release` 可（方針確定）
 - [x] CI: PR → `dev-v*` / `develop`（`.github/workflows/ci.yml`）
-- [ ] CD: `release` マージ → npm publish
+- [x] CD: `release` マージ → npm publish（`.github/workflows/publish.yml` + 既存版スキップ）
 - [ ] Playground を Netlify 公開し、README から導線
 
 以上

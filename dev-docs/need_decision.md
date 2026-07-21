@@ -49,6 +49,21 @@
 | 公開前チェック | `build` / `test` / `npm pack --dry-run` 等を実施してから publish | [roadmap.md](./roadmap.md) |
 | ドキュメントサイト | 当面作らない。README 拡充で足りる想定（サイトは [wishlist.md](./wishlist.md)） | [wishlist.md](./wishlist.md) |
 
+## リポジトリ運用（v0.10.0-docs で確定）
+
+正: [repository.md](./repository.md)。
+
+| 項目 | 方針 | 参照 |
+|------|------|------|
+| docs 版 | 以降の docs／インフラ／導線は **`v0.10.0-docs.n`** | [repository.md](./repository.md) |
+| 長期ブランチ | **`develop`**（維持）／**`main`**（いつでもリリース可）／**`release`**（npm 用） | 同上 |
+| 機能開発 | `feat/*` → `dev-vX.Y.Z` →（roadmap 達成）`develop` → `main` → `release` | 同上 |
+| docs / hotfix | docs は `main` 直マージ可。hotfix は `main` → `release` 可 | 同上 |
+| CI | GitHub PR（base: `dev-v*` / `develop`） | 同上 |
+| CD | **`release` へマージ → npm publish** | 同上 |
+| Playground | **Netlify 公開**＋ README 導線。npm 非同梱 | [playground.md](./playground.md), [repository.md](./repository.md) |
+| `main` 直接更新 | 通常禁止。例外: **`@kohki-shikata` の force push** | [repository.md](./repository.md) |
+
 ## 採用時期未定（先送り）
 
 | 項目 | 方針 | 参照 |

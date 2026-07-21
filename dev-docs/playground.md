@@ -1,8 +1,10 @@
 # プレイグラウンド（v0.9.0〜）
 
-同リポジトリ内の **ローカル向け** 動作確認 UI。ドキュメントサイトではない。  
-**npm パッケージ（`@b4moss/hyogen-md`）には含めない**（ライブラリ本体の公開とは別）。ライブラリ側の初回 npm 公開は **v0.10.0**（[roadmap.md](./roadmap.md) / [need_decision.md](./need_decision.md)）。
+同リポジトリ内の動作確認 UI。ドキュメントサイトではない。  
+**ローカル**に加え、**Netlify で公開**する（利用者導線は README）。  
+**npm パッケージ（`@b4moss/hyogen-md`）には含めない**（ライブラリ本体の公開とは別）。
 
+ライブラリ側の初回 npm 公開は **v0.10.0 済み**。ブランチ・CD・公開運用の正は [repository.md](./repository.md)。  
 方針の要約は [need_decision.md](./need_decision.md) / [roadmap.md](./roadmap.md)。  
 ライブラリ本体の API は [specs/api.md](./specs/api.md)（`renderClient` / loader）が正。
 
@@ -13,6 +15,7 @@
 | **v0.9.0** | 基盤（完了） |
 | **v0.9.1** | outDir の `_` 除外 |
 | **v0.10.0** | アクションメニュー、`@hg` / `@@` シンタックスハイライト |
+| **v0.10.0-docs.n** | Netlify 公開・README 導線・リポジトリ運用（[repository.md](./repository.md)） |
 
 （出力の空行改善 **v0.9.2** はライブラリ本体。[pipeline.md](./specs/pipeline.md)）
 
@@ -26,7 +29,8 @@
 | フレームワーク | Vite + Vue（TypeScript） |
 | エディタ | CodeMirror 6 |
 | hyogen-md 参照 | 開発時は Vite alias で `../app` の **ソース**を直接読む。公開後もローカル開発は alias でよい（npm インストールは利用者向け） |
-| 起動 | ローカルで `npm` / Vite により確認できれば十分 |
+| 起動 | ローカル（`npm` / Vite）および **Netlify 上の公開 URL** |
+| 公開 | **Netlify**。URL は公開後に README（英・日）へリンク（[repository.md](./repository.md)） |
 
 ## 仮想 FS
 

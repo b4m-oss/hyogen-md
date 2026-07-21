@@ -4,6 +4,12 @@
 
 English: [changelog.md](./changelog.md)
 
+### 0.10.0-docs.1 — リポジトリ運用
+
+- 長期ブランチ **`main`** / **`release`**（`v0.10.0` 時点の `develop` から）。`develop` は維持
+- GitHub Actions CI（PR base: `develop` / `dev-v*`）。`.github/workflows/ci.yml`
+- 仕様: [`dev-docs/repository.md`](https://github.com/b4m-oss/hyogen-md/blob/develop/dev-docs/repository.md)（Netlify の production は **`main`**）
+
 ### 0.10.0 — Playground UX + npm 初回公開
 
 Playground（npm 非同梱）:

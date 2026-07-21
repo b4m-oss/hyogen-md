@@ -14,6 +14,8 @@
 - Nuxt Content採用
 - とりあえず、Netlifyで運用する
 
+（Playground 自体の Netlify 公開は **採用済み** → [repository.md](./repository.md) / [playground.md](./playground.md)）
+
 ## 方針が固まった候補（バージョン割当済み）
 
 ### outDir の `_` 除外 — v0.9.1

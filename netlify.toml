@@ -1,0 +1,15 @@
+# Playground on Netlify — production branch: main
+# Spec: dev-docs/repository.md
+
+[build]
+  command = "npm --prefix playground ci && npm --prefix playground run build"
+  publish = "playground/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Vite SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

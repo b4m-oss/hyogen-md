@@ -30,7 +30,7 @@
 | エディタ | CodeMirror 6 |
 | hyogen-md 参照 | 開発時は Vite alias で `../app` の **ソース**を直接読む。公開後もローカル開発は alias でよい（npm インストールは利用者向け） |
 | 起動 | ローカル（`npm` / Vite）および **Netlify 上の公開 URL** |
-| 公開 | **Netlify**。URL は公開後に README（英・日）へリンク（[repository.md](./repository.md)） |
+| 公開 | **Netlify**（**https://hyogen-md.netlify.app**）。production branch は **`main`**（[repository.md](./repository.md)） |
 
 ## 仮想 FS
 

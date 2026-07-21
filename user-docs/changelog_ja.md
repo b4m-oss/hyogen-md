@@ -4,6 +4,12 @@
 
 English: [changelog.md](./changelog.md)
 
+### 0.10.0-docs.3 — Playground（Netlify）
+
+- 根の `netlify.toml`（`playground/` をビルド、`main` からデプロイ）
+- README（英・日、根・`app/`）から **https://hyogen-md.netlify.app** へ導線
+- サイト接続手順は `dev-docs/repository.md`（ダッシュボード、サイト名 `hyogen-md`）
+
 ### 0.10.0-docs.2 — CD / ブランチ保護
 
 - **`release`** への push で npm publish（`.github/workflows/publish.yml`）。既存 `name@version` はスキップ

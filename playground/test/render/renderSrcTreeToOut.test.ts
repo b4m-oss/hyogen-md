@@ -3,7 +3,7 @@ import { VirtualFs } from "../../src/fs/virtualFs";
 import { syncOutAfterSrcRename } from "../../src/fs/syncOutAfterSrcRename";
 import { renderOpenFile } from "../../src/render/renderOpenFile";
 import { renderSrcTreeToOut } from "../../src/render/renderSrcTreeToOut";
-import { FIXED_CONTEXT } from "../../src/seed/demoSeed";
+import { FIXED_CONTEXT, applyDemoSeed } from "../../src/seed/demoSeed";
 
 describe("renderSrcTreeToOut", () => {
   it("renders non-underscore files under a directory into /out", async () => {
@@ -36,6 +36,27 @@ describe("renderSrcTreeToOut", () => {
 
     expect(fs.exists("/out/meta.md")).toBe(true);
     expect(fs.read("/out/meta.md")).toContain("Meta");
+  });
+
+  it("after demo reset, nested /out files reappear via full /src tree render", async () => {
+    const fs = new VirtualFs();
+    applyDemoSeed(fs);
+
+    const { paths } = await renderSrcTreeToOut(fs, "/src", FIXED_CONTEXT);
+
+    expect(paths).toContain("/src/index.md");
+    expect(paths).toContain("/src/components/badge.md");
+    expect(paths).toContain("/src/partials/intro.md");
+    expect(paths).toContain("/src/layouts/base.md");
+
+    expect(fs.exists("/out/index.md")).toBe(true);
+    expect(fs.exists("/out/components/badge.md")).toBe(true);
+    expect(fs.exists("/out/partials/intro.md")).toBe(true);
+    // layout is not a render entry (orphan block) — soft note, no /out write
+    expect(fs.exists("/out/layouts/base.md")).toBe(false);
+
+    const outNames = fs.listTree("/out").map((n) => n.name).sort();
+    expect(outNames).toEqual(["components", "index.md", "partials"]);
   });
 
   it("skips underscore file root without writing /out", async () => {

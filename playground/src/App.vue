@@ -235,11 +235,22 @@ function onRemove(path: string) {
 
 function onReset() {
   if (!window.confirm("Reset to demo? This overwrites localStorage.")) return;
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+    debounceTimer = null;
+  }
   fs.value = resetToDemo(localStorage);
   selectedPath.value = DEMO_ENTRY;
   loadSelectedIntoEditor();
   bumpTree();
-  scheduleRender();
+  // Seed has no /out; render the whole /src tree so nested OUT dirs reappear.
+  void (async () => {
+    const seq = ++renderSeq;
+    await renderSrcTreeToOut(fs.value, "/src", FIXED_CONTEXT);
+    if (seq !== renderSeq) return;
+    persist();
+    await runRender(DEMO_ENTRY);
+  })();
 }
 
 loadSelectedIntoEditor();

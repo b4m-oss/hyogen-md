@@ -95,7 +95,8 @@ provide(NODE_ACTION_MENU_OPEN_ID, ref<string | null>(null));
 }
 
 .filer__out {
-  overflow: auto;
+  /* Grow with the tree; scroll on .filer instead of clipping nested rows. */
+  overflow: visible;
   padding: 0.5rem 0.55rem;
   margin-inline: 0.2rem;
   background: #d8e0e6;
